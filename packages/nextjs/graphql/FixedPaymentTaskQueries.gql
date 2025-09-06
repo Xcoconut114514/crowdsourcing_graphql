@@ -72,3 +72,27 @@ query GetFixedPaymentTaskByTaskId($taskId: BigInt!) {
     updatedAt
   }
 }
+
+query GetFixedPaymentTasksForCard(
+  $first: Int!
+  $skip: Int!
+  $where: FixedPaymentTask_filter
+  $orderBy: FixedPaymentTask_orderBy
+  $orderDirection: OrderDirection
+) {
+  fixedPaymentTasks(first: $first, skip: $skip, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
+    taskId
+    title
+    description
+    reward
+    deadline
+    status
+    creator {
+      address
+    }
+    worker {
+      address
+    }
+    createdAt
+  }
+}

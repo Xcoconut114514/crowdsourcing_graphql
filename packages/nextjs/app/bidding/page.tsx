@@ -1,14 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CreateTaskModal } from "./_components/CreateTaskModal";
-import { TaskCard } from "./_components/TaskCard";
 import { getBuiltGraphSDK } from "~~/.graphclient";
+import { CreateTaskModal } from "~~/components/tasks/CreateTaskModal";
+import { TaskCard } from "~~/components/tasks/TaskCard";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const BiddingTasksPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<number>(0); // 默认只显示Open状态的任务
+  const [selectedStatus, setSelectedStatus] = useState<string>("Open"); // 默认只显示Open状态的任务
   const [tasks, setTasks] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -65,26 +65,12 @@ const BiddingTasksPage = () => {
   };
 
   // 获取状态筛选选项
-  const statusOptions = [
-    { value: 0, label: "Open" },
-    { value: 1, label: "InProgress" },
-    { value: 2, label: "Completed" },
-    { value: 3, label: "Paid" },
-    { value: 4, label: "Cancelled" },
-  ];
+  const statusOptions = ["Open", "InProgress", "Completed", "Paid", "Cancelled"];
 
   // 根据选择的状态筛选任务
   const filteredTasks = tasks.filter(task => {
-    // 将字符串状态转换为数字进行比较
-    const statusMap: Record<string, number> = {
-      Open: 0,
-      InProgress: 1,
-      Completed: 2,
-      Paid: 3,
-      Cancelled: 4,
-    };
-
-    return statusMap[task.status] === selectedStatus;
+    // 直接使用字符串状态进行比较，与TaskCard组件保持一致
+    return task.status === selectedStatus;
   });
 
   return (
@@ -103,11 +89,11 @@ const BiddingTasksPage = () => {
           <div className="flex flex-wrap gap-2">
             {statusOptions.map(option => (
               <button
-                key={option.label}
-                className={`btn btn-sm ${selectedStatus === option.value ? "btn-primary" : "btn-outline"}`}
-                onClick={() => setSelectedStatus(option.value)}
+                key={option}
+                className={`btn btn-sm ${selectedStatus === option ? "btn-primary" : "btn-outline"}`}
+                onClick={() => setSelectedStatus(option)}
               >
-                {option.label}
+                {option}
               </button>
             ))}
           </div>
@@ -119,7 +105,7 @@ const BiddingTasksPage = () => {
               <span className="loading loading-spinner loading-lg">加载中...</span>
             </div>
           ) : filteredTasks.length > 0 ? (
-            filteredTasks.map(task => <TaskCard key={task.taskId} task={task} />)
+            filteredTasks.map(task => <TaskCard key={task.taskId} task={task} basePath="/bidding" />)
           ) : (
             <div className="col-span-full text-center py-10">
               <p className="text-gray-500">暂无任务</p>

@@ -6,7 +6,7 @@ interface Task {
   creator: string;
   title: string;
   description: string;
-  totalreward: bigint;
+  reward: bigint;
   deadline: bigint;
   status: number;
   createdAt: bigint;
@@ -58,7 +58,7 @@ export const TaskInfoCard = ({ task, taskWorker }: TaskInfoCardProps) => {
     }
   };
 
-  const { id, creator, title, description, totalreward, deadline, status, createdAt } = task;
+  const { id, creator, title, description, reward, deadline, status, createdAt } = task;
 
   return (
     <div className="card bg-base-100 shadow-2xl border border-base-300 rounded-3xl">
@@ -89,7 +89,7 @@ export const TaskInfoCard = ({ task, taskWorker }: TaskInfoCardProps) => {
             </div>
             <div className="bg-base-200 rounded-xl p-3 w-full">
               <div className="text-xs text-gray-500">任务报酬</div>
-              <div className="font-semibold">{formatUnits(totalreward, 18)} TST</div>
+              <div className="font-semibold">{formatUnits(reward, 18)} TST</div>
             </div>
             <div className="bg-base-200 rounded-xl p-3 w-full">
               <div className="text-xs text-gray-500">任务创建者</div>

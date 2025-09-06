@@ -1,19 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CreateTaskModal } from "./_components/CreateTaskModal";
-import { TaskCard } from "./_components/TaskCard";
 import { getBuiltGraphSDK } from "~~/.graphclient";
+import { CreateTaskModal } from "~~/components/tasks/CreateTaskModal";
+import { TaskCard } from "~~/components/tasks/TaskCard";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const MilestonePaymentTaskPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<number>(0); // 默认只显示Open状态的任务
+  const [selectedStatus, setSelectedStatus] = useState<string>("Open"); // 默认只显示Open状态的任务
   const [tasks, setTasks] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // 获取 GraphQL SDK
-  // const sdk = getBuiltGraphSDK();
 
   const { writeContractAsync: createTask } = useScaffoldWriteContract({ contractName: "MilestonePaymentTask" });
 
@@ -64,32 +61,13 @@ const MilestonePaymentTaskPage = () => {
     }
   };
 
-  // 获取状态筛选选项（移除"全部状态"和"Completed"状态）
-  const statusOptions = [
-    { value: 0, label: "Open" },
-    { value: 1, label: "InProgress" },
-    { value: 3, label: "Paid" },
-    { value: 4, label: "Cancelled" },
-  ];
+  // 获取状态筛选选项
+  const statusOptions = ["Open", "InProgress", "Paid", "Cancelled"];
 
   // 根据选择的状态筛选任务
   const filteredTasks = tasks.filter(task => {
-    // 定义状态映射关系
-    const statusMap: Record<string, number> = {
-      Open: 0,
-      InProgress: 1,
-      Paid: 3,
-      Cancelled: 4,
-    };
-
-    // 获取任务状态对应的数字值
-    const taskStatusNum = statusMap[task.status];
-
-    // 如果找不到对应状态或未选择状态，返回false
-    if (taskStatusNum === undefined) return false;
-
-    // 根据选中的状态进行过滤
-    return selectedStatus === 0 ? true : taskStatusNum === selectedStatus;
+    // 直接使用字符串状态进行比较，避免数字映射错误
+    return task.status === selectedStatus;
   });
 
   return (
@@ -107,11 +85,11 @@ const MilestonePaymentTaskPage = () => {
           <div className="flex flex-wrap gap-2">
             {statusOptions.map(option => (
               <button
-                key={option.label}
-                className={`btn btn-sm ${selectedStatus === option.value ? "btn-primary" : "btn-outline"}`}
-                onClick={() => setSelectedStatus(option.value)}
+                key={option}
+                className={`btn btn-sm ${selectedStatus === option ? "btn-primary" : "btn-outline"}`}
+                onClick={() => setSelectedStatus(option)}
               >
-                {option.label}
+                {option}
               </button>
             ))}
           </div>
@@ -121,15 +99,16 @@ const MilestonePaymentTaskPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {isLoading ? (
             <div className="col-span-full text-center py-10">
-              <span className="loading loading-spinner loading-lg">加载中...</span>
+              <span className="loading loading-spinner loading-lg"></span>
             </div>
           ) : filteredTasks.length > 0 ? (
-            filteredTasks.map(task => (
-              <TaskCard key={`task-${task.taskId}`} task={task} selectedStatus={selectedStatus} />
-            ))
+            filteredTasks.map(task => <TaskCard key={task.taskId} task={task} basePath="/milestone" />)
           ) : (
             <div className="col-span-full text-center py-10">
-              <p className="text-gray-500">暂无任务</p>
+              <h3 className="text-xl font-semibold mb-2">暂无任务</h3>
+              <p className="text-gray-500">
+                {tasks.length === 0 ? "当前没有任何任务，创建一个新任务开始吧！" : "没有符合当前筛选条件的任务"}
+              </p>
             </div>
           )}
         </div>

@@ -110,7 +110,7 @@ const MilestoneTaskDetailPage = () => {
   }
 
   // 解构任务数据
-  const { id, creator, title, description, totalReward, deadline, status, createdAt, worker, milestones } = task;
+  const { id, creator, title, description, reward, deadline, status, createdAt, worker, milestones } = task;
 
   // 检查当前用户是否为任务创建者
   const isTaskCreator = connectedAddress && creator && connectedAddress.toLowerCase() === creator.address.toLowerCase();
@@ -251,11 +251,11 @@ const MilestoneTaskDetailPage = () => {
   };
 
   // 构造taskData对象以匹配组件期望的格式
-  // Task结构: [id, totalreward, deadline, status, creator, worker]
+  // Task结构: [id, reward, deadline, status, creator, worker]
   const taskData = [
-    BigInt(id || 0),
-    BigInt(totalReward || 0),
-    BigInt(deadline || 0),
+    id ? BigInt(id) : BigInt(0),
+    reward ? BigInt(reward) : BigInt(0),
+    deadline ? BigInt(deadline) : BigInt(0),
     ["Open", "InProgress", "Completed", "Paid", "Cancelled"].indexOf(status),
     creator?.address || "",
     worker?.address || "",
@@ -313,7 +313,7 @@ const MilestoneTaskDetailPage = () => {
             creator: creator.address,
             title: title,
             description: description,
-            totalreward: BigInt(totalReward),
+            reward: BigInt(reward),
             deadline: BigInt(deadline),
             status: ["Open", "InProgress", "Completed", "Paid", "Cancelled"].indexOf(status),
             createdAt: BigInt(createdAt),

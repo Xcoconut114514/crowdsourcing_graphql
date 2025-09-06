@@ -140,7 +140,7 @@ type MilestonePaymentTask @entity(immutable: false) {
   worker: User!
   title: String!
   description: String!
-  totalReward: BigInt!
+  reward: BigInt!
   deadline: BigInt!
   status: MilestonePaymentTaskStatus!
   milestones: [Milestone!]!

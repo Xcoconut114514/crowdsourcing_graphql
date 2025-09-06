@@ -1259,7 +1259,7 @@ const deployedContracts = {
         renounceOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
         transferOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 2,
+      deployedOnBlock: 1,
     },
     UserInfo: {
       address: "0xb19b36b1456e65e3a6d514d3f715f204bd59f431",
@@ -2317,7 +2317,7 @@ const deployedContracts = {
         updatePlatformFee: "contracts/BaseTask.sol",
         withdrawPlatformRevenue: "contracts/BaseTask.sol",
       },
-      deployedOnBlock: 3,
+      deployedOnBlock: 2,
     },
     BiddingTask: {
       address: "0xe1aa25618fa0c7a1cfdab5d6b456af611873b629",
@@ -4621,7 +4621,7 @@ const deployedContracts = {
         updatePlatformFee: "contracts/BaseTask.sol",
         withdrawPlatformRevenue: "contracts/BaseTask.sol",
       },
-      deployedOnBlock: 4,
+      deployedOnBlock: 3,
     },
   },
 } as const;

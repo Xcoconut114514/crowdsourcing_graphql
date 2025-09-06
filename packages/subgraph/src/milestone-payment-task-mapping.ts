@@ -44,7 +44,7 @@ export function handleMilestonePaymentTaskCreated(
 
   entity.title = event.params.title;
   entity.description = event.params.description;
-  entity.totalReward = BigInt.fromI32(0);
+  entity.reward = BigInt.fromI32(0);
   entity.deadline = event.params.deadline;
   // 修复：创建一个默认的worker用户而不是使用空字符串
   let worker = getOrCreateUser(Address.zero());
@@ -94,9 +94,9 @@ export function handleMilestonePaymentTaskMilestoneAdded(
     let milestones = task.milestones;
     milestones.push(entity.id);
     task.milestones = milestones;
-    
+
     // 更新任务的总奖励
-    task.totalReward = task.totalReward.plus(event.params.reward);
+    task.reward = task.reward.plus(event.params.reward);
     task.updatedAt = event.block.timestamp;
     task.save();
   }
@@ -187,7 +187,7 @@ export function handleMilestonePaymentTaskMilestonePaid(
       task.completedMilestonesCount = task.completedMilestonesCount.plus(
         BigInt.fromI32(1)
       );
-      task.totalReward = task.totalReward.minus(entity.reward);
+      task.reward = task.reward.minus(entity.reward);
       task.updatedAt = event.block.timestamp;
       task.save();
     }
@@ -258,7 +258,7 @@ export function handleMilestonePaymentTaskMilestoneRewardIncreased(
     // 更新任务的总奖励
     let task = MilestonePaymentTask.load(taskId);
     if (task != null) {
-      task.totalReward = task.totalReward.plus(event.params.amount);
+      task.reward = task.reward.plus(event.params.amount);
       task.updatedAt = event.block.timestamp;
       task.save();
     }

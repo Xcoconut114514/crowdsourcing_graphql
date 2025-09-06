@@ -18,7 +18,7 @@ query GetMilestonePaymentTasks(
     }
     title
     description
-    totalReward
+    reward
     deadline
     status
     completedMilestonesCount
@@ -41,7 +41,7 @@ query GetMilestonePaymentTask($id: ID!) {
     }
     title
     description
-    totalReward
+    reward
     deadline
     status
     completedMilestonesCount
