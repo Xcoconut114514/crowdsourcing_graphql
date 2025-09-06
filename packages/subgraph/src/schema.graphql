@@ -1,0 +1,177 @@
+type User @entity(immutable: false) {
+  id: ID!
+  address: Bytes!
+  profile: UserProfile
+  skills: UserSkills
+  workerDisputes: [Dispute!]! @derivedFrom(field: "worker")
+  creatorDisputes: [Dispute!]! @derivedFrom(field: "taskCreator")
+  createdTasks: [FixedPaymentTask!]! @derivedFrom(field: "creator")
+  assignedTasks: [FixedPaymentTask!]! @derivedFrom(field: "worker")
+  biddingTaskCreated: [BiddingTask!]! @derivedFrom(field: "creator")
+  biddingTaskAssigned: [BiddingTask!]! @derivedFrom(field: "worker")
+  bids: [Bid!]! @derivedFrom(field: "bidder")
+}
+
+type UserProfile @entity(immutable: false) {
+  id: ID!
+  user: User!
+  name: String!
+  email: String
+  bio: String
+  website: String
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type UserSkills @entity(immutable: false) {
+  id: ID!
+  user: User!
+  skills: [String!]!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+# DisputeResolver实体定义
+type Dispute @entity(immutable: false) {
+  id: ID!
+  disputeId: BigInt!
+  taskId: BigInt!
+  taskContract: Bytes!
+  worker: User!
+  taskCreator: User!
+  rewardAmount: BigInt!
+  workerShare: BigInt!
+  status: DisputeStatus!
+  proofOfWork: String!
+  workerApproved: Boolean!
+  creatorApproved: Boolean!
+  votes: [AdminVote!]!
+  createdAt: BigInt!
+  resolvedAt: BigInt
+  distributedAt: BigInt
+}
+
+type Admin @entity(immutable: false) {
+  id: ID!
+  address: Bytes!
+  stakeAmount: BigInt!
+  isActive: Boolean!
+  votes: [AdminVote!]! @derivedFrom(field: "admin")
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type AdminVote @entity(immutable: false) {
+  id: ID!
+  dispute: Dispute!
+  admin: Admin!
+  workerShare: BigInt!
+  createdAt: BigInt!
+}
+
+enum DisputeStatus {
+  Filed
+  Resolved
+  Distributed
+}
+
+type FixedPaymentTask @entity(immutable: false) {
+  id: ID!
+  taskId: BigInt!
+  creator: User!
+  worker: User!
+  title: String!
+  description: String!
+  reward: BigInt!
+  deadline: BigInt!
+  proofOfWork: String!
+  status: FixedPaymentTaskStatus!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+enum FixedPaymentTaskStatus {
+  Open
+  InProgress
+  Completed
+  Paid
+  Cancelled
+}
+
+type BiddingTask @entity(immutable: false) {
+  id: ID!
+  taskId: BigInt!
+  creator: User!
+  worker: User!
+  title: String!
+  description: String!
+  reward: BigInt!
+  deadline: BigInt!
+  proofOfWork: String!
+  status: BiddingTaskStatus!
+  bids: [Bid!]!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type Bid @entity(immutable: false) {
+  id: ID!
+  taskId: BigInt!
+  bidder: User!
+  bidderUser: User
+  amount: BigInt!
+  estimatedTime: BigInt!
+  description: String!
+  createdAt: BigInt!
+}
+
+enum BiddingTaskStatus {
+  Open
+  InProgress
+  Completed
+  Paid
+  Cancelled
+}
+
+type MilestonePaymentTask @entity(immutable: false) {
+  id: ID!
+  taskId: BigInt!
+  creator: User!
+  worker: User!
+  title: String!
+  description: String!
+  totalReward: BigInt!
+  deadline: BigInt!
+  status: MilestonePaymentTaskStatus!
+  milestones: [Milestone!]!
+  completedMilestonesCount: BigInt!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type Milestone @entity(immutable: false) {
+  id: ID!
+  taskId: BigInt!
+  milestoneIndex: BigInt!
+  description: String!
+  reward: BigInt!
+  paid: Boolean!
+  workProof: WorkProof
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type WorkProof @entity(immutable: false) {
+  id: ID!
+  submitted: Boolean!
+  approved: Boolean!
+  submittedAt: BigInt!
+  proof: String!
+}
+
+enum MilestonePaymentTaskStatus {
+  Open
+  InProgress
+  Paid
+  Cancelled
+}

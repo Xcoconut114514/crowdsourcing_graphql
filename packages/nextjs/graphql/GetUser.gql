@@ -1,0 +1,35 @@
+query GetUser($id: ID!) {
+  user(id: $id) {
+    id
+    address
+    profile {
+      name
+      email
+      bio
+      website
+      createdAt
+      updatedAt
+    }
+    skills {
+      skills
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+query GetUsers($first: Int!, $skip: Int!) {
+  users(first: $first, skip: $skip) {
+    id
+    address
+    profile {
+      name
+      email
+      bio
+      website
+    }
+    skills {
+      skills
+    }
+  }
+}

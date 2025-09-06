@@ -1,0 +1,28 @@
+# .graphclientrc.yml
+sources:
+  - name: UserInfo
+    handler:
+      graphql:
+        endpoint: http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
+  - name: DisputeResolver
+    handler:
+      graphql:
+        endpoint: http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
+  - name: FixedPaymentTaskResolver
+    handler:
+      graphql:
+        endpoint: http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
+  - name: BiddingTaskResolver
+    handler:
+      graphql:
+        endpoint: http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
+  - name: MilestonePaymentTaskResolver
+    handler:
+      graphql:
+        endpoint: http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
+documents:
+  - ./graphql/GetUser.gql
+  - ./graphql/DisputeQueries.gql
+  - ./graphql/FixedPaymentTaskQueries.gql
+  - ./graphql/BiddingTaskQueries.gql
+  - ./graphql/MilestonePaymentTaskQueries.gql
