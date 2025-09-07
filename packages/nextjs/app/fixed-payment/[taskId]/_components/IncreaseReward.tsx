@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { notification } from "~~/utils/scaffold-eth";
 
 export const IncreaseReward = ({
   taskId,
@@ -61,7 +60,6 @@ export const IncreaseReward = ({
 
     try {
       setIsLoading(true);
-      setError("");
 
       // 先授权代币
       await approveToken({
@@ -75,21 +73,10 @@ export const IncreaseReward = ({
         args: [BigInt(taskId), rewardInWei],
       });
 
-      notification.success("奖励增加成功");
       onSuccess?.();
       setRewardAmount("");
     } catch (e: any) {
       console.error("Error increasing reward:", e);
-      // 检查是否为特定的合约错误
-      if (e.message?.includes("OnlyTaskCreator")) {
-        setError("只有任务创建者才能增加奖励");
-      } else if (e.message?.includes("RewardMoreThanZero")) {
-        setError("奖励金额必须大于0");
-      } else if (e.message?.includes("ERC20InsufficientBalance")) {
-        setError("代币余额不足，请确保您有足够的TST代币");
-      } else {
-        setError(e.message || "增加奖励时出错");
-      }
     } finally {
       setIsLoading(false);
     }

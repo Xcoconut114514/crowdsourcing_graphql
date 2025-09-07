@@ -1368,7 +1368,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 2,
+      deployedOnBlock: 1,
     },
     FixedPaymentTask: {
       address: "0x8ce361602b935680e8dec218b820ff5056beb7af",
@@ -3381,7 +3381,7 @@ const deployedContracts = {
         updatePlatformFee: "contracts/BaseTask.sol",
         withdrawPlatformRevenue: "contracts/BaseTask.sol",
       },
-      deployedOnBlock: 3,
+      deployedOnBlock: 2,
     },
     MilestonePaymentTask: {
       address: "0xe1da8919f262ee86f9be05059c9280142cf23f48",
@@ -4621,7 +4621,7 @@ const deployedContracts = {
         updatePlatformFee: "contracts/BaseTask.sol",
         withdrawPlatformRevenue: "contracts/BaseTask.sol",
       },
-      deployedOnBlock: 3,
+      deployedOnBlock: 2,
     },
   },
 } as const;

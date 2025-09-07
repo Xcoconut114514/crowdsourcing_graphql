@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { AddWorker } from "./_components/AddWorker";
+import { AddWorkerModal } from "./_components/AddWorkerModal";
 import { ApproveProof } from "./_components/ApproveProof";
 import { CancelTask } from "./_components/CancelTask";
 import { ClaimReward } from "./_components/ClaimReward";
@@ -15,6 +15,7 @@ import { formatUnits } from "viem";
 import { useAccount } from "wagmi";
 import { getBuiltGraphSDK } from "~~/.graphclient";
 import { Address } from "~~/components/scaffold-eth";
+import { formatCreatedAt, formatDeadline, getTaskStatusColor } from "~~/utils/tasks";
 
 const FixedPaymentTaskDetailPage = () => {
   const { taskId } = useParams<{ taskId: string }>();
@@ -22,35 +23,15 @@ const FixedPaymentTaskDetailPage = () => {
 
   // 控制工作量证明模态框的显示状态
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
+  // 控制添加工作者模态框的显示状态
+  const [isAddWorkerModalOpen, setIsAddWorkerModalOpen] = useState(false);
   const [task, setTask] = useState<any>(null);
   const [taskData, setTaskData] = useState<any>(null);
   const [taskProof, setTaskProof] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 提取处理任务数据的函数，避免重复代码
-  const processTaskData = useCallback((taskObj: any) => {
-    // 设置taskData格式以匹配组件期望的格式
-    setTaskData([
-      BigInt(taskObj.taskId || 0),
-      BigInt(taskObj.reward || 0),
-      BigInt(taskObj.deadline || 0),
-      getStatusValue(taskObj.status),
-      taskObj.creator?.address || "",
-      taskObj.worker?.address || "",
-    ]);
-
-    // 设置taskProof格式以匹配组件期望的格式
-    if (taskObj.proofOfWork) {
-      setTaskProof([
-        true,
-        taskObj.status === "Completed" || taskObj.status === "Paid",
-        taskObj.updatedAt,
-        taskObj.proofOfWork,
-      ]);
-    }
-  }, []);
-
+  // 合并数据获取和处理逻辑
   const fetchTaskData = useCallback(async () => {
     if (!taskId) {
       setError("任务ID无效");
@@ -61,7 +42,7 @@ const FixedPaymentTaskDetailPage = () => {
       setIsLoading(true);
       setError(null);
 
-      // 将sdk的创建移到函数内部，避免因对象引用变化导致的无限循环
+      // 创建sdk实例
       const sdk = getBuiltGraphSDK();
 
       // 从 GraphQL 获取任务详情
@@ -70,103 +51,46 @@ const FixedPaymentTaskDetailPage = () => {
       });
 
       if (taskResult?.fixedPaymentTask) {
-        setTask(taskResult.fixedPaymentTask);
-        processTaskData(taskResult.fixedPaymentTask);
+        const taskObj = taskResult.fixedPaymentTask;
+        setTask(taskObj);
+
+        // 直接处理taskData格式以匹配组件期望的格式
+        setTaskData([
+          BigInt(taskObj.taskId || 0),
+          BigInt(taskObj.reward || 0),
+          BigInt(taskObj.deadline || 0),
+          taskObj.status, // 直接使用字符串状态
+          taskObj.creator?.address || "",
+          taskObj.worker?.address || "",
+        ]);
+
+        // 直接处理taskProof格式以匹配组件期望的格式
+        if (taskObj.proofOfWork) {
+          setTaskProof([
+            true,
+            taskObj.status === "Completed" || taskObj.status === "Paid",
+            taskObj.updatedAt,
+            taskObj.proofOfWork,
+          ]);
+        }
       } else {
         setError("任务未找到");
       }
     } catch (err) {
       console.error("Error fetching task data:", err);
       setError("获取任务数据时出错");
+      // 出错时重置数据
+      setTask(null);
+      setTaskData(null);
+      setTaskProof(null);
     } finally {
       setIsLoading(false);
     }
-  }, [taskId, processTaskData]); // 移除sdk依赖以避免无限循环
+  }, [taskId]);
 
   useEffect(() => {
     fetchTaskData();
-  }, [taskId, fetchTaskData]);
-
-  const refetchTask = async () => {
-    // 重新获取任务数据
-    try {
-      // 将sdk的创建移到函数内部，避免因对象引用变化导致的无限循环
-      const sdk = getBuiltGraphSDK();
-
-      // 从 GraphQL 获取任务详情
-      const taskResult = await sdk.GetFixedPaymentTask({
-        id: taskId as string,
-      });
-
-      if (taskResult?.fixedPaymentTask) {
-        setTask(taskResult.fixedPaymentTask);
-        processTaskData(taskResult.fixedPaymentTask);
-      }
-    } catch (error) {
-      console.error("Error fetching task data:", error);
-    }
-  };
-
-  const formatDeadline = (deadline: string) => {
-    const date = new Date(Number(deadline) * 1000);
-    return date.toLocaleString();
-  };
-
-  const formatCreatedAt = (createdAt: string) => {
-    const date = new Date(Number(createdAt) * 1000);
-    return date.toLocaleString();
-  };
-
-  const getStatusValue = (status: string) => {
-    switch (status) {
-      case "Open":
-        return 0;
-      case "InProgress":
-        return 1;
-      case "Completed":
-        return 2;
-      case "Paid":
-        return 3;
-      case "Cancelled":
-        return 4;
-      default:
-        return 0;
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "Open":
-        return "Open";
-      case "InProgress":
-        return "InProgress";
-      case "Completed":
-        return "Completed";
-      case "Paid":
-        return "Paid";
-      case "Cancelled":
-        return "Cancelled";
-      default:
-        return "Unknown";
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Open": // Open
-        return "badge-success";
-      case "InProgress": // InProgress
-        return "badge-warning";
-      case "Completed": // Completed
-        return "badge-info";
-      case "Paid": // Paid
-        return "badge-primary";
-      case "Cancelled": // Cancelled
-        return "badge-error";
-      default:
-        return "badge-ghost";
-    }
-  };
+  }, [fetchTaskData]);
 
   if (isLoading) {
     return (
@@ -206,8 +130,7 @@ const FixedPaymentTaskDetailPage = () => {
   const { id, creator, worker, title, description, reward, deadline, status, createdAt, proofOfWork, updatedAt } = task;
 
   // 检查当前用户是否为任务创建者
-  const isTaskCreator =
-    connectedAddress && creator && creator?.address && connectedAddress.toLowerCase() === creator.address.toLowerCase();
+  const isTaskCreator = connectedAddress && connectedAddress.toLowerCase() === creator.address.toLowerCase();
 
   // 获取工作者地址
   const taskWorker = worker?.address;
@@ -224,12 +147,18 @@ const FixedPaymentTaskDetailPage = () => {
             {isTaskCreator && status !== "Cancelled" && status !== "Paid" && (
               <CancelTask
                 taskId={taskId as string}
-                taskStatus={getStatusValue(status)}
+                taskStatus={status} // 直接传递状态字符串
                 taskData={taskData}
                 taskProof={taskProof}
                 disputeProcessingRewardBps={BigInt(50)} // 使用默认值
-                onSuccess={refetchTask}
+                onSuccess={fetchTaskData}
               />
+            )}
+            {/* 只有任务创建者且任务状态为Open时才显示添加工作者按钮 */}
+            {isTaskCreator && status === "Open" && (
+              <button className="btn btn-primary" onClick={() => setIsAddWorkerModalOpen(true)}>
+                添加工作者
+              </button>
             )}
             {/* 只有工作者且任务状态为InProgress时才显示提交工作量证明按钮 */}
             {status === "InProgress" &&
@@ -244,7 +173,7 @@ const FixedPaymentTaskDetailPage = () => {
             {connectedAddress &&
               taskWorker &&
               connectedAddress.toLowerCase() === taskWorker.toLowerCase() &&
-              status === "Completed" && <ClaimReward taskId={taskId as string} onSuccess={refetchTask} />}
+              status === "Completed" && <ClaimReward taskId={taskId as string} onSuccess={fetchTaskData} />}
           </div>
         </div>
 
@@ -254,12 +183,14 @@ const FixedPaymentTaskDetailPage = () => {
             <div className="flex flex-col md:flex-row justify-between items-start gap-6">
               <div className="flex-1">
                 <h1 className="card-title text-3xl font-bold mb-2 text-primary">{title}</h1>
-                <span className={`badge ${getStatusColor(status)} badge-lg text-base mt-2`}>
-                  {getStatusText(status)}
-                </span>
+                <span className={`badge ${getTaskStatusColor(status)} badge-lg text-base mt-2`}>{status}</span>
                 <div className="mt-4 bg-base-200 rounded-xl p-4">
                   <p className="text-sm text-gray-500 mb-1">任务描述</p>
                   <p className="mt-1 text-base leading-relaxed">{description}</p>
+                </div>
+                <div className="mt-4 text-sm">
+                  <p className="text-gray-500">创建时间</p>
+                  <p className="font-semibold">{formatCreatedAt(createdAt)}</p>
                 </div>
               </div>
               <div className="flex flex-col gap-4 min-w-[180px] items-end">
@@ -268,25 +199,27 @@ const FixedPaymentTaskDetailPage = () => {
                   <div className="font-mono text-lg">#{id?.toString()}</div>
                 </div>
                 <div className="bg-base-200 rounded-xl p-3 w-full">
-                  <div className="text-xs text-gray-500">创建时间</div>
-                  <div className="font-semibold">{createdAt ? formatCreatedAt(createdAt) : "N/A"}</div>
+                  <div className="text-xs text-gray-500">报酬</div>
+                  <div className="text-xl font-bold text-primary">
+                    {formatUnits(BigInt(reward || 0), 18)} <span className="text-sm font-normal">Tokens</span>
+                  </div>
                 </div>
                 <div className="bg-base-200 rounded-xl p-3 w-full">
                   <div className="text-xs text-gray-500">截止时间</div>
-                  <div className="font-semibold">{deadline ? formatDeadline(deadline) : "N/A"}</div>
+                  <div className="font-semibold">{formatDeadline(deadline)}</div>
                 </div>
                 <div className="bg-base-200 rounded-xl p-3 w-full">
-                  <div className="text-xs text-gray-500">任务报酬</div>
-                  <div className="font-semibold">{reward ? formatUnits(BigInt(reward), 18) : "0"} TST</div>
+                  <div className="text-xs text-gray-500">创建者</div>
+                  <div className="font-semibold">
+                    <Address address={creator?.address} />
+                  </div>
                 </div>
-                <div className="bg-base-200 rounded-xl p-3 w-full">
-                  <div className="text-xs text-gray-500">任务创建者</div>
-                  {creator?.address ? <Address address={creator.address} /> : <div>N/A</div>}
-                </div>
-                {taskWorker && (
+                {worker?.address && (
                   <div className="bg-base-200 rounded-xl p-3 w-full">
                     <div className="text-xs text-gray-500">工作者</div>
-                    <Address address={taskWorker} />
+                    <div className="font-semibold">
+                      <Address address={worker?.address} />
+                    </div>
                   </div>
                 )}
               </div>
@@ -294,13 +227,14 @@ const FixedPaymentTaskDetailPage = () => {
           </div>
         </div>
 
-        {/* 操作区：添加工作者 */}
+        {/* 添加工作者模态框 */}
         {isTaskCreator && status === "Open" && (
-          <div className="flex flex-wrap gap-4">
-            <div className="flex-1 min-w-[220px]">
-              <AddWorker taskId={taskId as string} onSuccess={refetchTask} />
-            </div>
-          </div>
+          <AddWorkerModal
+            isOpen={isAddWorkerModalOpen}
+            onClose={() => setIsAddWorkerModalOpen(false)}
+            taskId={taskId as string}
+            onSuccess={fetchTaskData}
+          />
         )}
 
         {/* 工作量证明提交模态框 */}
@@ -310,7 +244,7 @@ const FixedPaymentTaskDetailPage = () => {
             taskDeadline={BigInt(deadline || 0)}
             isOpen={isProofModalOpen}
             onClose={() => setIsProofModalOpen(false)}
-            onSuccess={refetchTask}
+            onSuccess={fetchTaskData}
           />
         )}
 
@@ -324,7 +258,7 @@ const FixedPaymentTaskDetailPage = () => {
                   <label className="label">
                     <span className="label-text">提交时间</span>
                   </label>
-                  <p className="font-mono">{updatedAt ? new Date(Number(updatedAt) * 1000).toLocaleString() : "N/A"}</p>
+                  <p className="font-mono">{updatedAt ? formatCreatedAt(updatedAt) : "N/A"}</p>
                 </div>
                 <div className="form-control mt-4">
                   <label className="label">
@@ -347,7 +281,7 @@ const FixedPaymentTaskDetailPage = () => {
                   status !== "Completed" &&
                   status !== "Paid" &&
                   status === "InProgress" &&
-                  taskWorker && <ApproveProof taskId={taskId as string} onSuccess={refetchTask} />}
+                  taskWorker && <ApproveProof taskId={taskId as string} onSuccess={fetchTaskData} />}
                 {/* 只有工作者且工作量证明尚未批准时才显示提出纠纷按钮 */}
                 {connectedAddress &&
                   taskWorker &&
@@ -360,7 +294,7 @@ const FixedPaymentTaskDetailPage = () => {
                       taskData={taskData}
                       taskProof={taskProof}
                       disputeProcessingRewardBps={BigInt(50)} // 使用默认值
-                      onSuccess={refetchTask}
+                      onSuccess={fetchTaskData}
                     />
                   )}
               </div>
@@ -376,7 +310,7 @@ const FixedPaymentTaskDetailPage = () => {
                 taskId={taskId as string}
                 currentDeadline={BigInt(deadline || 0)}
                 task={taskData}
-                onSuccess={refetchTask}
+                onSuccess={fetchTaskData}
               />
             </div>
             <div className="flex-1 min-w-[220px]">
@@ -384,7 +318,7 @@ const FixedPaymentTaskDetailPage = () => {
                 taskId={taskId as string}
                 task={taskData}
                 userTokenBalance={undefined}
-                onSuccess={refetchTask}
+                onSuccess={fetchTaskData}
               />
             </div>
           </div>

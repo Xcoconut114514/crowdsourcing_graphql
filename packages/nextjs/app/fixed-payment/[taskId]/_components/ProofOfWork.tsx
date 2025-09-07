@@ -16,6 +16,10 @@ export const ProofOfWork = ({ taskId, taskDeadline, isOpen, onClose, onSuccess }
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { writeContractAsync: submitProofOfWork } = useScaffoldWriteContract({ contractName: "FixedPaymentTask" });
 
+  // 统一计算是否超过截止日期
+  const currentTime = BigInt(Math.floor(Date.now() / 1000));
+  const isPastDeadline = currentTime > taskDeadline;
+
   const handleSubmitProof = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -24,8 +28,7 @@ export const ProofOfWork = ({ taskId, taskDeadline, isOpen, onClose, onSuccess }
     }
 
     // 检查是否已经超过截止日期
-    const currentTime = BigInt(Math.floor(Date.now() / 1000));
-    if (currentTime > taskDeadline) {
+    if (isPastDeadline) {
       return;
     }
 
@@ -52,9 +55,6 @@ export const ProofOfWork = ({ taskId, taskDeadline, isOpen, onClose, onSuccess }
       setIsSubmitting(false);
     }
   };
-
-  // 检查是否已经超过截止日期
-  const isPastDeadline = BigInt(Math.floor(Date.now() / 1000)) > taskDeadline;
 
   if (!isOpen) return null;
 

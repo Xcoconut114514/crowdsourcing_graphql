@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Address } from "../scaffold-eth";
+import { formatDeadline as formatDeadlineUtil, formatReward, getTaskStatusColor } from "~~/utils/tasks";
 
 interface TaskCardProps {
   task: any; // GraphQL获取的任务数据
@@ -7,42 +8,6 @@ interface TaskCardProps {
 }
 
 export const TaskCard = ({ task, basePath = "/fixed-payment" }: TaskCardProps) => {
-  const formatDeadline = (deadline: string) => {
-    const date = new Date(Number(deadline) * 1000);
-    return date.toLocaleString();
-  };
-
-  const formatReward = (reward: string) => {
-    // 检查reward是否有效
-    if (!reward) return "0";
-
-    // 将reward从wei转换为ether（除以1e18）
-    try {
-      const rewardInEther = BigInt(reward) / BigInt(1e18);
-      return rewardInEther.toString();
-    } catch (e) {
-      console.error("Error formatting reward:", e);
-      return "0";
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Open":
-        return "badge-success";
-      case "InProgress":
-        return "badge-warning";
-      case "Completed":
-        return "badge-info";
-      case "Paid":
-        return "badge-primary";
-      case "Cancelled":
-        return "badge-error";
-      default:
-        return "badge-ghost";
-    }
-  };
-
   // 检查必要字段
   if (!task) {
     return <div className="card bg-base-100 shadow-lg border border-base-300">无效任务数据</div>;
@@ -65,14 +30,14 @@ export const TaskCard = ({ task, basePath = "/fixed-payment" }: TaskCardProps) =
             <h3 className="card-title text-lg">{task.title || "未命名任务"}</h3>
             <p className="text-xs text-gray-500 mb-2">任务ID: #{task.taskId ? task.taskId.toString() : "未知"}</p>
           </div>
-          <span className={`badge ${getStatusColor(task.status)} badge-sm`}>{task.status || "未知状态"}</span>
+          <span className={`badge ${getTaskStatusColor(task.status)} badge-sm`}>{task.status || "未知状态"}</span>
         </div>
 
         <p className="text-sm mb-2">{shortDescription}</p>
 
         <div className="flex justify-between text-xs text-gray-500">
           <span>截止时间:</span>
-          <span>{task.deadline ? formatDeadline(task.deadline) : "未设置"}</span>
+          <span>{task.deadline ? formatDeadlineUtil(task.deadline) : "未设置"}</span>
         </div>
 
         <div className="flex justify-between text-xs text-gray-500 mt-1">

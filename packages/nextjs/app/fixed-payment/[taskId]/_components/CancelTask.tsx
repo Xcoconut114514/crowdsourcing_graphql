@@ -3,7 +3,7 @@ import { useDeployedContractInfo, useScaffoldWriteContract } from "~~/hooks/scaf
 
 interface CancelTaskProps {
   taskId: string;
-  taskStatus: number;
+  taskStatus: string; // 修改类型为string
   taskData: any;
   taskProof: any;
   disputeProcessingRewardBps: bigint | undefined;
@@ -57,8 +57,8 @@ export const CancelTask = ({
     }
   };
 
-  // 根据合约逻辑更新，只要不是已经支付(3)或者已经取消(4)的任务都可以使用取消任务的功能
-  const canCancelTask = taskStatus !== 3 && taskStatus !== 4;
+  // 根据合约逻辑更新，只要不是已经支付或者已经取消的任务都可以使用取消任务的功能
+  const canCancelTask = taskStatus !== "Paid" && taskStatus !== "Cancelled";
 
   if (!canCancelTask) {
     return null;
