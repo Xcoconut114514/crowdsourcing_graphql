@@ -73,6 +73,17 @@ export const DisputeButton = ({
     return null;
   }
 
+  // 检查是否满足时间条件（提交时间后至少3天）
+  const minTimeBeforeDispute = 3 * 24 * 60 * 60 * 1000; // 3天转换为毫秒
+  const currentTime = Date.now();
+  const proofSubmittedTime = Number(milestoneData.workProof.submittedAt) * 1000; // 转换为毫秒
+  const timeConditionMet = currentTime >= proofSubmittedTime + minTimeBeforeDispute;
+
+  // 如果不满足时间条件，不显示按钮
+  if (!timeConditionMet) {
+    return null;
+  }
+
   return (
     <>
       <button className="btn btn-error btn-sm" onClick={() => setIsModalOpen(true)}>

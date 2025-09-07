@@ -1,34 +1,49 @@
 import { useState } from "react";
 import { AddressInput } from "~~/components/scaffold-eth";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 interface AddWorkerModalProps {
   isOpen: boolean;
   onClose: () => void;
   taskId: string;
-  onAddWorker: (workerAddress: string, reward: string) => void;
+  onSuccess?: () => void;
 }
 
-export const AddWorkerModal = ({ isOpen, onClose, onAddWorker }: AddWorkerModalProps) => {
+export const AddWorkerModal = ({ isOpen, onClose, taskId, onSuccess }: AddWorkerModalProps) => {
   const [workerAddress, setWorkerAddress] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { writeContractAsync: addWorker } = useScaffoldWriteContract({
+    contractName: "MilestonePaymentTask",
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!workerAddress) {
-      alert("请填写工作者地址");
+      setError("请填写工作者地址");
       return;
     }
 
     try {
       setIsSubmitting(true);
-      // 传递空字符串作为报酬参数，因为添加工作者时不再需要输入报酬
-      onAddWorker(workerAddress, "");
+      setError(null);
+
+      await addWorker({
+        functionName: "addWorker",
+        args: [BigInt(taskId), workerAddress],
+      });
 
       // 重置表单
       setWorkerAddress("");
-    } catch (e) {
+
+      // 调用成功回调
+      onSuccess?.();
+      onClose();
+    } catch (e: any) {
       console.error("Error adding worker:", e);
+      setError(e.message || "添加工作者时出错");
     } finally {
       setIsSubmitting(false);
     }
@@ -52,6 +67,8 @@ export const AddWorkerModal = ({ isOpen, onClose, onAddWorker }: AddWorkerModalP
               placeholder="输入工作者地址"
             />
           </div>
+
+          {error && <div className="text-error text-sm mb-4">{error}</div>}
 
           <div className="modal-action">
             <button type="button" className="btn" onClick={onClose} disabled={isSubmitting}>

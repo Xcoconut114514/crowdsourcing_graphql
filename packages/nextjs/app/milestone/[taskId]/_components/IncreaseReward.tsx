@@ -10,14 +10,17 @@ import { notification } from "~~/utils/scaffold-eth";
 export const IncreaseReward = ({
   taskId,
   taskCreator,
+  milestones,
   onSuccess,
 }: {
   taskId: string;
   taskCreator: string;
+  milestones: any[];
   onSuccess?: () => void;
 }) => {
   const { address: connectedAddress } = useAccount();
   const [rewardAmount, setRewardAmount] = useState("");
+  const [selectedMilestone, setSelectedMilestone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -34,6 +37,18 @@ export const IncreaseReward = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!selectedMilestone) {
+      setError("请输入里程碑索引");
+      return;
+    }
+
+    // 用户输入的是从1开始的编号，需要转换为从0开始的索引
+    const milestoneIndex = parseInt(selectedMilestone) - 1;
+    if (isNaN(milestoneIndex) || milestoneIndex < 0 || milestoneIndex >= milestones.length) {
+      setError(`请输入有效的里程碑编号 (1-${milestones.length})`);
+      return;
+    }
 
     if (!rewardAmount) {
       setError("请输入奖励金额");
@@ -74,15 +89,16 @@ export const IncreaseReward = ({
         args: [milestonePaymentTaskContract.address, rewardInWei],
       });
 
-      // 然后增加奖励 - 这里需要修改为正确的函数名
+      // 然后增加奖励 - 使用从0开始的索引
       await increaseReward({
         functionName: "increaseMilestoneReward",
-        args: [BigInt(taskId), BigInt(0), rewardInWei], // 假设增加第一个里程碑的奖励
+        args: [BigInt(taskId), BigInt(milestoneIndex), rewardInWei],
       });
 
       notification.success("奖励增加成功");
       onSuccess?.();
       setRewardAmount("");
+      setSelectedMilestone("");
     } catch (e: any) {
       console.error("Error increasing reward:", e);
       // 检查是否为特定的合约错误
@@ -108,11 +124,26 @@ export const IncreaseReward = ({
   }
 
   return (
-    <div className="card bg-base-100 shadow-xl mt-6">
+    <div className="card bg-base-100 shadow-xl mt-6 w-full">
       <div className="card-body">
         <h2 className="card-title">增加奖励</h2>
         <form onSubmit={handleSubmit}>
-          <div className="form-control">
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text">里程碑编号</span>
+            </label>
+            <input
+              type="number"
+              min="1"
+              max={milestones.length}
+              placeholder={`输入里程碑编号 (1-${milestones.length})`}
+              className="input input-bordered w-full max-w-full"
+              value={selectedMilestone}
+              onChange={e => setSelectedMilestone(e.target.value)}
+            />
+          </div>
+
+          <div className="form-control mt-4 w-full">
             <label className="label">
               <span className="label-text">奖励金额 (TST)</span>
             </label>
@@ -120,7 +151,7 @@ export const IncreaseReward = ({
               type="number"
               step="0.01"
               placeholder="输入奖励金额"
-              className="input input-bordered"
+              className="input input-bordered w-full max-w-full"
               value={rewardAmount}
               onChange={e => setRewardAmount(e.target.value)}
               required

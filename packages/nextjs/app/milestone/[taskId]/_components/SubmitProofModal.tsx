@@ -25,18 +25,26 @@ export const SubmitProofModal = ({ isOpen, onClose, taskId, milestoneIndex, onSu
       return;
     }
 
+    if (milestoneIndex === null) {
+      alert("请选择一个里程碑");
+      return;
+    }
+
     try {
       setIsSubmitting(true);
 
+      // 直接调用智能合约提交工作量证明
+      await submitMilestoneProofOfWork({
+        functionName: "submitMilestoneProofOfWork",
+        args: [BigInt(taskId), BigInt(milestoneIndex), proof],
+      });
+
+      setProof("");
+      onClose();
+
+      // 如果提供了onSubmitProof回调，则调用它来处理后续操作
       if (onSubmitProof) {
         onSubmitProof(proof);
-      } else {
-        await submitMilestoneProofOfWork({
-          functionName: "submitMilestoneProofOfWork",
-          args: [BigInt(taskId), BigInt(milestoneIndex!), proof],
-        });
-        setProof("");
-        onClose();
       }
     } catch (e) {
       console.error("Error submitting proof:", e);

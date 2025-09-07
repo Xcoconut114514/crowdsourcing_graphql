@@ -1,42 +1,86 @@
 import { useState } from "react";
+import { parseEther } from "viem";
 import { InputBase } from "~~/components/scaffold-eth";
+import { useDeployedContractInfo, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 interface AddMilestoneModalProps {
   isOpen: boolean;
   onClose: () => void;
   taskId: string;
-  onAddMilestone: (description: string, reward: string) => void;
+  onSuccess?: () => void;
 }
 
-export const AddMilestoneModal = ({ isOpen, onClose, onAddMilestone }: AddMilestoneModalProps) => {
+export const AddMilestoneModal = ({ isOpen, onClose, taskId, onSuccess }: AddMilestoneModalProps) => {
   const [description, setDescription] = useState("");
   const [reward, setReward] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { data: milestonePaymentTaskContract } = useDeployedContractInfo({
+    contractName: "MilestonePaymentTask",
+  });
+
+  const { writeContractAsync: approveToken } = useScaffoldWriteContract({
+    contractName: "TaskToken",
+  });
+
+  const { writeContractAsync: addMilestoneContract } = useScaffoldWriteContract({
+    contractName: "MilestonePaymentTask",
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!description || !reward) {
-      alert("请填写所有字段");
+    if (!description) {
+      setError("请填写里程碑描述");
       return;
     }
 
-    // 检查奖励值是否为有效数字
+    if (!reward) {
+      setError("请填写奖励金额");
+      return;
+    }
+
+    // 验证奖励金额
     const rewardValue = parseFloat(reward);
     if (isNaN(rewardValue) || rewardValue <= 0) {
-      alert("请输入有效的奖励值");
+      setError("请输入有效的奖励金额");
+      return;
+    }
+
+    if (!milestonePaymentTaskContract) {
+      setError("合约未部署或地址无效");
       return;
     }
 
     try {
       setIsSubmitting(true);
-      onAddMilestone(description, reward);
+      setError(null);
+
+      const rewardInWei = parseEther(reward);
+
+      // 批准代币转移给里程碑付款任务合约
+      await approveToken({
+        functionName: "approve",
+        args: [milestonePaymentTaskContract.address, rewardInWei],
+      });
+
+      // 调用合约添加里程碑
+      await addMilestoneContract({
+        functionName: "addMilestone",
+        args: [BigInt(taskId), description, rewardInWei],
+      });
 
       // 重置表单
       setDescription("");
       setReward("");
-    } catch (e) {
+
+      // 调用成功回调
+      onSuccess?.();
+      onClose();
+    } catch (e: any) {
       console.error("Error adding milestone:", e);
+      setError(e.message || "添加里程碑时出错");
     } finally {
       setIsSubmitting(false);
     }
@@ -60,6 +104,7 @@ export const AddMilestoneModal = ({ isOpen, onClose, onAddMilestone }: AddMilest
               placeholder="输入里程碑描述"
               className="textarea textarea-bordered w-full"
               rows={4}
+              disabled={isSubmitting}
             />
           </div>
 
@@ -67,11 +112,18 @@ export const AddMilestoneModal = ({ isOpen, onClose, onAddMilestone }: AddMilest
             <label className="label">
               <span className="label-text font-bold">里程碑报酬 (TST)</span>
             </label>
-            <InputBase value={reward} onChange={value => setReward(value)} placeholder="输入里程碑报酬" />
+            <InputBase
+              value={reward}
+              onChange={value => setReward(value)}
+              placeholder="输入里程碑报酬"
+              disabled={isSubmitting}
+            />
             <div className="text-xs text-gray-500 mt-1">
               输入数字，单位为TST代币。例如：输入1表示1个TST代币（即10^18个最小单位）
             </div>
           </div>
+
+          {error && <div className="text-error text-sm mb-4">{error}</div>}
 
           <div className="modal-action">
             <button type="button" className="btn" onClick={onClose} disabled={isSubmitting}>
