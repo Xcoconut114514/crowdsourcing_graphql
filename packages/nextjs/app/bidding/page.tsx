@@ -21,8 +21,8 @@ const BiddingTasksPage = () => {
       setIsLoading(true);
       // 将sdk的创建移到函数内部，避免因对象引用变化导致的无限循环
       const sdk = getBuiltGraphSDK();
-      // 恢复原始代码：使用GetBiddingTasks查询
-      const result = await sdk.GetBiddingTasks({
+      // 使用优化的GraphQL查询，只获取TaskCard组件需要的字段
+      const result = await sdk.GetBiddingTasksForCard({
         first: 100,
         skip: 0,
         orderBy: "createdAt",

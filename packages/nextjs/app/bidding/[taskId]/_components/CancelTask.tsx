@@ -25,8 +25,6 @@ export const CancelTask = ({
 
   const handleCancelTask = async () => {
     try {
-      console.log("Cancel task parameters:", { taskId, taskStatus, taskData, taskProof, disputeProcessingRewardBps });
-
       // 根据合约逻辑，terminateTask可能需要提交纠纷，需要批准处理奖励
       // 检查是否满足提交纠纷的条件：
       // 1. 有工作者 (worker exists and not zero address)
@@ -38,30 +36,18 @@ export const CancelTask = ({
       const hasProof = taskProof && taskProof[0];
       const isNotApproved = taskProof && !taskProof[1];
 
-      console.log("Dispute conditions:", { hasWorker, hasProof, isNotApproved });
-
       if (hasWorker && hasProof && isNotApproved) {
         // 需要提交纠纷，计算并批准处理奖励
         const rewardAmount = taskData?.reward ? BigInt(taskData.reward) : BigInt(0);
         const processingRewardBps = disputeProcessingRewardBps || BigInt(50); // 默认0.5%
         const processingReward = (rewardAmount * processingRewardBps) / BigInt(10000);
 
-        console.log("Processing reward calculation:", { rewardAmount, processingRewardBps, processingReward });
-
-        // 先批准代币给BiddingTask合约用于纠纷处理奖励
-        console.log(
-          "Approving token transfer for dispute processing reward:",
-          biddingTaskContract?.address,
-          processingReward.toString(),
-        );
         await approveToken({
           functionName: "approve",
           args: [biddingTaskContract?.address || "", processingReward],
         });
-        console.log("Approval completed");
       }
 
-      console.log("Calling terminateTask with taskId:", taskId);
       await cancelTask({
         functionName: "terminateTask",
         args: [BigInt(taskId)],

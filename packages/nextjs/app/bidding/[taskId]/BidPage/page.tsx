@@ -33,7 +33,7 @@ export default function BidPage() {
       // 将sdk的创建移到函数内部，避免因对象引用变化导致的无限循环
       const sdk = getBuiltGraphSDK();
       // 从 GraphQL 获取任务详情和竞标信息
-      const result = await sdk.GetBiddingTask({
+      const result = await sdk.GetBiddingTaskForBidPage({
         id: taskId,
       });
 
@@ -76,7 +76,7 @@ export default function BidPage() {
 
       // 重新获取数据以更新UI
       const sdk = getBuiltGraphSDK();
-      const result = await sdk.GetBiddingTask({
+      const result = await sdk.GetBiddingTaskForBidPage({
         id: taskId,
       });
 
@@ -148,7 +148,7 @@ export default function BidPage() {
             <div className="space-y-4">
               {bids.map((bid, index) => (
                 <div
-                  key={index}
+                  key={bid.id}
                   className="border border-base-300 rounded-xl p-4 hover:bg-base-200 transition cursor-pointer"
                   onClick={() => (window.location.href = `/user/${bid.bidder.address}`)}
                 >

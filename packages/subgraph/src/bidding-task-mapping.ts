@@ -56,14 +56,19 @@ export function handleBiddingTaskBidSubmitted(
   event: BiddingTaskBidSubmittedEvent
 ): void {
   let taskId = event.params.taskId.toString();
-  let bidId = taskId + "-" + event.logIndex.toString();
-  let entity = new Bid(bidId);
-
-  entity.taskId = event.params.taskId;
-  // 修改：使用User实体ID而不是Address
+  // 使用任务ID和竞标者地址组合作为Bid ID，支持用户更新竞标
+  let bidId = taskId + "-" + event.params.bidder.toHexString();
+  
+  // 加载现有的Bid实体或创建新的
+  let entity = Bid.load(bidId);
+  if (!entity) {
+    entity = new Bid(bidId);
+    entity.taskId = event.params.taskId;
+  }
+  
+  // 更新竞标信息
   let bidder = getOrCreateUser(event.params.bidder);
   entity.bidder = bidder.id;
-
   entity.amount = event.params.amount;
   entity.estimatedTime = event.params.estimatedTime;
   entity.description = event.params.description;
@@ -71,13 +76,16 @@ export function handleBiddingTaskBidSubmitted(
 
   entity.save();
 
-  // 关联Bid到对应的BiddingTask
+  // 关联Bid到对应的BiddingTask（如果尚未关联）
   let task = BiddingTask.load(taskId);
   if (task) {
     let bids = task.bids;
-    bids.push(entity.id);
-    task.bids = bids;
-    task.save();
+    // 检查bid是否已在数组中，避免重复添加
+    if (!bids.includes(entity.id)) {
+      bids.push(entity.id);
+      task.bids = bids;
+      task.save();
+    }
   }
 }
 

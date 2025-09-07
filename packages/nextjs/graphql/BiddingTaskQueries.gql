@@ -1,4 +1,4 @@
-query GetBiddingTask($id: ID!) {
+query GetBiddingTaskForDetail($id: ID!) {
   biddingTask(id: $id) {
     id
     taskId
@@ -16,6 +16,20 @@ query GetBiddingTask($id: ID!) {
     deadline
     proofOfWork
     status
+    createdAt
+    updatedAt
+  }
+}
+
+query GetBiddingTaskForBidPage($id: ID!) {
+  biddingTask(id: $id) {
+    id
+    taskId
+    creator {
+      id
+      address
+    }
+    status
     bids {
       id
       bidder {
@@ -27,8 +41,6 @@ query GetBiddingTask($id: ID!) {
       description
       createdAt
     }
-    createdAt
-    updatedAt
   }
 }
 
@@ -58,5 +70,29 @@ query GetBiddingTasks(
     status
     createdAt
     updatedAt
+  }
+}
+
+query GetBiddingTasksForCard(
+  $first: Int!
+  $skip: Int!
+  $where: BiddingTask_filter
+  $orderBy: BiddingTask_orderBy
+  $orderDirection: OrderDirection
+) {
+  biddingTasks(first: $first, skip: $skip, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
+    taskId
+    title
+    description
+    reward
+    deadline
+    status
+    creator {
+      address
+    }
+    worker {
+      address
+    }
+    createdAt
   }
 }

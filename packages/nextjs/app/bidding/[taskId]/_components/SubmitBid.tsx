@@ -2,7 +2,6 @@ import { useState } from "react";
 import { parseEther } from "viem";
 import { useAccount } from "wagmi";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
-import { notification } from "~~/utils/scaffold-eth";
 
 interface SubmitBidProps {
   taskId: bigint;
@@ -17,18 +16,11 @@ export const SubmitBid = ({ taskId, isTaskOpen }: SubmitBidProps) => {
   const { writeContractAsync: submitBid } = useScaffoldWriteContract({ contractName: "BiddingTask" });
 
   const handleSubmitBid = async () => {
-    if (!address) {
-      notification.error("请先连接钱包");
-      return;
-    }
-
-    if (!isTaskOpen) {
-      notification.error("任务不在开放状态，无法提交竞标");
+    if (!address || !isTaskOpen) {
       return;
     }
 
     if (!bidAmount || !bidDescription || !estimatedTime) {
-      notification.error("请填写所有竞标信息");
       return;
     }
 
@@ -43,14 +35,12 @@ export const SubmitBid = ({ taskId, isTaskOpen }: SubmitBidProps) => {
         functionName: "submitBid",
         args: [taskId, bidAmountInWei, bidDescription, estimatedTimeInSeconds],
       });
-      notification.success("竞标提交成功");
       // 清空表单
       setBidAmount("");
       setBidDescription("");
       setEstimatedTime("");
     } catch (e) {
       console.error("Error submitting bid:", e);
-      notification.error("提交竞标失败");
     }
   };
 

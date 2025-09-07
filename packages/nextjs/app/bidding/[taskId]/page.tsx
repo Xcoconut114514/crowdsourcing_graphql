@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useEffect as useReactEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ApproveProofOfWork } from "./_components/ApproveProofOfWork";
@@ -12,186 +11,83 @@ import { ExtendDeadline } from "./_components/ExtendDeadline";
 import { IncreaseReward } from "./_components/IncreaseReward";
 import { SubmitBid } from "./_components/SubmitBid";
 import { SubmitProofOfWork } from "./_components/SubmitProofOfWork";
+import { formatUnits } from "viem";
 import { useAccount } from "wagmi";
 import { getBuiltGraphSDK } from "~~/.graphclient";
 import { Address } from "~~/components/scaffold-eth";
+import { formatCreatedAt, formatDeadline, getTaskStatusColor } from "~~/utils/tasks";
 
 export default function BiddingTaskDetailPage() {
   const { taskId } = useParams<{ taskId: string }>();
   const { address: connectedAddress } = useAccount();
+  const [task, setTask] = useState<any>(null);
   const [taskData, setTaskData] = useState<any>(null);
-  const [taskWorker, setTaskWorker] = useState<string>("");
-  const [isProofModalOpen, setIsProofModalOpen] = useState(false);
   const [taskProof, setTaskProof] = useState<any>(null);
+  const [isProofModalOpen, setIsProofModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const sdk = getBuiltGraphSDK();
-
-  // 将任务状态字符串转换为数值
-  const getStatusValue = (status: string) => {
-    switch (status) {
-      case "Open":
-        return "Open";
-      case "InProgress":
-        return "InProgress";
-      case "Completed":
-        return "Completed";
-      case "Paid":
-        return "Paid";
-      case "Cancelled":
-        return "Cancelled";
-      default:
-        return "Open";
+  // 合并数据获取和处理逻辑
+  const fetchTaskData = useCallback(async () => {
+    if (!taskId) {
+      setError("任务ID无效");
+      return;
     }
-  };
 
-  // 获取任务详情
-  useReactEffect(() => {
-    const fetchTaskData = async () => {
-      if (!taskId) return;
-
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        // 从 GraphQL 获取任务详情
-        const taskResult = await sdk.GetBiddingTask({
-          id: taskId,
-        });
-
-        if (taskResult?.biddingTask) {
-          const task = taskResult.biddingTask;
-          // 设置taskData格式以匹配组件期望的格式，与FixedPaymentTask保持一致
-          setTaskData({
-            id: task.taskId || 0,
-            reward: task.reward || 0,
-            deadline: task.deadline || 0,
-            status: getStatusValue(task.status),
-            creator: task.creator?.address || "",
-            worker: task.worker?.address || "",
-            title: task.title,
-            description: task.description,
-            createdAt: task.createdAt,
-          });
-
-          if (task.worker?.address) {
-            setTaskWorker(task.worker.address);
-          }
-
-          if (task.proofOfWork) {
-            // 构造taskProof对象，格式与原来保持一致
-            // [proof, approved, submittedAt, worker]
-            setTaskProof([
-              task.proofOfWork,
-              task.status === "Completed" || task.status === "Paid",
-              task.updatedAt,
-              task.worker?.address || "",
-            ]);
-          } else {
-            // 如果没有工作量证明，则设置为空数组
-            setTaskProof(undefined);
-          }
-        } else {
-          setError("任务未找到");
-        }
-      } catch (err) {
-        console.error("Error fetching task data:", err);
-        setError("获取任务数据时出错");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTaskData();
-  }, [taskId]);
-
-  const refetchTask = async () => {
-    // 重新获取任务数据
     try {
+      setIsLoading(true);
+      setError(null);
+
+      // 创建sdk实例
+      const sdk = getBuiltGraphSDK();
+
       // 从 GraphQL 获取任务详情
-      const taskResult = await sdk.GetBiddingTask({
+      const taskResult = await sdk.GetBiddingTaskForDetail({
         id: taskId as string,
       });
 
       if (taskResult?.biddingTask) {
-        const task = taskResult.biddingTask;
-        setTaskData({
-          id: task.taskId,
-          creator: task.creator.address,
-          title: task.title,
-          description: task.description,
-          totalreward: task.reward,
-          deadline: task.deadline,
-          status: task.status,
-          createdAt: task.createdAt,
-        });
+        const taskObj = taskResult.biddingTask;
+        setTask(taskObj);
 
-        if (task.worker?.address) {
-          setTaskWorker(task.worker.address);
-        }
+        // 直接处理taskData格式以匹配组件期望的格式
+        setTaskData([
+          BigInt(taskObj.taskId || 0),
+          BigInt(taskObj.reward || 0),
+          BigInt(taskObj.deadline || 0),
+          taskObj.status, // 直接使用字符串状态
+          taskObj.creator?.address || "",
+          taskObj.worker?.address || "",
+        ]);
 
-        if (task.proofOfWork) {
-          // 构造taskProof对象，格式与原来保持一致
-          // [proof, approved, submittedAt, worker]
+        // 设置taskWorker
+        // 直接处理taskProof格式以匹配组件期望的格式
+        if (taskObj.proofOfWork) {
           setTaskProof([
-            task.proofOfWork,
-            task.status === "Completed" || task.status === "Paid",
-            task.updatedAt,
-            task.worker?.address || "",
+            taskObj.proofOfWork,
+            taskObj.status === "Completed" || taskObj.status === "Paid",
+            taskObj.updatedAt,
+            taskObj.worker?.address || "",
           ]);
         }
+      } else {
+        setError("任务未找到");
       }
-    } catch (error) {
-      console.error("Error fetching task data:", error);
+    } catch (err) {
+      console.error("Error fetching task data:", err);
+      setError("获取任务数据时出错");
+      // 出错时重置数据
+      setTask(null);
+      setTaskData(null);
+      setTaskProof(null);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [taskId]);
 
-  const formatDeadline = (deadline: string) => {
-    if (!deadline) return "N/A";
-    const date = new Date(Number(deadline) * 1000);
-    return date.toLocaleString();
-  };
-
-  const formatCreatedAt = (createdAt: string) => {
-    if (!createdAt) return "N/A";
-    const date = new Date(Number(createdAt) * 1000);
-    return date.toLocaleString();
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "Open":
-        return "Open";
-      case "InProgress":
-        return "InProgress";
-      case "Completed":
-        return "Completed";
-      case "Paid":
-        return "Paid";
-      case "Cancelled":
-        return "Cancelled";
-      default:
-        return "Unknown";
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Open": // Open
-        return "badge-success";
-      case "InProgress": // InProgress
-        return "badge-warning";
-      case "Completed": // Completed
-        return "badge-info";
-      case "Paid": // Paid
-        return "badge-primary";
-      case "Cancelled": // Cancelled
-        return "badge-error";
-      default:
-        return "badge-ghost";
-    }
-  };
+  useEffect(() => {
+    fetchTaskData();
+  }, [fetchTaskData]);
 
   if (isLoading) {
     return (
@@ -214,7 +110,7 @@ export default function BiddingTaskDetailPage() {
     );
   }
 
-  if (!taskData) {
+  if (!task) {
     return (
       <div className="flex items-center justify-center pt-10">
         <div className="text-center">
@@ -228,17 +124,23 @@ export default function BiddingTaskDetailPage() {
   }
 
   // 解构任务数据
-  const { id, creator, title, description, totalreward, deadline, status, createdAt } = taskData;
+  const { id, creator, worker, title, description, reward, deadline, status, createdAt, proofOfWork, updatedAt } = task;
 
   // 检查当前用户是否为任务创建者
-  const isTaskCreator = connectedAddress && creator && connectedAddress.toLowerCase() === creator.toLowerCase();
+  const isTaskCreator = connectedAddress && connectedAddress.toLowerCase() === creator.address.toLowerCase();
+
+  // 获取工作者地址
+  const workerAddress = worker?.address;
+
+  // 检查任务状态
   const isTaskOpen = status === "Open";
   const isTaskInProgress = status === "InProgress";
   const isTaskCompleted = status === "Completed";
   const isTaskCancelled = status === "Cancelled";
   const isTaskPaid = status === "Paid";
-  const hasWorker = taskWorker && taskWorker !== "0x0000000000000000000000000000000000000000";
-  const isTaskWorker = connectedAddress && taskWorker && connectedAddress.toLowerCase() === taskWorker.toLowerCase();
+  const hasWorker = workerAddress && workerAddress !== "0x0000000000000000000000000000000000000000";
+  const isTaskWorker =
+    connectedAddress && workerAddress && connectedAddress.toLowerCase() === workerAddress.toLowerCase();
 
   return (
     <div className="flex flex-col items-center pt-10 px-2 min-h-screen bg-gradient-to-br from-base-200 to-base-100">
@@ -257,12 +159,12 @@ export default function BiddingTaskDetailPage() {
             {/* 取消任务按钮 */}
             {isTaskCreator && !isTaskCancelled && !isTaskPaid && (
               <CancelTask
-                taskId={taskId}
-                taskStatus={isTaskOpen ? 0 : 1}
+                taskId={taskId as string}
+                taskStatus={status} // 直接传递状态字符串
                 taskData={taskData}
                 taskProof={taskProof}
                 disputeProcessingRewardBps={undefined}
-                onSuccess={refetchTask}
+                onSuccess={fetchTaskData}
               />
             )}
             {/* 只有工作者且任务状态为InProgress时才显示提交工作量证明按钮 */}
@@ -272,7 +174,7 @@ export default function BiddingTaskDetailPage() {
               </button>
             )}
             {/* 只有工作者且任务状态为Completed时才能申领报酬 */}
-            {isTaskWorker && isTaskCompleted && <ClaimReward taskId={taskId} onSuccess={refetchTask} />}
+            {isTaskWorker && isTaskCompleted && <ClaimReward taskId={taskId as string} onSuccess={fetchTaskData} />}
           </div>
         </div>
 
@@ -282,41 +184,43 @@ export default function BiddingTaskDetailPage() {
             <div className="flex flex-col md:flex-row justify-between items-start gap-6">
               <div className="flex-1">
                 <h1 className="card-title text-3xl font-bold mb-2 text-primary">{title}</h1>
-                <span className={`badge ${getStatusColor(status)} badge-lg text-base mt-2`}>
-                  {getStatusText(status)}
-                </span>
+                <span className={`badge ${getTaskStatusColor(status)} badge-lg text-base mt-2`}>{status}</span>
                 <div className="mt-4 bg-base-200 rounded-xl p-4">
                   <p className="text-sm text-gray-500 mb-1">任务描述</p>
                   <p className="mt-1 text-base leading-relaxed">{description}</p>
+                </div>
+                <div className="mt-4 text-sm">
+                  <p className="text-gray-500">创建时间</p>
+                  <p className="font-semibold">{formatCreatedAt(createdAt)}</p>
                 </div>
               </div>
               <div className="flex flex-col gap-4 min-w-[180px] items-end">
                 <div className="bg-base-200 rounded-xl p-3 w-full">
                   <div className="text-xs text-gray-500">任务ID</div>
-                  <div className="font-mono text-lg">#{id?.toString() || "N/A"}</div>
+                  <div className="font-mono text-lg">#{id?.toString()}</div>
                 </div>
                 <div className="bg-base-200 rounded-xl p-3 w-full">
-                  <div className="text-xs text-gray-500">创建时间</div>
-                  <div className="font-semibold">{formatCreatedAt(createdAt)}</div>
+                  <div className="text-xs text-gray-500">报酬</div>
+                  <div className="text-xl font-bold text-primary">
+                    {formatUnits(BigInt(reward || 0), 18)} <span className="text-sm font-normal">Tokens</span>
+                  </div>
                 </div>
                 <div className="bg-base-200 rounded-xl p-3 w-full">
                   <div className="text-xs text-gray-500">截止时间</div>
                   <div className="font-semibold">{formatDeadline(deadline)}</div>
                 </div>
                 <div className="bg-base-200 rounded-xl p-3 w-full">
-                  <div className="text-xs text-gray-500">任务报酬</div>
+                  <div className="text-xs text-gray-500">创建者</div>
                   <div className="font-semibold">
-                    {totalreward ? (Number(totalreward.toString()) / 1e18).toFixed(2) : "0.00"} TST
+                    <Address address={creator?.address} />
                   </div>
                 </div>
-                <div className="bg-base-200 rounded-xl p-3 w-full">
-                  <div className="text-xs text-gray-500">任务创建者</div>
-                  <Address address={creator} />
-                </div>
-                {taskWorker && (
+                {worker?.address && (
                   <div className="bg-base-200 rounded-xl p-3 w-full">
                     <div className="text-xs text-gray-500">工作者</div>
-                    <Address address={taskWorker} />
+                    <div className="font-semibold">
+                      <Address address={worker?.address} />
+                    </div>
                   </div>
                 )}
               </div>
@@ -332,14 +236,14 @@ export default function BiddingTaskDetailPage() {
               <div className="flex flex-wrap gap-4 mt-2">
                 <div className="flex-1 min-w-[220px]">
                   <ExtendDeadline
-                    taskId={taskId}
-                    currentDeadline={deadline}
-                    taskCreator={creator}
-                    onSuccess={refetchTask}
+                    taskId={taskId as string}
+                    currentDeadline={BigInt(deadline || 0)}
+                    taskCreator={creator?.address}
+                    onSuccess={fetchTaskData}
                   />
                 </div>
                 <div className="flex-1 min-w-[220px]">
-                  <IncreaseReward taskId={taskId} taskCreator={creator} onSuccess={refetchTask} />
+                  <IncreaseReward taskId={taskId as string} taskCreator={creator?.address} onSuccess={fetchTaskData} />
                 </div>
               </div>
             )}
@@ -363,7 +267,7 @@ export default function BiddingTaskDetailPage() {
                 isOpen={isProofModalOpen}
                 onClose={() => setIsProofModalOpen(false)}
                 onSuccess={() => {
-                  refetchTask();
+                  fetchTaskData();
                   setIsProofModalOpen(false);
                 }}
               />
@@ -372,7 +276,7 @@ export default function BiddingTaskDetailPage() {
         )}
 
         {/* 显示已提交的工作量证明 */}
-        {taskProof && taskProof[0] && (
+        {proofOfWork && (
           <div className="card bg-base-100 shadow border border-base-300 rounded-2xl">
             <div className="card-body grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -381,14 +285,14 @@ export default function BiddingTaskDetailPage() {
                   <label className="label">
                     <span className="label-text">提交时间</span>
                   </label>
-                  <p className="font-mono">{new Date(Number(taskProof[2]) * 1000).toLocaleString()}</p>
+                  <p className="font-mono">{updatedAt ? formatCreatedAt(updatedAt) : "N/A"}</p>
                 </div>
                 <div className="form-control mt-4">
                   <label className="label">
                     <span className="label-text">证明内容</span>
                   </label>
                   <div className="p-4 bg-base-200 rounded-lg text-base">
-                    <p>{taskProof[0]}</p>
+                    <p>{proofOfWork}</p>
                   </div>
                 </div>
               </div>
@@ -397,27 +301,27 @@ export default function BiddingTaskDetailPage() {
                   <label className="label">
                     <span className="label-text">状态</span>
                   </label>
-                  <p className="font-semibold">{taskProof[1] ? "已批准" : "待批准"}</p>
+                  <p className="font-semibold">{status === "Completed" || status === "Paid" ? "已批准" : "待批准"}</p>
                 </div>
 
                 {/* 只有任务创建者且工作量证明尚未批准时才显示批准按钮 */}
-                {isTaskCreator && !taskProof[1] && isTaskInProgress && hasWorker && (
+                {isTaskCreator && status !== "Completed" && status !== "Paid" && isTaskInProgress && hasWorker && (
                   <ApproveProofOfWork
                     taskId={BigInt(taskId)}
-                    taskWorker={taskWorker}
+                    taskWorker={workerAddress}
                     isTaskCreator={isTaskCreator}
                     isTaskInProgress={isTaskInProgress}
                   />
                 )}
 
                 {/* 只有工作者且工作量证明尚未批准时才显示提出纠纷按钮 */}
-                {isTaskWorker && !taskProof[1] && isTaskInProgress && (
+                {isTaskWorker && status !== "Completed" && status !== "Paid" && (
                   <DisputeButton
-                    taskId={taskId}
+                    taskId={taskId as string}
                     taskProof={taskProof}
-                    taskData={[undefined, totalreward]}
+                    taskData={taskData}
                     disputeProcessingRewardBps={undefined}
-                    onSuccess={refetchTask}
+                    onSuccess={fetchTaskData}
                   />
                 )}
               </div>
