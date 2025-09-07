@@ -1,18 +1,21 @@
 "use client";
 
+import { useState } from "react";
+import { useDeployedContractInfo, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+
+// 固定的纠纷处理奖励比例 (以基点表示，100基点=1%)
+const DISPUTE_PROCESSING_REWARD_BPS = 50n; // 0.5%
+const DENOMINATOR_FEE = 10000n;
+
 interface DistributionProposalProps {
   disputeData: any;
   distributionProposal: any;
   canApprove: boolean;
   canDistribute: boolean;
   canReject: boolean;
-  isApproving: boolean;
-  isDistributing: boolean;
-  isRejecting: boolean;
   isWorker: boolean;
-  handleApprove: () => void;
-  handleDistribute: () => void;
-  handleReject: () => void;
+  refreshDisputeData: () => void;
+  disputeId: string;
 }
 
 export const DistributionProposal = ({
@@ -20,15 +23,94 @@ export const DistributionProposal = ({
   canApprove,
   canDistribute,
   canReject,
-  isApproving,
-  isDistributing,
-  isRejecting,
   isWorker,
-  handleApprove,
-  handleDistribute,
-  handleReject,
+  refreshDisputeData,
+  disputeId,
 }: DistributionProposalProps) => {
+  const [isApprovingState, setIsApprovingState] = useState(false);
+  const [isDistributingState, setIsDistributingState] = useState(false);
+  const [isRejectingState, setIsRejectingState] = useState(false);
+
+  const { writeContractAsync: approveProposal } = useScaffoldWriteContract({ contractName: "DisputeResolver" });
+  const { writeContractAsync: distributeFunds } = useScaffoldWriteContract({ contractName: "DisputeResolver" });
+  const { writeContractAsync: rejectProposal } = useScaffoldWriteContract({ contractName: "DisputeResolver" });
+  const { writeContractAsync: approveToken } = useScaffoldWriteContract({ contractName: "TaskToken" });
+
+  // 获取DisputeResolver合约信息
+  const { data: disputeResolver } = useDeployedContractInfo({ contractName: "DisputeResolver" });
+
   const disputeStatus = disputeData ? disputeData.status : "Unknown";
+
+  const handleApprove = async () => {
+    try {
+      setIsApprovingState(true);
+      await approveProposal({
+        functionName: "approveProposal",
+        args: [BigInt(disputeId || "0")],
+      });
+
+      // 重新获取纠纷数据
+      setTimeout(() => {
+        refreshDisputeData();
+      }, 1000);
+    } catch (error) {
+      console.error("Error approving proposal:", error);
+    } finally {
+      setIsApprovingState(false);
+    }
+  };
+
+  const handleDistribute = async () => {
+    try {
+      setIsDistributingState(true);
+      await distributeFunds({
+        functionName: "distributeFunds",
+        args: [BigInt(disputeId || "0")],
+      });
+
+      // 重新获取纠纷数据
+      setTimeout(() => {
+        refreshDisputeData();
+      }, 1000);
+    } catch (error) {
+      console.error("Error distributing funds:", error);
+    } finally {
+      setIsDistributingState(false);
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      setIsRejectingState(true);
+
+      // 计算处理费用
+      if (disputeData && DISPUTE_PROCESSING_REWARD_BPS) {
+        const processingReward = (BigInt(disputeData.rewardAmount) * DISPUTE_PROCESSING_REWARD_BPS) / DENOMINATOR_FEE;
+
+        if (processingReward > 0n) {
+          // 先授权合约可以转移处理费用
+          await approveToken({
+            functionName: "approve",
+            args: [disputeResolver?.address, processingReward],
+          });
+        }
+      }
+
+      await rejectProposal({
+        functionName: "rejectProposal",
+        args: [BigInt(disputeId || "0")],
+      });
+
+      // 重新获取纠纷数据
+      setTimeout(() => {
+        refreshDisputeData();
+      }, 1000);
+    } catch (error) {
+      console.error("Error rejecting proposal:", error);
+    } finally {
+      setIsRejectingState(false);
+    }
+  };
 
   return (
     <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 p-6 mb-8">
@@ -69,9 +151,9 @@ export const DistributionProposal = ({
           {canApprove && (
             <div className="mb-4">
               <button
-                className={`btn ${isWorker ? "btn-primary" : "btn-secondary"} w-full ${isApproving ? "loading" : ""}`}
+                className={`btn ${isWorker ? "btn-primary" : "btn-secondary"} w-full ${isApprovingState ? "loading" : ""}`}
                 onClick={handleApprove}
-                disabled={isApproving}
+                disabled={isApprovingState}
               >
                 {isWorker ? "工作者批准" : "创建者批准"}
               </button>
@@ -81,9 +163,9 @@ export const DistributionProposal = ({
           {canReject && (
             <div className="mb-4">
               <button
-                className={`btn btn-error w-full ${isRejecting ? "loading" : ""}`}
+                className={`btn btn-error w-full ${isRejectingState ? "loading" : ""}`}
                 onClick={handleReject}
-                disabled={isRejecting}
+                disabled={isRejectingState}
               >
                 拒绝提案
               </button>
@@ -93,9 +175,9 @@ export const DistributionProposal = ({
           {canDistribute && (
             <div className="mb-4">
               <button
-                className={`btn btn-success w-full ${isDistributing ? "loading" : ""}`}
+                className={`btn btn-success w-full ${isDistributingState ? "loading" : ""}`}
                 onClick={handleDistribute}
-                disabled={isDistributing}
+                disabled={isDistributingState}
               >
                 分配资金
               </button>

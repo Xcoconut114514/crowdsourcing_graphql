@@ -121,11 +121,16 @@ const UserDetailPage = ({ params }: { params: Promise<{ address: string }> }) =>
       <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 px-6 py-8 w-full max-w-2xl">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">用户信息</h2>
-          {isOwnProfile && (
-            <Link href="/profile" className="btn btn-secondary btn-sm">
-              编辑资料
+          <div className="flex gap-2">
+            {isOwnProfile && (
+              <Link href="/profile" className="btn btn-secondary btn-sm">
+                编辑资料
+              </Link>
+            )}
+            <Link href={`/user/${userAddress}/work-and-disputes`} className="btn btn-primary btn-sm">
+              工作和纠纷
             </Link>
-          )}
+          </div>
         </div>
 
         <div className="mb-6">

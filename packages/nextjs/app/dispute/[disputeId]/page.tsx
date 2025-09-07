@@ -1,47 +1,96 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { AdminVoting } from "./_components/AdminVoting";
-import { useDisputeData } from "./_components/DisputeDataProvider";
 import { DisputeInfo } from "./_components/DisputeInfo";
 import { DistributionProposal } from "./_components/DistributionProposal";
 import { useAccount } from "wagmi";
-import { useDeployedContractInfo, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
-import { notification } from "~~/utils/scaffold-eth";
-
-// 固定的纠纷处理奖励比例 (以基点表示，100基点=1%)
-const DISPUTE_PROCESSING_REWARD_BPS = 50n; // 0.5%
-const DENOMINATOR_FEE = 10000n;
+import { getBuiltGraphSDK } from "~~/.graphclient";
+import { getStatusText, getTaskStatusColor } from "~~/utils/tasks";
 
 export default function DisputeDetailPage() {
   const { disputeId } = useParams<{ disputeId: string }>();
   const { address: connectedAddress } = useAccount();
 
+  const [disputeData, setDisputeData] = useState<any>(null);
+  const [disputeLoading, setDisputeLoading] = useState(true);
+  const [distributionProposal, setDistributionProposal] = useState<any>(null);
+  const [hasVoted, setHasVoted] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [voteAmount, setVoteAmount] = useState("");
 
-  const [isVoting, setIsVoting] = useState(false);
-  const [isProcessingVotes, setIsProcessingVotes] = useState(false);
-  const [isApproving, setIsApproving] = useState(false);
-  const [isDistributing, setIsDistributing] = useState(false);
-  const [isRejecting, setIsRejecting] = useState(false);
+  const fetchDisputeData = useCallback(
+    async (isRefreshing = false) => {
+      if (!disputeId) return;
 
-  const { writeContractAsync: voteOnDispute } = useScaffoldWriteContract({ contractName: "DisputeResolver" });
-  const { writeContractAsync: processVotes } = useScaffoldWriteContract({ contractName: "DisputeResolver" });
-  const { writeContractAsync: approveProposal } = useScaffoldWriteContract({ contractName: "DisputeResolver" });
-  const { writeContractAsync: distributeFunds } = useScaffoldWriteContract({ contractName: "DisputeResolver" });
-  const { writeContractAsync: rejectProposal } = useScaffoldWriteContract({ contractName: "DisputeResolver" });
-  const { writeContractAsync: approveToken } = useScaffoldWriteContract({ contractName: "TaskToken" });
+      // 获取 GraphQL SDK
+      const sdk = getBuiltGraphSDK();
 
-  // 获取DisputeResolver合约信息
-  const { data: disputeResolver } = useDeployedContractInfo({ contractName: "DisputeResolver" });
+      try {
+        if (!isRefreshing) {
+          setDisputeLoading(true);
+        }
 
-  // 使用专门的数据获取hook
-  const { disputeData, disputeLoading, distributionProposal, hasVoted, isAdmin, refreshDisputeData } = useDisputeData({
-    disputeId,
-    connectedAddress,
-  });
+        // 获取纠纷详情
+        const disputeResult = await sdk.GetDispute({
+          id: disputeId,
+        });
+
+        if (disputeResult?.dispute) {
+          setDisputeData(disputeResult.dispute);
+
+          // 设置分配方案数据
+          if (disputeResult.dispute.workerShare) {
+            setDistributionProposal([
+              disputeResult.dispute.workerShare,
+              disputeResult.dispute.workerApproved,
+              disputeResult.dispute.creatorApproved,
+            ]);
+          }
+
+          // 检查当前用户是否已投票
+          if (connectedAddress && disputeResult.dispute.votes) {
+            const userVote = disputeResult.dispute.votes.find(
+              (vote: any) => vote.admin.address.toLowerCase() === connectedAddress.toLowerCase(),
+            );
+            setHasVoted(!!userVote);
+          }
+
+          // 检查当前用户是否为管理员 (仅在初次加载时)
+          if (!isRefreshing && connectedAddress) {
+            // 从子图获取管理员信息
+            sdk
+              .GetAdmin({ id: connectedAddress.toLowerCase() })
+              .then(adminResult => {
+                if (adminResult?.admin) {
+                  setIsAdmin(adminResult.admin.isActive);
+                }
+              })
+              .catch(err => {
+                console.error("Error fetching admin data:", err);
+              });
+          }
+        }
+      } catch (err) {
+        console.error(`Error ${isRefreshing ? "refreshing" : "fetching"} dispute data:`, err);
+      } finally {
+        if (!isRefreshing) {
+          setDisputeLoading(false);
+        }
+      }
+    },
+    [disputeId, connectedAddress],
+  );
+
+  const refreshDisputeData = async () => {
+    await fetchDisputeData(true);
+  };
+
+  useEffect(() => {
+    fetchDisputeData();
+  }, [fetchDisputeData]);
 
   const isWorker =
     disputeData &&
@@ -65,173 +114,6 @@ export default function DisputeDetailPage() {
     distributionProposal[1] && // workerApproved
     distributionProposal[2]; // creatorApproved
   const canReject = (isWorker || isTaskCreator) && disputeStatus === "Resolved";
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "Filed":
-        return "已提交";
-      case "Resolved":
-        return "已解决";
-      case "Distributed":
-        return "已分配";
-      default:
-        return "未知";
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Filed":
-        return "badge-warning";
-      case "Resolved":
-        return "badge-info";
-      case "Distributed":
-        return "badge-success";
-      default:
-        return "badge-ghost";
-    }
-  };
-
-  const handleVote = async () => {
-    if (!voteAmount) {
-      notification.error("请输入投票金额");
-      return;
-    }
-
-    if (!disputeData || !disputeData.rewardAmount) {
-      notification.error("无法获取奖励金额");
-      return;
-    }
-
-    const voteAmountWei = BigInt(Math.round(parseFloat(voteAmount) * 1e18));
-    if (voteAmountWei > BigInt(disputeData.rewardAmount)) {
-      notification.error("投票金额不能超过奖励金额");
-      return;
-    }
-
-    try {
-      setIsVoting(true);
-      await voteOnDispute({
-        functionName: "voteOnDispute",
-        args: [BigInt(disputeId || 0), voteAmountWei],
-      });
-
-      notification.success("投票成功！");
-      setVoteAmount("");
-
-      // 重新获取纠纷数据
-      setTimeout(() => {
-        refreshDisputeData();
-      }, 1000);
-    } catch (error) {
-      console.error("Error voting on dispute:", error);
-      notification.error("投票失败");
-    } finally {
-      setIsVoting(false);
-    }
-  };
-
-  const handleProcessVotes = async () => {
-    try {
-      setIsProcessingVotes(true);
-      await processVotes({
-        functionName: "processVotes",
-        args: [BigInt(disputeId || 0)],
-      });
-
-      notification.success("处理投票成功！");
-
-      // 重新获取纠纷数据
-      setTimeout(() => {
-        refreshDisputeData();
-      }, 1000);
-    } catch (error) {
-      console.error("Error processing votes:", error);
-      notification.error("处理投票失败");
-    } finally {
-      setIsProcessingVotes(false);
-    }
-  };
-
-  const handleApprove = async () => {
-    try {
-      setIsApproving(true);
-      await approveProposal({
-        functionName: "approveProposal",
-        args: [BigInt(disputeId || 0)],
-      });
-
-      notification.success("批准提案成功！");
-
-      // 重新获取纠纷数据
-      setTimeout(() => {
-        refreshDisputeData();
-      }, 1000);
-    } catch (error) {
-      console.error("Error approving proposal:", error);
-      notification.error("批准提案失败");
-    } finally {
-      setIsApproving(false);
-    }
-  };
-
-  const handleDistribute = async () => {
-    try {
-      setIsDistributing(true);
-      await distributeFunds({
-        functionName: "distributeFunds",
-        args: [BigInt(disputeId || 0)],
-      });
-
-      notification.success("分配资金成功！");
-
-      // 重新获取纠纷数据
-      setTimeout(() => {
-        refreshDisputeData();
-      }, 1000);
-    } catch (error) {
-      console.error("Error distributing funds:", error);
-      notification.error("分配资金失败");
-    } finally {
-      setIsDistributing(false);
-    }
-  };
-
-  const handleReject = async () => {
-    try {
-      setIsRejecting(true);
-
-      // 计算处理费用
-      if (disputeData && DISPUTE_PROCESSING_REWARD_BPS) {
-        const processingReward = (BigInt(disputeData.rewardAmount) * DISPUTE_PROCESSING_REWARD_BPS) / DENOMINATOR_FEE;
-
-        if (processingReward > 0n) {
-          // 先授权合约可以转移处理费用
-          await approveToken({
-            functionName: "approve",
-            args: [disputeResolver?.address, processingReward],
-          });
-        }
-      }
-
-      await rejectProposal({
-        functionName: "rejectProposal",
-        args: [BigInt(disputeId || 0)],
-      });
-
-      notification.success("拒绝提案成功！");
-
-      // 重新获取纠纷数据
-      setTimeout(() => {
-        refreshDisputeData();
-      }, 1000);
-    } catch (error) {
-      console.error("Error rejecting proposal:", error);
-      notification.error("拒绝提案失败");
-    } finally {
-      setIsRejecting(false);
-    }
-  };
 
   if (disputeLoading) {
     return (
@@ -289,7 +171,7 @@ export default function DisputeDetailPage() {
           disputeId={disputeId}
           disputeData={disputeData}
           getStatusText={getStatusText}
-          getStatusColor={getStatusColor}
+          getStatusColor={getTaskStatusColor}
         />
 
         {/* 管理员投票部分 */}
@@ -298,12 +180,10 @@ export default function DisputeDetailPage() {
           canVote={!!canVote}
           canProcess={!!canProcess}
           hasVoted={hasVoted}
-          isVoting={isVoting}
-          isProcessingVotes={isProcessingVotes}
           voteAmount={voteAmount}
           setVoteAmount={setVoteAmount}
-          handleVote={handleVote}
-          handleProcessVotes={handleProcessVotes}
+          refreshDisputeData={refreshDisputeData}
+          disputeId={disputeId as string}
         />
 
         {/* 分配方案部分 */}
@@ -314,13 +194,9 @@ export default function DisputeDetailPage() {
             canApprove={!!canApprove}
             canDistribute={!!canDistribute}
             canReject={!!canReject}
-            isApproving={isApproving}
-            isDistributing={isDistributing}
-            isRejecting={isRejecting}
             isWorker={!!isWorker}
-            handleApprove={handleApprove}
-            handleDistribute={handleDistribute}
-            handleReject={handleReject}
+            refreshDisputeData={refreshDisputeData}
+            disputeId={disputeId as string}
           />
         )}
       </div>

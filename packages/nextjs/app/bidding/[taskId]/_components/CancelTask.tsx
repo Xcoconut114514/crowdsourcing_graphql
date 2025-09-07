@@ -3,7 +3,7 @@ import { useDeployedContractInfo, useScaffoldWriteContract } from "~~/hooks/scaf
 
 interface CancelTaskProps {
   taskId: string;
-  taskStatus: number;
+  taskStatus: string; // 修改类型为string
   taskData: any;
   taskProof: any;
   disputeProcessingRewardBps: bigint | undefined;
@@ -19,36 +19,34 @@ export const CancelTask = ({
   onSuccess,
 }: CancelTaskProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { writeContractAsync: cancelTask } = useScaffoldWriteContract({ contractName: "BiddingTask" });
+  const { writeContractAsync: terminateTask } = useScaffoldWriteContract({ contractName: "BiddingTask" });
   const { writeContractAsync: approveToken } = useScaffoldWriteContract({ contractName: "TaskToken" });
   const { data: biddingTaskContract } = useDeployedContractInfo({ contractName: "BiddingTask" });
 
   const handleCancelTask = async () => {
     try {
       // 根据合约逻辑，terminateTask可能需要提交纠纷，需要批准处理奖励
-      // 检查是否满足提交纠纷的条件：
-      // 1. 有工作者 (worker exists and not zero address)
-      // 2. 已提交工作量证明 (proof submitted)
-      // 3. 工作量证明尚未批准 (proof not approved)
-
-      // taskData是一个对象，不是数组
-      const hasWorker = taskData?.worker && taskData?.worker !== "0x0000000000000000000000000000000000000000";
-      const hasProof = taskProof && taskProof[0];
-      const isNotApproved = taskProof && !taskProof[1];
-
-      if (hasWorker && hasProof && isNotApproved) {
-        // 需要提交纠纷，计算并批准处理奖励
-        const rewardAmount = taskData?.reward ? BigInt(taskData.reward) : BigInt(0);
+      if (
+        taskData?.[5] &&
+        taskData?.[5] !== "0x0000000000000000000000000000000000000000" && // worker exists
+        taskProof &&
+        taskProof[0] &&
+        !taskProof[1]
+      ) {
+        // proof submitted but not approved
+        // 如果有工作者且有报酬，则可能需要提交纠纷
+        const rewardAmount = taskData?.[1] || BigInt(0);
         const processingRewardBps = disputeProcessingRewardBps || BigInt(50); // 默认0.5%
         const processingReward = (rewardAmount * processingRewardBps) / BigInt(10000);
 
+        // 先批准代币给BiddingTask合约用于可能的纠纷处理
         await approveToken({
           functionName: "approve",
           args: [biddingTaskContract?.address || "", processingReward],
         });
       }
 
-      await cancelTask({
+      await terminateTask({
         functionName: "terminateTask",
         args: [BigInt(taskId)],
       });
@@ -59,8 +57,10 @@ export const CancelTask = ({
     }
   };
 
-  // 只有任务状态为Open (0) 或 InProgress (1) 时才显示取消按钮
-  if (taskStatus !== 0 && taskStatus !== 1) {
+  // 根据合约逻辑更新，只要不是已经支付或者已经取消的任务都可以使用取消任务的功能
+  const canCancelTask = taskStatus !== "Paid" && taskStatus !== "Cancelled";
+
+  if (!canCancelTask) {
     return null;
   }
 

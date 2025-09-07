@@ -1,18 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { Address } from "~~/components/scaffold-eth";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 interface AdminVotingProps {
   disputeData: any;
   canVote: boolean;
   canProcess: boolean;
   hasVoted: boolean;
-  isVoting: boolean;
-  isProcessingVotes: boolean;
   voteAmount: string;
   setVoteAmount: (value: string) => void;
-  handleVote: () => void;
-  handleProcessVotes: () => void;
+  refreshDisputeData: () => void;
+  disputeId: string;
 }
 
 export const AdminVoting = ({
@@ -20,13 +20,66 @@ export const AdminVoting = ({
   canVote,
   canProcess,
   hasVoted,
-  isVoting,
-  isProcessingVotes,
   voteAmount,
   setVoteAmount,
-  handleVote,
-  handleProcessVotes,
+  refreshDisputeData,
+  disputeId,
 }: AdminVotingProps) => {
+  const [isVotingState, setIsVotingState] = useState(false);
+  const [isProcessingVotesState, setIsProcessingVotesState] = useState(false);
+
+  const { writeContractAsync: voteOnDispute } = useScaffoldWriteContract({ contractName: "DisputeResolver" });
+  const { writeContractAsync: processVotes } = useScaffoldWriteContract({ contractName: "DisputeResolver" });
+
+  const handleVote = async () => {
+    if (!voteAmount || !disputeData || !disputeData.rewardAmount) {
+      return;
+    }
+
+    const voteAmountWei = BigInt(Math.round(parseFloat(voteAmount) * 1e18));
+    if (voteAmountWei > BigInt(disputeData.rewardAmount)) {
+      return;
+    }
+
+    try {
+      setIsVotingState(true);
+      await voteOnDispute({
+        functionName: "voteOnDispute",
+        args: [BigInt(disputeId || "0"), voteAmountWei],
+      });
+
+      setVoteAmount("");
+
+      // 重新获取纠纷数据
+      setTimeout(() => {
+        refreshDisputeData();
+      }, 1000);
+    } catch (error) {
+      console.error("Error voting on dispute:", error);
+    } finally {
+      setIsVotingState(false);
+    }
+  };
+
+  const handleProcessVotes = async () => {
+    try {
+      setIsProcessingVotesState(true);
+      await processVotes({
+        functionName: "processVotes",
+        args: [BigInt(disputeId || "0")],
+      });
+
+      // 重新获取纠纷数据
+      setTimeout(() => {
+        refreshDisputeData();
+      }, 1000);
+    } catch (error) {
+      console.error("Error processing votes:", error);
+    } finally {
+      setIsProcessingVotesState(false);
+    }
+  };
+
   return (
     <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 p-6 mb-8">
       <h2 className="text-2xl font-bold mb-4">管理员投票</h2>
@@ -49,9 +102,9 @@ export const AdminVoting = ({
           </div>
           <div className="flex items-end">
             <button
-              className={`btn btn-primary w-full ${isVoting ? "loading" : ""}`}
+              className={`btn btn-primary w-full ${isVotingState ? "loading" : ""}`}
               onClick={handleVote}
-              disabled={isVoting || hasVoted || !voteAmount}
+              disabled={isVotingState || hasVoted || !voteAmount}
             >
               {hasVoted ? "已投票" : "投票"}
             </button>
@@ -62,9 +115,9 @@ export const AdminVoting = ({
       {canProcess && (
         <div className="mb-4">
           <button
-            className={`btn btn-secondary w-full ${isProcessingVotes ? "loading" : ""}`}
+            className={`btn btn-secondary w-full ${isProcessingVotesState ? "loading" : ""}`}
             onClick={handleProcessVotes}
-            disabled={isProcessingVotes}
+            disabled={isProcessingVotesState}
           >
             处理投票结果
           </button>

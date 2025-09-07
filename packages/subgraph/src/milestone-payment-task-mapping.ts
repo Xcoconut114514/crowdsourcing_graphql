@@ -46,7 +46,7 @@ export function handleMilestonePaymentTaskCreated(
   entity.description = event.params.description;
   entity.reward = BigInt.fromI32(0);
   entity.deadline = event.params.deadline;
-  // 修复：创建一个默认的worker用户而不是使用空字符串
+  // 修复：正确初始化worker字段
   let worker = getOrCreateUser(Address.zero());
   entity.worker = worker.id;
   entity.status = "Open";

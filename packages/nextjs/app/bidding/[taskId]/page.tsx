@@ -163,7 +163,7 @@ export default function BiddingTaskDetailPage() {
                 taskStatus={status} // 直接传递状态字符串
                 taskData={taskData}
                 taskProof={taskProof}
-                disputeProcessingRewardBps={undefined}
+                disputeProcessingRewardBps={BigInt(50)} // 使用默认值
                 onSuccess={fetchTaskData}
               />
             )}

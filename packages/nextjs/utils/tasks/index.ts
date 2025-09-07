@@ -58,3 +58,33 @@ export const getTaskStatusColor = (status: string) => {
       return "badge-ghost";
   }
 };
+
+// 获取纠纷状态的显示颜色
+export const getDisputeStatusColor = (status: string) => {
+  switch (status) {
+    case "Filed":
+      return "badge-info";
+    case "Resolved":
+      return "badge-warning";
+    case "Distributed":
+      return "badge-success";
+    default:
+      return "badge-ghost";
+  }
+};
+
+/**
+ * 获取状态显示文本
+ */
+export const getStatusText = (status: string) => {
+  switch (status) {
+    case "Filed":
+      return "已提交";
+    case "Resolved":
+      return "已解决";
+    case "Distributed":
+      return "已分配";
+    default:
+      return "未知";
+  }
+};

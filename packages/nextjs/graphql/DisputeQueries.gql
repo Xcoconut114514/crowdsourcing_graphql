@@ -41,6 +41,31 @@ query GetDisputes(
   }
 }
 
+query GetDisputesForList(
+  $first: Int!
+  $skip: Int!
+  $where: Dispute_filter
+  $orderBy: Dispute_orderBy
+  $orderDirection: OrderDirection
+) {
+  disputes(first: $first, skip: $skip, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
+    id
+    disputeId
+    taskId
+    worker {
+      id
+      address
+    }
+    taskCreator {
+      id
+      address
+    }
+    rewardAmount
+    status
+    createdAt
+  }
+}
+
 query GetDispute($id: ID!) {
   dispute(id: $id) {
     id

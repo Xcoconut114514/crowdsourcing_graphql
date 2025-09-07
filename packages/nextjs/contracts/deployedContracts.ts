@@ -1259,7 +1259,7 @@ const deployedContracts = {
         renounceOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
         transferOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 1,
+      deployedOnBlock: 2,
     },
     UserInfo: {
       address: "0xb19b36b1456e65e3a6d514d3f715f204bd59f431",
@@ -1368,7 +1368,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 1,
+      deployedOnBlock: 2,
     },
     FixedPaymentTask: {
       address: "0x8ce361602b935680e8dec218b820ff5056beb7af",
@@ -2317,7 +2317,7 @@ const deployedContracts = {
         updatePlatformFee: "contracts/BaseTask.sol",
         withdrawPlatformRevenue: "contracts/BaseTask.sol",
       },
-      deployedOnBlock: 2,
+      deployedOnBlock: 3,
     },
     BiddingTask: {
       address: "0xe1aa25618fa0c7a1cfdab5d6b456af611873b629",
@@ -3381,7 +3381,7 @@ const deployedContracts = {
         updatePlatformFee: "contracts/BaseTask.sol",
         withdrawPlatformRevenue: "contracts/BaseTask.sol",
       },
-      deployedOnBlock: 2,
+      deployedOnBlock: 4,
     },
     MilestonePaymentTask: {
       address: "0xe1da8919f262ee86f9be05059c9280142cf23f48",
@@ -4621,7 +4621,7 @@ const deployedContracts = {
         updatePlatformFee: "contracts/BaseTask.sol",
         withdrawPlatformRevenue: "contracts/BaseTask.sol",
       },
-      deployedOnBlock: 2,
+      deployedOnBlock: 4,
     },
   },
 } as const;

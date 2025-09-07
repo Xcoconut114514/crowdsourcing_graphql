@@ -27,6 +27,32 @@ query GetMilestonePaymentTasks(
   }
 }
 
+query GetMilestonePaymentTasksForList(
+  $first: Int!
+  $skip: Int!
+  $where: MilestonePaymentTask_filter
+  $orderBy: MilestonePaymentTask_orderBy
+  $orderDirection: OrderDirection
+) {
+  milestonePaymentTasks(first: $first, skip: $skip, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
+    id
+    taskId
+    creator {
+      id
+      address
+    }
+    worker {
+      id
+      address
+    }
+    title
+    reward
+    status
+    completedMilestonesCount
+    createdAt
+  }
+}
+
 query GetMilestonePaymentTask($id: ID!) {
   milestonePaymentTask(id: $id) {
     id
