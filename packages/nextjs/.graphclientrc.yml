@@ -3,23 +3,23 @@ sources:
   - name: UserInfo
     handler:
       graphql:
-        endpoint: http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
+        endpoint: https://api.studio.thegraph.com/query/119408/crowdsourcing/v0.0.1
   - name: DisputeResolver
     handler:
       graphql:
-        endpoint: http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
+        endpoint: https://api.studio.thegraph.com/query/119408/crowdsourcing/v0.0.1
   - name: FixedPaymentTaskResolver
     handler:
       graphql:
-        endpoint: http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
+        endpoint: https://api.studio.thegraph.com/query/119408/crowdsourcing/v0.0.1
   - name: BiddingTaskResolver
     handler:
       graphql:
-        endpoint: http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
+        endpoint: https://api.studio.thegraph.com/query/119408/crowdsourcing/v0.0.1
   - name: MilestonePaymentTaskResolver
     handler:
       graphql:
-        endpoint: http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
+        endpoint: https://api.studio.thegraph.com/query/119408/crowdsourcing/v0.0.1
 documents:
   - ./graphql/GetUser.gql
   - ./graphql/DisputeQueries.gql

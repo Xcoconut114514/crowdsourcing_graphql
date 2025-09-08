@@ -5,9 +5,9 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  31337: {
+  11155111: {
     TaskToken: {
-      address: "0x700b6a60ce7eaaea56f065753d8dcb9653dbad35",
+      address: "0xC60094551BE157Ce85a765739663E70eC868D81B",
       abi: [
         {
           type: "constructor",
@@ -481,7 +481,7 @@ const deployedContracts = {
       deployedOnBlock: 1,
     },
     DisputeResolver: {
-      address: "0xa15bb66138824a1c7167f5e85b957d04dd34e468",
+      address: "0x75460477F10a92fb4444b7cb3C82A2d77220c54F",
       abi: [
         {
           type: "constructor",
@@ -1262,7 +1262,7 @@ const deployedContracts = {
       deployedOnBlock: 2,
     },
     UserInfo: {
-      address: "0xb19b36b1456e65e3a6d514d3f715f204bd59f431",
+      address: "0xA1134b21b0FC9B0313D149FbE51249EEd429A482",
       abi: [
         {
           type: "function",
@@ -1371,7 +1371,7 @@ const deployedContracts = {
       deployedOnBlock: 2,
     },
     FixedPaymentTask: {
-      address: "0x8ce361602b935680e8dec218b820ff5056beb7af",
+      address: "0x4Ab860E65e934EdD1191e6Ee6C3561D304f5F9b2",
       abi: [
         {
           type: "constructor",
@@ -2320,7 +2320,7 @@ const deployedContracts = {
       deployedOnBlock: 3,
     },
     BiddingTask: {
-      address: "0xe1aa25618fa0c7a1cfdab5d6b456af611873b629",
+      address: "0x4524cc34CA526e42907C1cd4732dc4ED3f90a458",
       abi: [
         {
           type: "constructor",
@@ -3384,7 +3384,7 @@ const deployedContracts = {
       deployedOnBlock: 4,
     },
     MilestonePaymentTask: {
-      address: "0xe1da8919f262ee86f9be05059c9280142cf23f48",
+      address: "0xd1F251a60513e7b15De8b236716f8DEB0A427379",
       abi: [
         {
           type: "constructor",
