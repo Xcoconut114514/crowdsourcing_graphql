@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "yarn client && next build",
     "check-types": "tsc --noEmit --incremental",
     "client": "graphclient build",
     "dev": "next dev",

@@ -5,6 +5,8 @@ import "forge-std/Test.sol";
 import "../contracts/BaseTask.sol";
 import "../contracts/TaskToken.sol";
 import "../contracts/DisputeResolver.sol";
+import "../contracts/UserInfoNFT.sol";
+import "../contracts/interfaces/IUserInfoNFT.sol";
 import "../contracts/interface/IDisputeResolver.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
@@ -42,6 +44,7 @@ contract BaseTaskTest is Test {
     TestBaseTask public baseTask;
     TaskToken public taskToken;
     DisputeResolver public disputeResolver;
+    SoulboundUserNFT public userInfoNFT;
 
     address public owner;
     address public taskCreator;
@@ -61,8 +64,11 @@ contract BaseTaskTest is Test {
         // 为用户铸造代币
         taskToken.mint(taskCreator, REWARD_AMOUNT * 10);
 
+        // 部署UserInfoNFT合约
+        userInfoNFT = new SoulboundUserNFT("Test User NFT", "TUN");
+
         // 部署DisputeResolver合约
-        disputeResolver = new DisputeResolver(taskToken);
+        disputeResolver = new DisputeResolver(taskToken, IUserInfoNFT(address(userInfoNFT)));
 
         // 部署BaseTask合约
         baseTask = new TestBaseTask(taskToken, IDisputeResolver(address(disputeResolver)));

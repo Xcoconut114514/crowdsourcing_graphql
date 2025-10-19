@@ -4,10 +4,11 @@ pragma solidity ^0.8.19;
 import "./DeployHelpers.s.sol";
 import "../contracts/TaskToken.sol";
 import "../contracts/DisputeResolver.sol";
-import "../contracts/UserInfo.sol";
 import "../contracts/task/FixedPaymentTask.sol";
 import "../contracts/task/BiddingTask.sol";
 import "../contracts/task/MilestonePaymentTask.sol";
+import "../contracts/UserInfoNFT.sol";
+import "../contracts/interfaces/IUserInfoNFT.sol";
 
 /**
  * @notice Deploy script for YourContract contract
@@ -34,13 +35,13 @@ contract DeployYourContract is ScaffoldETHDeploy {
         TaskToken taskToken = new TaskToken("Task Token", "TASK", 18);
         console.log("TaskToken deployed to:", address(taskToken));
 
-        // Deploy DisputeResolver contract
-        DisputeResolver disputeResolver = new DisputeResolver(taskToken);
-        console.log("DisputeResolver deployed to:", address(disputeResolver));
-
         // Deploy UserInfo contract
-        UserInfo userInfo = new UserInfo();
-        console.log("UserInfo deployed to:", address(userInfo));
+        SoulboundUserNFT userInfo = new SoulboundUserNFT("User Identity NFT", "UIN");
+        console.log("SoulboundUserNFT deployed to:", address(userInfo));
+
+        // Deploy DisputeResolver contract
+        DisputeResolver disputeResolver = new DisputeResolver(taskToken, IUserInfoNFT(address(userInfo)));
+        console.log("DisputeResolver deployed to:", address(disputeResolver));
 
         // Deploy FixedPaymentTask contract
         FixedPaymentTask fixedPaymentTask = new FixedPaymentTask(taskToken, IDisputeResolver(address(disputeResolver)));

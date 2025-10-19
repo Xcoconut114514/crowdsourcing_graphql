@@ -6,10 +6,10 @@ import "forge-std/console.sol";
 import "forge-std/StdUtils.sol";
 import "../contracts/TaskToken.sol";
 import "../contracts/DisputeResolver.sol";
-import "../contracts/UserInfo.sol";
 import "../contracts/task/FixedPaymentTask.sol";
 import "../contracts/task/BiddingTask.sol";
 import "../contracts/task/MilestonePaymentTask.sol";
+import "../contracts/UserInfoNFT.sol";
 
 /**
  * @notice Script to create test data and simulate transactions after contracts are deployed
@@ -18,7 +18,7 @@ import "../contracts/task/MilestonePaymentTask.sol";
 contract SimulateTestData is Script {
     TaskToken public taskToken;
     DisputeResolver public disputeResolver;
-    UserInfo public userInfo;
+    SoulboundUserNFT public userInfo;
     FixedPaymentTask public fixedPaymentTask;
     BiddingTask public biddingTask;
     MilestonePaymentTask public milestonePaymentTask;
@@ -78,7 +78,7 @@ contract SimulateTestData is Script {
     function _loadContracts() internal {
         taskToken = TaskToken(TASK_TOKEN_ADDRESS);
         disputeResolver = DisputeResolver(DISPUTE_RESOLVER_ADDRESS);
-        userInfo = UserInfo(USER_INFO_ADDRESS);
+        userInfo = SoulboundUserNFT(USER_INFO_ADDRESS);
         fixedPaymentTask = FixedPaymentTask(FIXED_PAYMENT_TASK_ADDRESS);
         biddingTask = BiddingTask(BIDDING_TASK_ADDRESS);
         milestonePaymentTask = MilestonePaymentTask(MILESTONE_PAYMENT_TASK_ADDRESS);
@@ -120,84 +120,64 @@ contract SimulateTestData is Script {
         // Set up user info for test accounts
         // Worker 1 profile
         vm.startBroadcast(worker1PrivateKey);
-        userInfo.updateUserProfile(
-            "Worker One", "worker1@example.com", "Experienced developer", "https://example.com/worker1"
-        );
         string[] memory skills1 = new string[](3);
         skills1[0] = "Solidity";
         skills1[1] = "Smart Contracts";
         skills1[2] = "Web3";
-        userInfo.updateUserSkills(skills1);
+        userInfo.updateUserProfile("Experienced developer", "https://example.com/worker1", skills1);
         vm.stopBroadcast();
 
         // Worker 2 profile
         vm.startBroadcast(worker2PrivateKey);
-        userInfo.updateUserProfile(
-            "Worker Two", "worker2@example.com", "Frontend specialist", "https://example.com/worker2"
-        );
         string[] memory skills2 = new string[](2);
         skills2[0] = "React";
         skills2[1] = "TypeScript";
-        userInfo.updateUserSkills(skills2);
+        userInfo.updateUserProfile("Frontend specialist", "https://example.com/worker2", skills2);
         vm.stopBroadcast();
 
         // Worker 3 profile
         vm.startBroadcast(worker3PrivateKey);
-        userInfo.updateUserProfile(
-            "Worker Three", "worker3@example.com", "Backend engineer", "https://example.com/worker3"
-        );
         string[] memory skills3 = new string[](2);
         skills3[0] = "Node.js";
         skills3[1] = "MongoDB";
-        userInfo.updateUserSkills(skills3);
+        userInfo.updateUserProfile("Backend engineer", "https://example.com/worker3", skills3);
         vm.stopBroadcast();
 
         // Client 1 profile
         vm.startBroadcast(client1PrivateKey);
-        userInfo.updateUserProfile(
-            "Client One", "client1@example.com", "Project manager", "https://example.com/client1"
-        );
         string[] memory skills4 = new string[](1);
         skills4[0] = "Project Management";
-        userInfo.updateUserSkills(skills4);
+        userInfo.updateUserProfile("Project manager", "https://example.com/client1", skills4);
         vm.stopBroadcast();
 
         // Client 2 profile
         vm.startBroadcast(client2PrivateKey);
-        userInfo.updateUserProfile("Client Two", "client2@example.com", "Product owner", "https://example.com/client2");
         string[] memory skills5 = new string[](2);
         skills5[0] = "Agile";
         skills5[1] = "Scrum";
-        userInfo.updateUserSkills(skills5);
+        userInfo.updateUserProfile("Product owner", "https://example.com/client2", skills5);
         vm.stopBroadcast();
 
         // Freelancer 1 profile
         vm.startBroadcast(freelancer1PrivateKey);
-        userInfo.updateUserProfile(
-            "Freelancer One", "freelancer1@example.com", "Full Stack Developer", "https://example.com/freelancer1"
-        );
         string[] memory skills6 = new string[](4);
         skills6[0] = "JavaScript";
         skills6[1] = "Python";
         skills6[2] = "React";
         skills6[3] = "Node.js";
-        userInfo.updateUserSkills(skills6);
+        userInfo.updateUserProfile("Full Stack Developer", "https://example.com/freelancer1", skills6);
         vm.stopBroadcast();
 
         // Freelancer 2 profile
         vm.startBroadcast(freelancer2PrivateKey);
-        userInfo.updateUserProfile(
-            "Freelancer Two", "freelancer2@example.com", "Smart Contract Auditor", "https://example.com/freelancer2"
-        );
         string[] memory skills7 = new string[](3);
         skills7[0] = "Solidity";
         skills7[1] = "Security Audit";
         skills7[2] = "Formal Verification";
-        userInfo.updateUserSkills(skills7);
+        userInfo.updateUserProfile("Smart Contract Auditor", "https://example.com/freelancer2", skills7);
         vm.stopBroadcast();
 
-        // Initialize admins by staking
-        _initializeAdmins();
+        // Admins are now determined by their NFT grade (顶级游民)
 
         // No need to restart broadcasting here as we're immediately going to create tasks
         // Create fixed payment tasks
@@ -211,31 +191,6 @@ contract SimulateTestData is Script {
 
         // Create disputes
         _createDisputes();
-    }
-
-    function _initializeAdmins() internal {
-        console.log("Initializing admins by staking...");
-
-        // Approve dispute resolver to spend tokens for all admins
-        vm.startBroadcast(admin1PrivateKey);
-        taskToken.approve(address(disputeResolver), type(uint256).max);
-        disputeResolver.stakeToBecomeAdmin();
-        console.log("Admin1 staked successfully");
-        vm.stopBroadcast();
-
-        vm.startBroadcast(admin2PrivateKey);
-        taskToken.approve(address(disputeResolver), type(uint256).max);
-        disputeResolver.stakeToBecomeAdmin();
-        console.log("Admin2 staked successfully");
-        vm.stopBroadcast();
-
-        vm.startBroadcast(admin3PrivateKey);
-        taskToken.approve(address(disputeResolver), type(uint256).max);
-        disputeResolver.stakeToBecomeAdmin();
-        console.log("Admin3 staked successfully");
-        vm.stopBroadcast();
-
-        console.log("Admins initialized and staked successfully");
     }
 
     /**

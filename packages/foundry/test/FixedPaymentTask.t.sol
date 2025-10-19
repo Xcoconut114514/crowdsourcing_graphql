@@ -5,12 +5,15 @@ import "forge-std/Test.sol";
 import "../contracts/task/FixedPaymentTask.sol";
 import "../contracts/TaskToken.sol";
 import "../contracts/DisputeResolver.sol";
+import "../contracts/UserInfoNFT.sol";
+import "../contracts/interfaces/IUserInfoNFT.sol";
 import "../contracts/interface/IDisputeResolver.sol";
 
 contract FixedPaymentTaskTest is Test {
     FixedPaymentTask public fixedPaymentTask;
     TaskToken public taskToken;
     DisputeResolver public disputeResolver;
+    SoulboundUserNFT public userInfoNFT;
 
     address public owner;
     address public taskCreator;
@@ -66,8 +69,11 @@ contract FixedPaymentTaskTest is Test {
         taskToken.mint(worker, ADMIN_STAKE_AMOUNT);
         taskToken.mint(otherUser, REWARD_AMOUNT);
 
+        // 部署UserInfoNFT合约
+        userInfoNFT = new SoulboundUserNFT("Test User NFT", "TUN");
+
         // 部署DisputeResolver合约
-        disputeResolver = new DisputeResolver(taskToken);
+        disputeResolver = new DisputeResolver(taskToken, IUserInfoNFT(address(userInfoNFT)));
 
         // 部署FixedPaymentTask合约
         fixedPaymentTask = new FixedPaymentTask(taskToken, IDisputeResolver(address(disputeResolver)));
