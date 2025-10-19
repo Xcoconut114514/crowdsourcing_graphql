@@ -4,10 +4,12 @@ pragma solidity >=0.8.0 <0.9.0;
 import "forge-std/Test.sol";
 import "../contracts/DisputeResolver.sol";
 import "../contracts/TaskToken.sol";
+import "../contracts/UserInfoNFT.sol";
 
 contract DisputeResolverTest is Test {
     DisputeResolver public disputeResolver;
     TaskToken public taskToken;
+    SoulboundUserNFT public userInfoNFT;
     address public owner;
     address public admin1;
     address public admin2;
@@ -36,8 +38,31 @@ contract DisputeResolverTest is Test {
         taskToken.mint(worker, ADMIN_STAKE_AMOUNT + REWARD_AMOUNT);
         taskToken.mint(taskCreator, ADMIN_STAKE_AMOUNT);
 
+        // 部署UserInfoNFT合约
+        userInfoNFT = new SoulboundUserNFT("Test User NFT", "TUN");
+
         // 部署DisputeResolver合约
-        disputeResolver = new DisputeResolver(taskToken);
+        disputeResolver = new DisputeResolver(taskToken, IUserInfoNFT(address(userInfoNFT)));
+
+        // 为管理员铸造NFT
+        vm.startPrank(admin1);
+        userInfoNFT.mintUserNFT("Admin1", "admin1@test.com", "Test admin", "avatar1", new string[](0));
+        vm.stopPrank();
+
+        vm.startPrank(admin2);
+        userInfoNFT.mintUserNFT("Admin2", "admin2@test.com", "Test admin", "avatar2", new string[](0));
+        vm.stopPrank();
+
+        vm.startPrank(admin3);
+        userInfoNFT.mintUserNFT("Admin3", "admin3@test.com", "Test admin", "avatar3", new string[](0));
+        vm.stopPrank();
+
+        // 使用合约所有者设置管理员为顶级游民等级
+        vm.startPrank(owner);
+        userInfoNFT.updateUserGrade(admin1, SoulboundUserNFT.UserGrade.Excellent);
+        userInfoNFT.updateUserGrade(admin2, SoulboundUserNFT.UserGrade.Excellent);
+        userInfoNFT.updateUserGrade(admin3, SoulboundUserNFT.UserGrade.Excellent);
+        vm.stopPrank();
 
         // 设置授权
         vm.prank(admin1);
@@ -61,66 +86,11 @@ contract DisputeResolverTest is Test {
         assertEq(disputeResolver.owner(), owner);
         assertEq(address(disputeResolver.taskToken()), address(taskToken));
         assertEq(disputeResolver.disputeCounter(), 0);
-        assertEq(disputeResolver.adminStakeAmount(), ADMIN_STAKE_AMOUNT);
-    }
-
-    // 测试管理员质押成为管理员
-    function testStakeToBecomeAdmin() public {
-        uint256 initialBalance = taskToken.balanceOf(admin1);
-
-        vm.prank(admin1);
-        disputeResolver.stakeToBecomeAdmin();
-
-        (, bool isActive) = disputeResolver.adminStatus(admin1);
-        assertEq(disputeResolver.getAdminStake(admin1), ADMIN_STAKE_AMOUNT);
-        assertTrue(isActive);
-        assertEq(taskToken.balanceOf(admin1), initialBalance - ADMIN_STAKE_AMOUNT);
-        assertEq(taskToken.balanceOf(address(disputeResolver)), ADMIN_STAKE_AMOUNT);
-    }
-
-    // 测试重复质押
-    function testStakeToBecomeAdminAlreadyStaked() public {
-        vm.prank(admin1);
-        disputeResolver.stakeToBecomeAdmin();
-
-        vm.prank(admin1);
-        vm.expectRevert(DisputeResolver.DisputeResolver_AlreadyStaked.selector);
-        disputeResolver.stakeToBecomeAdmin();
-    }
-
-    // 测试管理员提取质押
-    function testWithdrawStake() public {
-        // 先质押
-        vm.prank(admin1);
-        disputeResolver.stakeToBecomeAdmin();
-
-        uint256 contractBalance = taskToken.balanceOf(address(disputeResolver));
-        uint256 adminBalance = taskToken.balanceOf(admin1);
-
-        // 提取质押
-        vm.prank(admin1);
-        disputeResolver.withdrawStake();
-
-        (, bool isActive) = disputeResolver.adminStatus(admin1);
-        assertFalse(isActive);
-        assertEq(disputeResolver.getAdminStake(admin1), 0);
-        assertEq(taskToken.balanceOf(admin1), adminBalance + ADMIN_STAKE_AMOUNT);
-        assertEq(taskToken.balanceOf(address(disputeResolver)), contractBalance - ADMIN_STAKE_AMOUNT);
-    }
-
-    // 测试非管理员提取质押
-    function testWithdrawStakeNotAdmin() public {
-        vm.prank(admin1);
-        vm.expectRevert(DisputeResolver.DisputeResolver_NotAdmin.selector);
-        disputeResolver.withdrawStake();
+        // adminStakeAmount 已被移除，现在使用用户等级来判断管理员权限
     }
 
     // 测试提交纠纷
     function testFileDispute() public {
-        // 先质押成为管理员
-        vm.prank(admin1);
-        disputeResolver.stakeToBecomeAdmin();
-
         uint256 initialWorkerBalance = taskToken.balanceOf(worker);
         uint256 initialContractBalance = taskToken.balanceOf(address(disputeResolver));
 
@@ -173,7 +143,7 @@ contract DisputeResolverTest is Test {
         assertTrue(disputeResolver.hasVotedOnDispute(admin1, 0));
         DisputeResolver.Dispute memory dispute = disputeResolver.getDispute(0);
         assertEq(dispute.votes.length, 1);
-        assertEq(dispute.votes[0].admin, admin1);
+        assertEq(dispute.votes[0].elite, admin1);
         assertEq(dispute.votes[0].workerShare, REWARD_AMOUNT / 2);
     }
 
@@ -184,7 +154,7 @@ contract DisputeResolverTest is Test {
 
         // 非管理员尝试投票
         vm.prank(worker);
-        vm.expectRevert(DisputeResolver.DisputeResolver_NotAdmin.selector);
+        vm.expectRevert(DisputeResolver.DisputeResolver_NotEliteUser.selector);
         disputeResolver.voteOnDispute(0, REWARD_AMOUNT / 2);
     }
 
@@ -403,9 +373,9 @@ contract DisputeResolverTest is Test {
         uint256 initialContractBalance = taskToken.balanceOf(address(disputeResolver));
         uint256 initialWorkerBalance = taskToken.balanceOf(worker);
         uint256 initialCreatorBalance = taskToken.balanceOf(taskCreator);
-        uint256 initialAdmin1Stake = disputeResolver.getAdminStake(admin1);
-        uint256 initialAdmin2Stake = disputeResolver.getAdminStake(admin2);
-        uint256 initialAdmin3Stake = disputeResolver.getAdminStake(admin3);
+        uint256 initialAdmin1Balance = taskToken.balanceOf(admin1);
+        uint256 initialAdmin2Balance = taskToken.balanceOf(admin2);
+        uint256 initialAdmin3Balance = taskToken.balanceOf(admin3);
 
         // 分配资金
         disputeResolver.distributeFunds(0);
@@ -414,20 +384,24 @@ contract DisputeResolverTest is Test {
         DisputeResolver.Dispute memory dispute = disputeResolver.getDispute(0);
         assertEq(uint8(dispute.status), uint8(DisputeResolver.DisputeStatus.Distributed));
 
-        uint256 processingReward = (REWARD_AMOUNT * 50) / 10000; // 0.5% = 0.5 * 10^18
-        uint256 rewardPerAdmin = processingReward / 3;
         // 根据投票结果，工作者应得50 * 10^18，创建者应得50 * 10^18
         uint256 workerAmount = REWARD_AMOUNT / 2;
         uint256 creatorAmount = REWARD_AMOUNT / 2;
+        uint256 processingReward = (REWARD_AMOUNT * 50) / 10000; // 0.5%
+        uint256 rewardPerElite = processingReward / 3; // 3个顶级游民
 
-        // 合约最终余额应该是初始余额减去分配给工作者和创建者的金额，但处理奖励仍留在合约中
-        uint256 finalContractBalance = initialContractBalance - workerAmount - creatorAmount;
+        // 合约最终余额应该是初始余额减去所有分配的金额
+        // 注意：由于整数除法，实际分配的奖励可能略少于计算的processingReward
+        uint256 actualDistributedReward = rewardPerElite * 3; // 实际分配的奖励
+        uint256 finalContractBalance = initialContractBalance - workerAmount - creatorAmount - actualDistributedReward;
         assertEq(taskToken.balanceOf(address(disputeResolver)), finalContractBalance);
         assertEq(taskToken.balanceOf(worker), initialWorkerBalance + workerAmount);
         assertEq(taskToken.balanceOf(taskCreator), initialCreatorBalance + creatorAmount);
-        assertEq(disputeResolver.getAdminStake(admin1), initialAdmin1Stake + rewardPerAdmin);
-        assertEq(disputeResolver.getAdminStake(admin2), initialAdmin2Stake + rewardPerAdmin);
-        assertEq(disputeResolver.getAdminStake(admin3), initialAdmin3Stake + rewardPerAdmin);
+
+        // 验证顶级游民获得处理奖励
+        assertEq(taskToken.balanceOf(admin1), initialAdmin1Balance + rewardPerElite);
+        assertEq(taskToken.balanceOf(admin2), initialAdmin2Balance + rewardPerElite);
+        assertEq(taskToken.balanceOf(admin3), initialAdmin3Balance + rewardPerElite);
     }
 
     // 测试分配资金时提案未获批准
@@ -462,9 +436,6 @@ contract DisputeResolverTest is Test {
         voteAndProcess();
 
         uint256 initialBalance = taskToken.balanceOf(worker);
-        uint256 initialAdmin1Stake = disputeResolver.getAdminStake(admin1);
-        uint256 initialAdmin2Stake = disputeResolver.getAdminStake(admin2);
-        uint256 initialAdmin3Stake = disputeResolver.getAdminStake(admin3);
         uint256 processingReward = (REWARD_AMOUNT * 50) / 10000; // 0.5%
 
         // 工作者拒绝提案
@@ -482,12 +453,6 @@ contract DisputeResolverTest is Test {
 
         // 检查拒绝费用是否正确扣除
         assertEq(taskToken.balanceOf(worker), initialBalance - processingReward);
-
-        // 检查管理员质押金额是否增加了处理奖励
-        uint256 rewardPerAdmin = processingReward / 3;
-        assertEq(disputeResolver.getAdminStake(admin1), initialAdmin1Stake + rewardPerAdmin);
-        assertEq(disputeResolver.getAdminStake(admin2), initialAdmin2Stake + rewardPerAdmin);
-        assertEq(disputeResolver.getAdminStake(admin3), initialAdmin3Stake + rewardPerAdmin);
 
         // 验证管理员可以重新投票
         assertFalse(disputeResolver.hasVotedOnDispute(admin1, 0));
@@ -520,17 +485,9 @@ contract DisputeResolverTest is Test {
         disputeResolver.rejectProposal(0);
     }
 
-    // 辅助函数：设置纠纷和管理员
+    // 辅助函数：设置纠纷和顶级游民
     function setupDisputeAndAdmins() internal {
-        // 质押成为管理员
-        vm.prank(admin1);
-        disputeResolver.stakeToBecomeAdmin();
-
-        vm.prank(admin2);
-        disputeResolver.stakeToBecomeAdmin();
-
-        vm.prank(admin3);
-        disputeResolver.stakeToBecomeAdmin();
+        // 管理员已经是顶级游民，无需额外设置
 
         // 提交纠纷
         vm.prank(worker);

@@ -5,12 +5,15 @@ import "forge-std/Test.sol";
 import "../contracts/task/MilestonePaymentTask.sol";
 import "../contracts/TaskToken.sol";
 import "../contracts/DisputeResolver.sol";
+import "../contracts/UserInfoNFT.sol";
+import "../contracts/interfaces/IUserInfoNFT.sol";
 import "../contracts/interface/IDisputeResolver.sol";
 
 contract MilestonePaymentTaskTest is Test {
     MilestonePaymentTask public milestonePaymentTask;
     TaskToken public taskToken;
     DisputeResolver public disputeResolver;
+    SoulboundUserNFT public userInfoNFT;
 
     address public owner;
     address public taskCreator;
@@ -97,8 +100,11 @@ contract MilestonePaymentTaskTest is Test {
         taskToken.mint(worker, ADMIN_STAKE_AMOUNT);
         taskToken.mint(otherUser, TOTAL_REWARD);
 
+        // 部署UserInfoNFT合约
+        userInfoNFT = new SoulboundUserNFT("Test User NFT", "TUN");
+
         // 部署DisputeResolver合约
-        disputeResolver = new DisputeResolver(taskToken);
+        disputeResolver = new DisputeResolver(taskToken, IUserInfoNFT(address(userInfoNFT)));
 
         // 部署MilestonePaymentTask合约
         milestonePaymentTask = new MilestonePaymentTask(taskToken, IDisputeResolver(address(disputeResolver)));

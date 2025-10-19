@@ -4,11 +4,12 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "./interfaces/IUserInfoNFT.sol";
 
 /**
  * @title 纠纷解决合约
  * @notice 用于处理任务创建者和工作者之间的纠纷，托管资金直到纠纷解决
- * @dev 该合约允许在纠纷期间冻结资金，直到质押者投票决定如何分配这些资金
+ * @dev 该合约允许在纠纷期间冻结资金，直到顶级游民投票决定如何分配这些资金
  */
 contract DisputeResolver is ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
@@ -21,15 +22,10 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
 
     }
 
-    struct Admin {
-        uint256 stakeAmount;
-        bool isActive;
-    }
-
-    // 管理员投票结构体
-    struct AdminVote {
-        address admin; // 管理员地址
-        uint256 workerShare; // 管理员投票的工作者份额
+    // 顶级游民投票结构体
+    struct EliteVote {
+        address elite; // 顶级游民地址
+        uint256 workerShare; // 顶级游民投票的工作者份额
     }
 
     // 纠纷结构体
@@ -43,17 +39,17 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
         bool workerApproved; // 工作者是否批准
         bool creatorApproved; // 创建者是否批准
         DisputeStatus status; // 纠纷状态
-        AdminVote[] votes; // 投票列表
+        EliteVote[] votes; // 投票列表
     }
 
     // 平台代币地址
     IERC20 public immutable taskToken;
 
+    // 用户NFT合约地址
+    IUserInfoNFT public immutable userInfoNFT;
+
     // 纠纷计数器
     uint256 public disputeCounter;
-
-    // 管理员质押金额
-    uint256 public constant adminStakeAmount = 1000 * 10 ** 18; // 默认1000个代币
 
     // 纠纷处理奖励比例 (以基点表示，100基点=1%)
     uint256 public constant disputeProcessingRewardBps = 50; // 默认0.5%
@@ -61,10 +57,7 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
     // 存储所有纠纷
     mapping(uint256 => Dispute) public disputes;
 
-    // 存储管理员状态
-    mapping(address => Admin) public adminStatus;
-
-    // 存储管理员是否已对特定纠纷投票
+    // 存储顶级游民是否已对特定纠纷投票
     mapping(address => mapping(uint256 => bool)) public hasVotedOnDispute;
 
     // 自定义错误
@@ -76,11 +69,11 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
     error DisputeResolver_OnlyDisputeParty();
     error DisputeResolver_ProposalNotApproved();
     error DisputeResolver_AlreadyApproved();
-    error DisputeResolver_AlreadyStaked();
-    error DisputeResolver_NotAdmin();
+    error DisputeResolver_NotEliteUser();
     error DisputeResolver_AlreadyVoted();
     error DisputeResolver_NotEnoughVotes();
     error DisputeResolver_InvalidTaskToken();
+    error DisputeResolver_InvalidUserNFTContract();
 
     // 事件定义
     event DisputeResolver_DisputeFiled(
@@ -103,11 +96,7 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
 
     event DisputeResolver_ProposalRejected(uint256 indexed disputeId);
 
-    event DisputeResolver_AdminStaked(address indexed admin, uint256 amount);
-
-    event DisputeResolver_AdminWithdrawn(address indexed admin, uint256 amount);
-
-    event DisputeResolver_AdminVoted(uint256 indexed disputeId, address indexed admin, uint256 workerShare);
+    event DisputeResolver_EliteVoted(uint256 indexed disputeId, address indexed elite, uint256 workerShare);
 
     modifier onlyActiveDispute(uint256 _disputeId) {
         if (_disputeId >= disputeCounter) {
@@ -116,52 +105,34 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
         _;
     }
 
+    modifier onlyEliteUser() {
+        // 检查用户是否拥有NFT
+        if (!userInfoNFT.hasUserMintedNFT(msg.sender)) {
+            revert DisputeResolver_NotEliteUser();
+        }
+
+        // 检查用户是否为顶级游民
+        IUserInfoNFT.UserGrade userGrade = userInfoNFT.getUserGrade(msg.sender);
+        if (userGrade != IUserInfoNFT.UserGrade.Excellent) {
+            revert DisputeResolver_NotEliteUser();
+        }
+        _;
+    }
+
     /**
      * @notice 构造函数
      * @param _taskToken 平台代币地址
+     * @param _userInfoNFT 用户NFT合约地址
      */
-    constructor(IERC20 _taskToken) Ownable(msg.sender) {
+    constructor(IERC20 _taskToken, IUserInfoNFT _userInfoNFT) Ownable(msg.sender) {
         if (address(_taskToken) == address(0)) {
             revert DisputeResolver_InvalidTaskToken();
         }
+        if (address(_userInfoNFT) == address(0)) {
+            revert DisputeResolver_InvalidUserNFTContract();
+        }
         taskToken = _taskToken;
-    }
-
-    /**
-     * @notice 管理员质押代币成为管理员
-     */
-    function stakeToBecomeAdmin() external {
-        // 检查是否已经质押
-        Admin storage adminstatus = adminStatus[msg.sender];
-        if (adminstatus.isActive) {
-            revert DisputeResolver_AlreadyStaked();
-        }
-
-        // 质押代币
-        taskToken.safeTransferFrom(msg.sender, address(this), adminStakeAmount);
-        adminstatus.stakeAmount = adminStakeAmount;
-        adminstatus.isActive = true;
-
-        emit DisputeResolver_AdminStaked(msg.sender, adminStakeAmount);
-    }
-
-    /**
-     * @notice 管理员提取质押金（需要先取消管理员资格）
-     */
-    function withdrawStake() external nonReentrant {
-        // 检查是否是管理员
-        Admin storage adminstatus = adminStatus[msg.sender];
-        if (!adminstatus.isActive) {
-            revert DisputeResolver_NotAdmin();
-        }
-
-        adminstatus.isActive = false;
-        uint256 amount = adminstatus.stakeAmount;
-        adminstatus.stakeAmount = 0;
-
-        taskToken.safeTransfer(msg.sender, amount);
-
-        emit DisputeResolver_AdminWithdrawn(msg.sender, amount);
+        userInfoNFT = _userInfoNFT;
     }
 
     /**
@@ -205,7 +176,7 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
             workerApproved: false,
             creatorApproved: false,
             status: DisputeStatus.Filed,
-            votes: new AdminVote[](0)
+            votes: new EliteVote[](0)
         });
         // 增加纠纷计数器
         disputeCounter++;
@@ -218,7 +189,7 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @notice 管理员对纠纷进行投票
+     * @notice 顶级游民对纠纷进行投票
      * @param _disputeId 纠纷ID
      * @param _workerShare 分配给工作者的金额
      */
@@ -226,13 +197,8 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
         external
         nonReentrant
         onlyActiveDispute(_disputeId)
+        onlyEliteUser
     {
-        Admin storage adminstatus = adminStatus[msg.sender];
-        // 检查是否是激活的管理员
-        if (!adminstatus.isActive) {
-            revert DisputeResolver_NotAdmin();
-        }
-
         Dispute storage dispute = disputes[_disputeId];
 
         // 检查纠纷状态
@@ -251,16 +217,16 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
         }
 
         // 记录投票
-        dispute.votes.push(AdminVote({ admin: msg.sender, workerShare: _workerShare }));
+        dispute.votes.push(EliteVote({ elite: msg.sender, workerShare: _workerShare }));
 
         // 标记为已投票
         hasVotedOnDispute[msg.sender][_disputeId] = true;
 
-        emit DisputeResolver_AdminVoted(_disputeId, msg.sender, _workerShare);
+        emit DisputeResolver_EliteVoted(_disputeId, msg.sender, _workerShare);
     }
 
     /**
-     * @notice 处理管理员投票，计算平均值并解决纠纷
+     * @notice 处理顶级游民投票，计算平均值并解决纠纷
      * @param _disputeId 纠纷ID
      */
     function processVotes(uint256 _disputeId) external nonReentrant onlyActiveDispute(_disputeId) {
@@ -345,7 +311,7 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
             revert DisputeResolver_ProposalNotApproved();
         }
 
-        // 计算奖励金额
+        // 计算处理奖励金额
         uint256 processingReward = (dispute.rewardAmount * disputeProcessingRewardBps) / DenominatorFee;
 
         // 计算实际分配给工作者和创建者的金额（扣除奖励）
@@ -354,7 +320,7 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
 
         // 计算每个评判人的奖励
         uint256 length = dispute.votes.length;
-        uint256 rewardPerAdmin = processingReward / length;
+        uint256 rewardPerElite = processingReward / length;
 
         // 更新纠纷状态
         dispute.status = DisputeStatus.Distributed;
@@ -369,11 +335,11 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
             taskToken.safeTransfer(dispute.taskCreator, creatorAmount);
         }
 
-        // 为参与投票的管理员增加质押资金（奖励）
-        if (rewardPerAdmin > 0) {
+        // 为参与投票的顶级游民发放奖励
+        if (rewardPerElite > 0) {
             for (uint256 i = 0; i < length; i++) {
-                address admin = dispute.votes[i].admin;
-                adminStatus[admin].stakeAmount += rewardPerAdmin;
+                address elite = dispute.votes[i].elite;
+                taskToken.safeTransfer(elite, rewardPerElite);
             }
         }
 
@@ -404,13 +370,19 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
         // 收取拒绝费用并分配给评判人
         if (processingReward > 0) {
             taskToken.safeTransferFrom(msg.sender, address(this), processingReward);
-            uint256 rewardPerAdmin = processingReward / length;
+            uint256 rewardPerElite = processingReward / length;
 
-            // 为参与投票的管理员增加质押资金（拒绝费用）
+            // 为参与投票的顶级游民发放拒绝费用奖励
             for (uint256 i = 0; i < length; i++) {
-                address admin = dispute.votes[i].admin;
-                adminStatus[admin].stakeAmount += rewardPerAdmin;
-                hasVotedOnDispute[admin][_disputeId] = false;
+                address elite = dispute.votes[i].elite;
+                taskToken.safeTransfer(elite, rewardPerElite);
+                hasVotedOnDispute[elite][_disputeId] = false;
+            }
+        } else {
+            // 如果没有处理费用，仍然需要重置投票状态
+            for (uint256 i = 0; i < length; i++) {
+                address elite = dispute.votes[i].elite;
+                hasVotedOnDispute[elite][_disputeId] = false;
             }
         }
 
@@ -437,14 +409,9 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @notice 获取管理员质押金额
-     * @param _admin 管理员地址
-     * @return 质押金额
+     * @notice 获取纠纷处理奖励比例
+     * @return 奖励比例（基点）
      */
-    function getAdminStake(address _admin) external view returns (uint256) {
-        return adminStatus[_admin].stakeAmount;
-    }
-
     function getDisputeProcessingRewardBps() external pure returns (uint256) {
         return disputeProcessingRewardBps;
     }
