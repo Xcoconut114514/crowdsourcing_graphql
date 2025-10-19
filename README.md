@@ -1,396 +1,225 @@
-# 🏗 Scaffold-ETH 2
+# Nomad UBI
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+**链上游民的普惠收入协议 —— 面向网络社会的声誉与协作系统**
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+# **摘要**
 
-⚙️ Built using NextJS, RainbowKit, Foundry, Wagmi, Viem, and Typescript.
+Nomad UBI 是一个基于区块链的去中心化协作平台，通过智能合约实现三个核心功能板块：
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+1. **内容分享板块** - 知识变现与付费内容分享
+2. **任务工作板块** - 技能匹配与雇佣结算  
+3. **项目众筹板块** - 集体协作与资金筹集
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+平台通过灵魂绑定NFT（SBT）系统管理用户身份和等级，使用平台代币（TaskToken）进行所有交易，并内置纠纷解决机制确保公平协作。
 
-## Requirements
+# **1. 引言**
 
-Before you begin, you need to install the following tools:
+在去中心化的网络社会中，传统的价值创造和分配模式正在发生根本性变化。人们通过多样化的贡献方式创造价值，但缺乏有效的激励机制和信任保障。
 
-- [Node (>= v20.18.3)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
+Nomad UBI 通过区块链技术构建了一个让"参与即收益"的协作经济系统，通过智能合约确保价值分配的透明性和公平性，让每个参与者都能获得应有的收益。
 
-## Quickstart
+# **2. 设计动机**
 
-To get started with Scaffold-ETH 2, follow the steps below:
+1. **价值创造多样化**：传统工作模式无法充分体现知识、技能、创意的价值
+2. **信任机制缺失**：跨地域协作缺乏有效的信任保障和纠纷解决机制
+3. **收益分配不透明**：中心化平台抽取高额手续费，创作者和工作者收益有限
 
-1. Install dependencies if it was skipped in CLI:
+目标：
 
-```
-cd my-dapp-example
-yarn install
-```
+Nomad UBI 致力于降低协作门槛，提高价值分配的公平性，通过智能合约自动化执行确保每个参与者都能公平地获得收益。
 
-2. Run a local network in the first terminal:
+# **3. 核心理念**
 
-```
-yarn chain
-```
+"协作即价值，参与即收益。"
 
-This command starts a local Ethereum network using Foundry. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `packages/foundry/foundry.toml`.
+Nomad UBI 建立了一个基于智能合约的协作经济系统，通过透明的规则和自动化的执行，确保每个参与者都能公平地获得收益。
 
-3. On a second terminal, deploy the test contract:
+# **4. 系统架构**
 
-```
-yarn deploy
-```
+**4.1 核心合约组件**
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/foundry/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/foundry/script` to deploy the contract to the network. You can also customize the deploy script.
+| **合约** | **功能** | **说明** |
+| --- | --- | --- |
+| UserInfoNFT | 灵魂绑定身份系统 | 不可转移的NFT，管理用户等级和身份 |
+| TaskToken | 平台代币 | ERC20代币，用于所有交易和奖励 |
+| ContentShare | 内容分享合约 | 付费内容发布和购买，支持等级折扣 |
+| BaseTask | 任务基础合约 | 抽象合约，定义任务核心逻辑 |
+| Crowdfunding | 众筹合约 | 项目众筹和资金管理 |
+| DisputeResolver | 纠纷解决合约 | 处理任务纠纷，顶级游民投票裁决 |
+| ProposalGovernance | 提案治理合约 | 众筹项目的资金使用提案和投票 |
 
-4. On a third terminal, start your NextJS app:
+**4.2 用户等级系统**
 
-```
-yarn start
-```
+| **等级** | **称号** | **特权** | **折扣** |
+| --- | --- | --- | --- |
+| Poor (0) | 新手游民 🌱 | 基础功能访问 | 无折扣 |
+| Good (1) | 资深游民 ✈️ | 内容分享折扣 | 10% 折扣 |
+| Excellent (2) | 顶级游民 👑 | 纠纷裁决权 | 20% 折扣 |
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+# **5. 产品功能详解**
 
-Run smart contract test with `yarn foundry:test`
+**5.1 内容分享板块**
 
-- Edit your smart contracts in `packages/foundry/contracts`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/foundry/script`
+**功能流程：**
+1. 用户铸造灵魂绑定NFT获得身份
+2. 创作者发布付费内容，设置价格
+3. 购买者根据NFT等级享受不同折扣
+4. 收益自动分配：创作者90%，平台10%
 
-## 🚀 Setup The Graph Integration
+**技术特性：**
+- 支持等级折扣系统（新手无折扣，资深10%，顶级20%）
+- 记账模式：收益记录在合约中，用户可随时提取
+- 集成用户NFT系统，确保只有认证用户可参与
 
-Now that we have spun up our blockchain, started our frontend application and deployed our smart contract, we can start setting up our subgraph and utilize The Graph!
+**5.2 任务工作板块**
 
-> Before following these steps be sure Docker is running!
+**功能流程：**
+1. 任务创建者发布任务，设置奖励和截止时间
+2. 工作者接受任务并提交工作成果
+3. 任务完成后的资金托管和纠纷处理
+4. 平台抽取1%手续费
 
-#### ✅ Step 1: Clean up any old data and spin up our docker containers ✅
+**技术特性：**
+- 抽象合约设计，支持不同类型任务扩展
+- 内置纠纷解决机制，顶级游民投票裁决
+- 工作量证明系统，确保工作质量
+- 可暂停/恢复功能，支持紧急情况处理
 
-First run the following to clean up any old data. Do this if you need to reset everything.
+**5.3 众筹板块**
 
-```
-yarn subgraph:clean-node
-```
+**功能流程：**
+1. 项目发起人创建众筹项目，设定目标和截止时间
+2. 用户向项目捐赠资金
+3. 项目成功：发起人获得25%启动资金，其余通过提案申请
+4. 项目失败：捐赠者可按比例退款
 
-> We can now spin up a graph node by running the following command… 🧑‍🚀
+**技术特性：**
+- 提案治理系统：发起人需通过投票申请资金
+- 连续失败保护：提案失败3次后项目自动失败
+- 透明资金管理：所有资金流动公开可查
+- 自动退款机制：失败项目自动退款
 
-```
-yarn subgraph:run-node
-```
+# **6. 纠纷解决机制**
 
-This will spin up all the containers for The Graph using docker-compose. You will want to keep this window open at all times so that you can see log output from Docker.
+**6.1 纠纷处理流程**
 
-> As stated before, be sure to keep this window open so that you can see any log output from Docker. 🔎
+1. **提交纠纷**：任务相关方提交纠纷，支付0.5%处理费
+2. **顶级游民投票**：至少3位顶级游民对资金分配进行投票
+3. **计算平均值**：系统计算投票平均值作为分配方案
+4. **双方确认**：纠纷相关方确认分配方案
+5. **资金分配**：按确认方案分配资金，投票者获得奖励
 
-> NOTE FOR LINUX USERS: If you are running Linux you will need some additional changes to the project.
+**6.2 激励机制**
 
-##### Linux Only
+- 纠纷处理奖励：0.5%的处理费分配给参与投票的顶级游民
+- 拒绝惩罚：拒绝分配方案需再次支付处理费
+- 投票要求：至少需要3票才能处理纠纷
 
-**For hardhat**
+# **7. 收益分配机制**
 
-Update your package.json in packages/hardhat with the following command line option for the hardhat chain.
+**7.1 内容分享板块**
+- 内容创作者：90%
+- 平台金库：10%
 
-```
-"chain": "hardhat node --network hardhat --no-deploy --hostname 0.0.0.0"
-```
+**7.2 任务工作板块**
+- 工作者：99%（扣除1%平台费）
+- 平台手续费：1%
 
-**For foundry**
+**7.3 众筹板块**
+- 项目发起人：25%启动资金 + 提案通过的资金
+- 捐赠者：项目失败时按比例退款
 
-Update your package.json in packages/foundry with the following command line option for the anvil chain.
+**7.4 纠纷解决**
+- 纠纷相关方：按投票结果分配
+- 顶级游民：获得处理费奖励
+- 平台：无直接收益，维护系统运行
 
-```
-"chain": "anvil --host 0.0.0.0 --config-out localhost.json",
-```
+# **8. 用户成长体系**
 
-Save the file and then restart your chain in its original window.
+**8.1 等级提升机制**
 
-```
-yarn chain
-```
+用户通过参与平台活动提升等级：
+- 新手游民：刚注册用户
+- 资深游民：通过内容创作或任务完成获得
+- 顶级游民：通过持续贡献和社区认可获得
 
-Redeploy your smart contracts.
+**8.2 等级特权**
 
-```
-yarn deploy
-```
+- **内容折扣**：高等级用户享受购买折扣
+- **纠纷裁决**：顶级游民参与纠纷投票裁决
+- **优先推荐**：高等级用户在任务匹配中获得优先权
 
-You might also need to add a firewall exception for port 8432. As an example for Ubuntu... run the following command.
+# **9. 技术特性**
 
-```
-sudo ufw allow 8545/tcp
-```
+**9.1 智能合约安全**
+- 重入攻击保护（ReentrancyGuard）
+- 暂停/恢复机制（Pausable）
+- 所有权管理（Ownable）
+- 安全代币转账（SafeERC20）
 
-#### ✅ Step 2: Create and ship our subgraph ✅
+**9.2 用户身份管理**
+- 灵魂绑定NFT（SBT）：不可转移、不可销毁
+- 等级系统：Poor/Good/Excellent三级体系
+- 元数据存储：用户信息链上存储
 
-Now we can open up a fifth window to finish setting up The Graph. 😅 In this fifth window we will create our local subgraph!
+**9.3 资金管理**
+- 托管机制：任务资金托管至纠纷解决
+- 自动分配：智能合约自动执行收益分配
+- 透明账本：所有交易公开可查
 
-> Note: You will only need to do this once.
+# **10. 治理机制**
 
-```
-yarn subgraph:create-local
-```
+**10.1 平台治理**
+- 合约所有者：负责系统参数调整和紧急情况处理
+- 社区提案：未来可扩展为DAO治理模式
 
-> You should see some output stating your subgraph has been created along with a log output on your graph-node inside docker.
+**10.2 项目治理**
+- 众筹项目：捐赠者投票决定资金使用
+- 纠纷处理：顶级游民投票裁决争议
 
-Next we will ship our subgraph! You will need to give your subgraph a version after executing this command. (e.g. 0.0.1).
+# **11. 可持续性**
 
-```
-yarn subgraph:local-ship
-```
+**11.1 经济可持续**
+- 平台手续费：维持系统运营
+- 纠纷处理费：激励顶级游民参与治理
+- 用户增长：更多参与者带来更多交易
 
-> This command does the following all in one… 🚀🚀🚀
+**11.2 技术可持续**
+- 模块化设计：各合约独立，易于升级
+- 开源架构：支持社区贡献和改进
+- 标准化接口：兼容现有DeFi生态
 
--   Copies the contracts ABI from the hardhat/deployments folder
--   Generates the networks.json file
--   Generates AssemblyScript types from the subgraph schema and the contract ABIs.
--   Compiles and checks the mapping functions.
--   … and deploy a local subgraph!
+# **12. 安全机制**
 
-> If you get an error ts-node you can install it with the following command
+**12.1 智能合约安全**
+- 多重安全检查：防止常见攻击向量
+- 紧急暂停：支持紧急情况下的系统暂停
+- 权限控制：严格的函数访问控制
 
-```
-npm install -g ts-node
-```
+**12.2 用户资金安全**
+- 资金托管：纠纷期间资金安全托管
+- 自动退款：失败项目自动退款机制
+- 透明审计：所有资金流动可审计
 
-You should get a build completed output along with the address of your Subgraph endpoint.
+# **13. 路线图**
 
-```
-Build completed: QmYdGWsVSUYTd1dJnqn84kJkDggc2GD9RZWK5xLVEMB9iP
+| **阶段** | **目标** | **时间线** |
+| --- | --- | --- |
+| I | 核心合约部署和测试 | 2025 Q1 |
+| II | 前端界面开发和集成 | 2025 Q2 |
+| III | 用户测试和功能优化 | 2025 Q3 |
+| IV | 正式上线和生态扩展 | 2025 Q4 |
 
-Deployed to http://localhost:8000/subgraphs/name/scaffold-eth/your-contract/graphql
+# **14. 法律声明**
 
-Subgraph endpoints:
-Queries (HTTP):     http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
-```
+Nomad UBI 为社区驱动的开源协议，不发行投资产品，本文件不构成投资建议或募资行为。
 
-#### ✅ Step 3: Test your Subgraph ✅
+所有参与均基于智能合约规则和用户自愿。
 
-Go ahead and head over to your subgraph endpoint and take a look!
+# **15. 结语**
 
-> Here is an example query…
+Nomad UBI 致力于构建一个公平、透明、可持续的协作经济系统。
 
-```
-  {
-    greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
-      id
-      greeting
-      premium
-      value
-      createdAt
-      sender {
-        address
-        greetingCount
-      }
-    }
-  }
-```
+通过内容分享、任务工作、项目众筹三大板块，配合灵魂绑定身份系统和智能纠纷解决机制，让每个参与者都能在去中心化的网络社会中获得应有的价值回报。
 
-> If all is well and you’ve sent a transaction to your smart contract then you will see a similar data output!
-
-#### ✅ Step 4: Create Graph Client Artifacts ✅
-
-The Graph Client is a tool used to query GraphQL based applications and contains a lot of advanced features, such as client side composition or automatic pagination. A complete list of features and goals of this project can be found [here].(https://github.com/graphprotocol/graph-client?tab=readme-ov-file#features-and-goals)
-
-In order to utilize Graph-Client in our application, we need to build the artifacts needed for our frontend. To do this simply run...
-
-```
-yarn graphclient:build
-```
-
-After doing so, navigate to http://localhost:3000/subgraph and you should be able to see the GraphQL rendered in your application. If you don't see anything, make sure you've triggered an event in your smart contract.
-
-If you want to look at the query code for this, it can be found the component located in the subgraph folder `packages/nextjs/app/subgraph/_components/GreetingsTable.tsx`
-
-
-
-#### ✅ Side Quest: Run a Matchstick Test ✅
-
-Matchstick is a [unit testing framework](https://thegraph.com/docs/en/developing/unit-testing-framework/), developed by [LimeChain](https://limechain.tech/), that enables subgraph developers to test their mapping logic in a sandboxed environment and deploy their subgraphs with confidence!
-
-The project comes with a pre-written test located in `packages/subgraph/tests/asserts.test.ts`
-
-To test simply type....
-
-```
-yarn subgraph:test
-```
-
-> This will run `graph test` and automatically download the needed files for testing.
-
-You should receive the following output.
-
-```
-Fetching latest version tag...
-Downloading release from https://github.com/LimeChain/matchstick/releases/download/0.6.0/binary-macos-11-m1
-binary-macos-11-m1 has been installed!
-
-Compiling...
-
-💬 Compiling asserts...
-
-Igniting tests 🔥
-
-asserts
---------------------------------------------------
-  Asserts:
-    √ Greeting and Sender entities - 0.102ms
-
-All 1 tests passed! 😎
-
-[Thu, 07 Mar 2024 15:10:26 -0800] Program executed in: 1.838s.
-```
-
-> NOTE: If you get an error, you may trying passing `-d` flag `yarn subgraph:test -d`. This will run matchstick in docker container.
-
-## Shipping to Subgraph Studio 🚀
-
-> NOTE: This step requires [deployment of contract](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts) to live network. Checkout list of [supported networks](https://thegraph.com/docs/networks).
-
-1. Update the `packages/subgraph/subgraph.yaml` file with your contract address, network name, start block number(optional) :
-   ```diff
-   ...
-   -     network: localhost
-   +     network: sepolia
-         source:
-           abi: YourContract
-   +       address: "0x54FE7f8Db97e102D3b7d86cc34D885B735E31E8e"
-   +       startBlock: 5889410
-   ...
-   ```
-  TIP: For `startBlock` you can use block number of your deployed contract, which can be found by visiting deployed transaction hash in blockexplorer.
-
-2. Create a new subgraph on [Subgraph Studio](https://thegraph.com/studio) and get "SUBGRAPH SLUG" and "DEPLOY KEY".
-
-3. Authenticate with the graph CLI:
-   ```sh
-   yarn graph auth --studio <DEPLOY KEY>
-   ```
-
-4. Deploy the subgraph to TheGraph Studio:
-   ```sh
-   yarn graph deploy --studio <SUBGRAPH SLUG>
-   ```
-   Once deployed, the CLI should output the Subgraph endpoints. Copy the HTTP endpoint and test your queries.
-
-5. Update `packages/nextjs/components/ScaffoldEthAppWithProviders.tsx` to use the above HTTP subgraph endpoint:
-   ```diff
-   - const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
-   + const subgraphUri = 'YOUR_SUBGRAPH_ENDPOINT';
-   ```
-
-## A list of all available root commands
-
-### graph
-
-```sh
-yarn graph
-```
-
-Shortcut to run `@graphprotocol/graph-cli` scoped to the subgraph package.
-
-### run-node
-
-```sh
-yarn subgraph:run-node
-```
-
-Spin up a local graph node (requires Docker).
-
-### stop-node
-
-```sh
-yarn subgraph:stop-node
-```
-
-Stop the local graph node.
-
-### clean-node
-
-```sh
-yarn clean-node
-```
-
-Remove the data from the local graph node.
-
-### local-create
-
-```sh
-yarn subgraph:create-local
-```
-
-Create your local subgraph (only required once).
-
-### local-remove
-
-```sh
-yarn subgraph:remove-local
-```
-
-Delete a local subgprah.
-
-### abi-copy
-
-```sh
-yarn subgraph:abi-copy
-```
-
-Copy the contracts ABI from the hardhat/deployments folder. Generates the networks.json file too.
-
-### codegen
-
-```sh
-yarn subgraph:codegen
-```
-
-Generates AssemblyScript types from the subgraph schema and the contract ABIs.
-
-### build
-
-```sh
-yarn subgraph:build
-```
-
-Compile and check the mapping functions.
-
-### local-deploy
-
-```sh
-yarn subgraph:deploy-local
-```
-
-Deploy a local subgraph.
-
-### local-ship
-
-```sh
-yarn subgraph:local-ship
-```
-
-Run all the required commands to deploy a local subgraph (abi-copy, codegen, build and local-deploy).
-
-### deploy
-
-```sh
-yarn subgraph:deploy
-```
-
-Deploy a subgraph to The Graph Network.
-## Documentation
-
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
-
-To know more about its features, check out our [website](https://scaffoldeth.io).
-
-## Contributing to Scaffold-ETH 2
-
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+"协作创造价值，价值回馈协作，智能合约保障公平。"
