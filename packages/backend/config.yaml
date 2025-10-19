@@ -3,15 +3,15 @@ port: 8080
 log_level: info
 
 database:
-  host: localhost
+  host: postgres
   port: 5432
   user: postgres
-  password: your_password
+  password: 123456
   dbname: guild_score
   sslmode: disable
 
 redis:
-  host: localhost
+  host: redis
   port: 6379
   password: ""
   db: 0

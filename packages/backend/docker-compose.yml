@@ -6,7 +6,7 @@ services:
     container_name: guild-score-postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: 123456
       POSTGRES_DB: guild_score
     ports:
       - "5432:5432"
@@ -47,7 +47,7 @@ services:
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
+      DATABASE_PASSWORD: 123456
       DATABASE_DBNAME: guild_score
       REDIS_HOST: redis
       REDIS_PORT: 6379
