@@ -9,13 +9,11 @@ import (
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/internal/config"
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/internal/repository/db"
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/internal/service/reputation"
-	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/pkg/cache"
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/pkg/subgraph"
 )
 
 func SetupRoutes(
 	database *db.Database,
-	redisCache *cache.RedisCache,
 	subgraphClient *subgraph.Client,
 	cfg *config.Config,
 ) *gin.Engine {
@@ -32,10 +30,9 @@ func SetupRoutes(
 		AllowCredentials: true,
 	}))
 
-	// 初始化服务
+	// 初始化服务 (去掉 Redis)
 	reputationService := reputation.NewService(
 		database,
-		redisCache,
 		reputation.NewCalculator(subgraphClient),
 	)
 
@@ -58,6 +55,7 @@ func SetupRoutes(
 			reputation.GET("/history/:address", reputationHandler.GetScoreHistory)
 			reputation.POST("/calculate/:address", reputationHandler.CalculateScore)
 			reputation.GET("/suggestions/:address", reputationHandler.GetImprovementSuggestions)
+			reputation.GET("/tier/:address", reputationHandler.GetUserTier) // 新增：获取用户等级
 		}
 
 		// 用户相关路由
@@ -66,13 +64,12 @@ func SetupRoutes(
 			users.GET("/:address", reputationHandler.GetUserProfile)
 			users.GET("/:address/stats", reputationHandler.GetUserStats)
 		}
+	}
 
-		// AI 分析相关路由 (未来扩展)
-		ai := v1.Group("/ai")
-		{
-			ai.POST("/analyze/:address", reputationHandler.AnalyzeUser)
-			ai.GET("/anomaly/:address", reputationHandler.GetAnomalyDetection)
-		}
+	admin := v1.Group("/admin")
+	{
+		admin.POST("/trigger-weekly-update", reputationHandler.TriggerWeeklyUpdate)
+		admin.POST("/trigger-monthly-update", reputationHandler.TriggerMonthlyUpdate)
 	}
 
 	return router

@@ -2,59 +2,43 @@ package reputation
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/internal/model"
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/internal/repository/db"
-	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/pkg/cache"
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/pkg/logger"
 )
 
 type Service struct {
 	db         *db.Database
-	cache      *cache.RedisCache
 	calculator *Calculator
 }
 
-func NewService(db *db.Database, cache *cache.RedisCache, calculator *Calculator) *Service {
+func NewService(db *db.Database, calculator *Calculator) *Service {
 	return &Service{
 		db:         db,
-		cache:      cache,
 		calculator: calculator,
 	}
 }
 
-// GetOrCalculateScore 获取或计算用户分数（带缓存）
+// GetOrCalculateScore 获取或计算用户分数
 func (s *Service) GetOrCalculateScore(ctx context.Context, address string) (*model.GuildScore, error) {
-	// 1. 尝试从缓存获取
-	cacheKey := fmt.Sprintf("guild_score:%s", address)
-	if cached, err := s.cache.Get(ctx, cacheKey); err == nil && cached != "" {
-		var score model.GuildScore
-		if err := json.Unmarshal([]byte(cached), &score); err == nil {
-			logger.Info("Score fetched from cache", "address", address)
-			return &score, nil
-		}
-	}
-
-	// 2. 从数据库获取
+	// 从数据库获取
 	var score model.GuildScore
-	err := s.db.Where("user_id = (SELECT id FROM users WHERE address = ?)", address).
+	err := s.db.Preload("User").
+		Joins("JOIN users ON users.id = guild_scores.user_id").
+		Where("users.address = ?", address).
 		First(&score).Error
 
 	if err == nil {
 		// 检查是否需要更新（超过1小时）
 		if time.Since(score.CalculatedAt) < time.Hour {
-			// 写入缓存
-			if data, err := json.Marshal(score); err == nil {
-				s.cache.Set(ctx, cacheKey, string(data), time.Hour)
-			}
 			return &score, nil
 		}
 	}
 
-	// 3. 重新计算
+	// 重新计算
 	return s.CalculateAndSave(ctx, address)
 }
 
@@ -122,12 +106,6 @@ func (s *Service) CalculateAndSave(ctx context.Context, address string) (*model.
 		return nil, fmt.Errorf("failed to save score: %w", err)
 	}
 
-	// 更新缓存
-	cacheKey := fmt.Sprintf("guild_score:%s", address)
-	if data, err := json.Marshal(score); err == nil {
-		s.cache.Set(ctx, cacheKey, string(data), time.Hour)
-	}
-
 	logger.Info("Score calculated and saved", "address", address, "score", result.GuildScore)
 
 	return &score, nil
@@ -189,17 +167,63 @@ func (s *Service) GetUserStats(ctx context.Context, address string) (interface{}
 		return nil, err
 	}
 
+	completionRate := 0.0
+	if score.TotalTasks > 0 {
+		completionRate = float64(score.CompletedTasks) / float64(score.TotalTasks)
+	}
+
 	stats := map[string]interface{}{
 		"total_tasks":     score.TotalTasks,
 		"completed_tasks": score.CompletedTasks,
 		"dispute_count":   score.DisputeCount,
-		"completion_rate": float64(score.CompletedTasks) / float64(score.TotalTasks),
+		"completion_rate": completionRate,
 		"current_score":   score.Score,
 		"rank":            score.RankTitle,
 		"last_updated":    score.CalculatedAt,
 	}
 
 	return stats, nil
+}
+
+// GetUserTier 获取用户等级
+func (s *Service) GetUserTier(ctx context.Context, address string) (map[string]interface{}, error) {
+	score, err := s.GetOrCalculateScore(ctx, address)
+	if err != nil {
+		return nil, err
+	}
+
+	tier := GetScoreTier(score.Score)
+	inSensitiveZone := IsInSensitiveZone(score.Score)
+
+	return map[string]interface{}{
+		"address":           address,
+		"score":             score.Score,
+		"tier":              string(tier),
+		"in_sensitive_zone": inSensitiveZone,
+		"next_tier_score":   getNextTierScore(score.Score),
+		"tier_progress":     getTierProgress(score.Score),
+	}, nil
+}
+
+// 辅助函数
+func getNextTierScore(score float64) float64 {
+	if score < ThresholdPoorGood {
+		return ThresholdPoorGood
+	}
+	if score < ThresholdGoodExcellent {
+		return ThresholdGoodExcellent
+	}
+	return 100.0
+}
+
+func getTierProgress(score float64) float64 {
+	if score < ThresholdPoorGood {
+		return (score / ThresholdPoorGood) * 100
+	}
+	if score < ThresholdGoodExcellent {
+		return ((score - ThresholdPoorGood) / (ThresholdGoodExcellent - ThresholdPoorGood)) * 100
+	}
+	return ((score - ThresholdGoodExcellent) / (100 - ThresholdGoodExcellent)) * 100
 }
 
 func generateSuggestions(score *model.GuildScore) []map[string]interface{} {

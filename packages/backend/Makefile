@@ -1,4 +1,4 @@
-.PHONY: build run test migrate docker-up docker-down
+.PHONY: build run test migrate docker-up docker-down clean
 
 # 构建
 build:
@@ -14,11 +14,12 @@ test:
 
 # 数据库迁移
 migrate:
-	go run scripts/migrate/main.go
+	@echo "Running database migrations..."
+	go run cmd/server/main.go --migrate
 
 # 启动 Docker 服务
 docker-up:
-	docker-compose up -d
+	docker-compose up -d postgres
 
 # 停止 Docker 服务
 docker-down:
@@ -42,5 +43,20 @@ clean:
 	rm -rf bin/
 	go clean
 
-# 开发环境完整启动
-dev: docker-up run
+# 完整的开发环境启动
+dev: docker-up
+	@echo "Waiting for database..."
+	@sleep 5
+	@echo "Starting backend..."
+	@make run
+
+# 查看日志
+logs:
+	docker-compose logs -f
+
+# 重置数据库
+reset-db:
+	docker-compose down -v
+	docker-compose up -d postgres
+	@sleep 5
+	@make run
