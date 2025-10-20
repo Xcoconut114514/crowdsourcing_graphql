@@ -116,8 +116,6 @@ contract CollectiveRental is Ownable, ReentrancyGuard {
         uint256 indexed id, address indexed participant, uint256 depositAmount, uint256 currentParticipants
     );
 
-    event RentalEnded(uint256 indexed id, bool success);
-
     event ProjectCompleted(uint256 indexed id, bool isSuccessful);
 
     event FundsWithdrawn(uint256 indexed id, address indexed account, uint256 amount);

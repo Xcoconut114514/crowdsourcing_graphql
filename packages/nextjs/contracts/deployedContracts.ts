@@ -2134,7 +2134,7 @@ const deployedContracts = {
         renounceOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
         transferOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 3,
+      deployedOnBlock: 2,
     },
     CollectiveRental: {
       address: "0x8ce361602b935680e8dec218b820ff5056beb7af",
@@ -2975,7 +2975,7 @@ const deployedContracts = {
         renounceOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
         transferOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 3,
+      deployedOnBlock: 2,
     },
     ProposalGovernance: {
       address: "0xe1aa25618fa0c7a1cfdab5d6b456af611873b629",
@@ -3335,7 +3335,7 @@ const deployedContracts = {
         renounceOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
         transferOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 3,
+      deployedOnBlock: 2,
     },
     MilestonePaymentTask: {
       address: "0x12975173b87f7595ee45dffb2ab812ece596bf84",
@@ -5266,7 +5266,7 @@ const deployedContracts = {
         renounceOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
         transferOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 3,
+      deployedOnBlock: 2,
     },
     FixedPaymentTask: {
       address: "0xed1db453c3156ff3155a97ad217b3087d5dc5f6e",
@@ -6215,7 +6215,7 @@ const deployedContracts = {
         updatePlatformFee: "contracts/task/BaseTask.sol",
         withdrawPlatformRevenue: "contracts/task/BaseTask.sol",
       },
-      deployedOnBlock: 3,
+      deployedOnBlock: 2,
     },
     BiddingTask: {
       address: "0xf7cd8fa9b94db2aa972023b379c7f72c65e4de9d",
@@ -7279,7 +7279,7 @@ const deployedContracts = {
         updatePlatformFee: "contracts/task/BaseTask.sol",
         withdrawPlatformRevenue: "contracts/task/BaseTask.sol",
       },
-      deployedOnBlock: 4,
+      deployedOnBlock: 3,
     },
   },
 } as const;

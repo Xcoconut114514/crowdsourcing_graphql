@@ -1,16 +1,10 @@
 {
   "localhost": {
-    "YourContract": {
-      "address": "0x700b6a60ce7eaaea56f065753d8dcb9653dbad35"
-    },
     "TaskToken": {
       "address": "0x700b6a60ce7eaaea56f065753d8dcb9653dbad35"
     },
     "DisputeResolver": {
       "address": "0x0c8e79f3534b00d9a3d4a856b665bf4ebc22f2ba"
-    },
-    "UserInfo": {
-      "address": "0x33b1b5aa9aa4da83a332f0bc5cac6a903fde5d92"
     },
     "FixedPaymentTask": {
       "address": "0xed1db453c3156ff3155a97ad217b3087d5dc5f6e"
