@@ -2,12 +2,12 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "forge-std/Test.sol";
-import "../contracts/BaseTask.sol";
+import "../contracts/task/BaseTask.sol";
 import "../contracts/TaskToken.sol";
-import "../contracts/DisputeResolver.sol";
-import "../contracts/UserInfoNFT.sol";
-import "../contracts/interfaces/IUserInfoNFT.sol";
-import "../contracts/interface/IDisputeResolver.sol";
+import "../contracts/task/DisputeResolver.sol";
+import "../contracts/SoulboundUserNFT.sol";
+import "../contracts/interfaces/ISoulboundUserNFT.sol";
+import "../contracts/interfaces/IDisputeResolver.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 // 创建一个简单的实现合约来测试BaseTask的抽象功能
@@ -44,7 +44,7 @@ contract BaseTaskTest is Test {
     TestBaseTask public baseTask;
     TaskToken public taskToken;
     DisputeResolver public disputeResolver;
-    SoulboundUserNFT public userInfoNFT;
+    SoulboundUserNFT public soulboundUserNFT;
 
     address public owner;
     address public taskCreator;
@@ -64,11 +64,11 @@ contract BaseTaskTest is Test {
         // 为用户铸造代币
         taskToken.mint(taskCreator, REWARD_AMOUNT * 10);
 
-        // 部署UserInfoNFT合约
-        userInfoNFT = new SoulboundUserNFT("Test User NFT", "TUN");
+        // 部署SoulboundUserNFT合约
+        soulboundUserNFT = new SoulboundUserNFT("Test User NFT", "TUN");
 
         // 部署DisputeResolver合约
-        disputeResolver = new DisputeResolver(taskToken, IUserInfoNFT(address(userInfoNFT)));
+        disputeResolver = new DisputeResolver(taskToken, ISoulboundUserNFT(address(soulboundUserNFT)));
 
         // 部署BaseTask合约
         baseTask = new TestBaseTask(taskToken, IDisputeResolver(address(disputeResolver)));

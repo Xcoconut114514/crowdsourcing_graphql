@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "./interfaces/IUserInfoNFT.sol";
+import "./interfaces/ISoulboundUserNFT.sol";
 
 /**
  * @title 内容分享合约
@@ -39,7 +39,7 @@ contract ContentShare is ReentrancyGuard, Ownable {
     IERC20 public immutable taskToken;
 
     // 用户NFT合约
-    IUserInfoNFT public immutable userNFT;
+    ISoulboundUserNFT public immutable userNFT;
 
     // 硬编码收益分配比例 (创作者90%, 平台10%)
     uint256 public constant CREATOR_SHARE = 9000; // 90%
@@ -51,11 +51,7 @@ contract ContentShare is ReentrancyGuard, Ownable {
     mapping(address => uint256) public creatorRevenue; // 用户收益（包括创作者和平台）
 
     // 事件
-    event ContentCreated(
-        uint256 indexed contentId,
-        address indexed creator,
-        uint256 price
-    );
+    event ContentCreated(uint256 indexed contentId, address indexed creator, uint256 price);
 
     event ContentUpdated(uint256 indexed contentId, uint256 price);
 
@@ -69,25 +65,18 @@ contract ContentShare is ReentrancyGuard, Ownable {
     );
 
     event RevenueDistributed(
-        uint256 indexed contentId,
-        address indexed creator,
-        uint256 creatorAmount,
-        uint256 platformAmount
+        uint256 indexed contentId, address indexed creator, uint256 creatorAmount, uint256 platformAmount
     );
 
     event GradeDiscountUpdated(uint8 grade, uint256 discount);
-    event RevenueWithdrawn(
-        address indexed recipient,
-        uint256 amount,
-        string type_
-    );
+    event RevenueWithdrawn(address indexed recipient, uint256 amount, string type_);
 
     /**
      * @notice 构造函数
      * @param _taskToken 平台代币地址
      * @param _userNFT 用户NFT合约地址
      */
-    constructor(IERC20 _taskToken, IUserInfoNFT _userNFT) Ownable(msg.sender) {
+    constructor(IERC20 _taskToken, ISoulboundUserNFT _userNFT) Ownable(msg.sender) {
         taskToken = _taskToken;
         userNFT = _userNFT;
 
@@ -105,22 +94,14 @@ contract ContentShare is ReentrancyGuard, Ownable {
      * @param _title 简短标题
      * @param _price 价格
      */
-    function createContent(
-        string calldata _title,
-        uint256 _price
-    ) external returns (uint256) {
+    function createContent(string calldata _title, uint256 _price) external returns (uint256) {
         // 检查用户是否拥有NFT
         require(userNFT.hasUserMintedNFT(msg.sender), "Must have user NFT");
 
         contentCounter++;
         uint256 contentId = contentCounter;
 
-        contents[contentId] = Content({
-            id: contentId,
-            creator: msg.sender,
-            title: _title,
-            price: _price
-        });
+        contents[contentId] = Content({ id: contentId, creator: msg.sender, title: _title, price: _price });
 
         emit ContentCreated(contentId, msg.sender, _price);
 
@@ -133,11 +114,7 @@ contract ContentShare is ReentrancyGuard, Ownable {
      * @param _title 新标题
      * @param _price 新价格
      */
-    function updateContent(
-        uint256 _contentId,
-        string calldata _title,
-        uint256 _price
-    ) external {
+    function updateContent(uint256 _contentId, string calldata _title, uint256 _price) external {
         Content storage content = contents[_contentId];
 
         if (content.id == 0) {
@@ -174,16 +151,11 @@ contract ContentShare is ReentrancyGuard, Ownable {
         uint256 actualPrice = content.price;
 
         if (discount > 0) {
-            actualPrice =
-                (content.price * (BASIS_POINTS - discount)) /
-                BASIS_POINTS;
+            actualPrice = (content.price * (BASIS_POINTS - discount)) / BASIS_POINTS;
         }
 
         // 检查用户余额
-        require(
-            taskToken.balanceOf(msg.sender) >= actualPrice,
-            "Insufficient balance"
-        );
+        require(taskToken.balanceOf(msg.sender) >= actualPrice, "Insufficient balance");
 
         // 转移代币到合约
         taskToken.safeTransferFrom(msg.sender, address(this), actualPrice);
@@ -191,14 +163,7 @@ contract ContentShare is ReentrancyGuard, Ownable {
         // 分配收益
         _distributeRevenue(_contentId, actualPrice, content.creator);
 
-        emit ContentPurchased(
-            _contentId,
-            msg.sender,
-            content.creator,
-            actualPrice,
-            userGrade,
-            discount
-        );
+        emit ContentPurchased(_contentId, msg.sender, content.creator, actualPrice, userGrade, discount);
     }
 
     /**
@@ -207,11 +172,7 @@ contract ContentShare is ReentrancyGuard, Ownable {
      * @param _amount 收益金额
      * @param _creator 创作者地址
      */
-    function _distributeRevenue(
-        uint256 _contentId,
-        uint256 _amount,
-        address _creator
-    ) internal {
+    function _distributeRevenue(uint256 _contentId, uint256 _amount, address _creator) internal {
         uint256 creatorAmount = (_amount * CREATOR_SHARE) / BASIS_POINTS;
         uint256 platformAmount = (_amount * PLATFORM_SHARE) / BASIS_POINTS;
 
@@ -219,12 +180,7 @@ contract ContentShare is ReentrancyGuard, Ownable {
         creatorRevenue[_creator] += creatorAmount;
         creatorRevenue[owner()] += platformAmount;
 
-        emit RevenueDistributed(
-            _contentId,
-            _creator,
-            creatorAmount,
-            platformAmount
-        );
+        emit RevenueDistributed(_contentId, _creator, creatorAmount, platformAmount);
     }
 
     /**
@@ -232,10 +188,7 @@ contract ContentShare is ReentrancyGuard, Ownable {
      * @param _grade 用户等级
      * @param _discount 折扣(基点)
      */
-    function updateGradeDiscount(
-        uint8 _grade,
-        uint256 _discount
-    ) external onlyOwner {
+    function updateGradeDiscount(uint8 _grade, uint256 _discount) external onlyOwner {
         require(_discount <= 5000, "Discount cannot exceed 50%");
         gradeDiscounts[_grade] = _discount;
         emit GradeDiscountUpdated(_grade, _discount);
@@ -261,9 +214,7 @@ contract ContentShare is ReentrancyGuard, Ownable {
      * @param _contentId 内容ID
      * @return 内容结构体
      */
-    function getContent(
-        uint256 _contentId
-    ) external view returns (Content memory) {
+    function getContent(uint256 _contentId) external view returns (Content memory) {
         return contents[_contentId];
     }
 

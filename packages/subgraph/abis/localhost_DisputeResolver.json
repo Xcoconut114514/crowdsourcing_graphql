@@ -6,6 +6,11 @@
         "name": "_taskToken",
         "type": "address",
         "internalType": "contract IERC20"
+      },
+      {
+        "name": "_userInfoNFT",
+        "type": "address",
+        "internalType": "contract ISoulboundUserNFT"
       }
     ],
     "stateMutability": "nonpayable"
@@ -19,43 +24,6 @@
         "name": "",
         "type": "uint256",
         "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "adminStakeAmount",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "adminStatus",
-    "inputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "stakeAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "isActive",
-        "type": "bool",
-        "internalType": "bool"
       }
     ],
     "stateMutability": "view"
@@ -211,25 +179,6 @@
   },
   {
     "type": "function",
-    "name": "getAdminStake",
-    "inputs": [
-      {
-        "name": "_admin",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "getDispute",
     "inputs": [
       {
@@ -292,10 +241,10 @@
           {
             "name": "votes",
             "type": "tuple[]",
-            "internalType": "struct DisputeResolver.AdminVote[]",
+            "internalType": "struct DisputeResolver.EliteVote[]",
             "components": [
               {
-                "name": "admin",
+                "name": "elite",
                 "type": "address",
                 "internalType": "address"
               },
@@ -396,13 +345,6 @@
   },
   {
     "type": "function",
-    "name": "stakeToBecomeAdmin",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "taskToken",
     "inputs": [],
     "outputs": [
@@ -429,6 +371,19 @@
   },
   {
     "type": "function",
+    "name": "userInfoNFT",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract ISoulboundUserNFT"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "voteOnDispute",
     "inputs": [
       {
@@ -444,76 +399,6 @@
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "withdrawStake",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "event",
-    "name": "DisputeResolver_AdminStaked",
-    "inputs": [
-      {
-        "name": "admin",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "DisputeResolver_AdminVoted",
-    "inputs": [
-      {
-        "name": "disputeId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "admin",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "workerShare",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "DisputeResolver_AdminWithdrawn",
-    "inputs": [
-      {
-        "name": "admin",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
   },
   {
     "type": "event",
@@ -573,6 +458,31 @@
         "type": "uint256",
         "indexed": true,
         "internalType": "uint256"
+      },
+      {
+        "name": "workerShare",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "DisputeResolver_EliteVoted",
+    "inputs": [
+      {
+        "name": "disputeId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "elite",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
       },
       {
         "name": "workerShare",
@@ -673,11 +583,6 @@
   },
   {
     "type": "error",
-    "name": "DisputeResolver_AlreadyStaked",
-    "inputs": []
-  },
-  {
-    "type": "error",
     "name": "DisputeResolver_AlreadyVoted",
     "inputs": []
   },
@@ -698,6 +603,11 @@
   },
   {
     "type": "error",
+    "name": "DisputeResolver_InvalidUserNFTContract",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "DisputeResolver_InvalidWorkerShare",
     "inputs": []
   },
@@ -708,7 +618,7 @@
   },
   {
     "type": "error",
-    "name": "DisputeResolver_NotAdmin",
+    "name": "DisputeResolver_NotEliteUser",
     "inputs": []
   },
   {

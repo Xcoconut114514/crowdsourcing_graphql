@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "../BaseTask.sol";
+import "./BaseTask.sol";
 
 /**
  * @title 按里程碑付款的任务合约

@@ -4,16 +4,16 @@ pragma solidity >=0.8.0 <0.9.0;
 import "forge-std/Test.sol";
 import "../contracts/task/BiddingTask.sol";
 import "../contracts/TaskToken.sol";
-import "../contracts/DisputeResolver.sol";
-import "../contracts/UserInfoNFT.sol";
-import "../contracts/interfaces/IUserInfoNFT.sol";
-import "../contracts/interface/IDisputeResolver.sol";
+import "../contracts/task/DisputeResolver.sol";
+import "../contracts/SoulboundUserNFT.sol";
+import "../contracts/interfaces/ISoulboundUserNFT.sol";
+import "../contracts/interfaces/IDisputeResolver.sol";
 
 contract BiddingTaskTest is Test {
     BiddingTask public biddingTask;
     TaskToken public taskToken;
     DisputeResolver public disputeResolver;
-    SoulboundUserNFT public userInfoNFT;
+    SoulboundUserNFT public soulboundUserNFT;
 
     address public owner;
     address public taskCreator;
@@ -102,11 +102,11 @@ contract BiddingTaskTest is Test {
         taskToken.mint(worker2, ADMIN_STAKE_AMOUNT);
         taskToken.mint(otherUser, BID_AMOUNT_1);
 
-        // 部署UserInfoNFT合约
-        userInfoNFT = new SoulboundUserNFT("Test User NFT", "TUN");
+        // 部署SoulboundUserNFT合约
+        soulboundUserNFT = new SoulboundUserNFT("Test User NFT", "TUN");
 
         // 部署DisputeResolver合约
-        disputeResolver = new DisputeResolver(taskToken, IUserInfoNFT(address(userInfoNFT)));
+        disputeResolver = new DisputeResolver(taskToken, ISoulboundUserNFT(address(soulboundUserNFT)));
 
         // 部署BiddingTask合约
         biddingTask = new BiddingTask(taskToken, IDisputeResolver(address(disputeResolver)));

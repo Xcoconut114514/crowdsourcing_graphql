@@ -2,10 +2,10 @@
 pragma solidity ^0.8.20;
 
 /**
- * @title IUserInfoNFT 接口
+ * @title ISoulboundUserNFT 接口
  * @notice 定义用户NFT合约的接口，用于查询用户等级
  */
-interface IUserInfoNFT {
+interface ISoulboundUserNFT {
     // 用户等级枚举
     enum UserGrade {
         Poor, // 新手游民 (0)
@@ -34,4 +34,11 @@ interface IUserInfoNFT {
      * @return 用户等级字符串
      */
     function getUserGradeString(address userAddress) external view returns (string memory);
+
+    /**
+     * @notice 更新用户等级（仅所有者）
+     * @param userAddress 用户地址
+     * @param newGrade 新等级
+     */
+    function updateUserGrade(address userAddress, UserGrade newGrade) external;
 }

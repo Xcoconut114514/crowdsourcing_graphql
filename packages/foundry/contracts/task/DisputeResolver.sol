@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "./interfaces/IUserInfoNFT.sol";
+import "../interfaces/ISoulboundUserNFT.sol";
 
 /**
  * @title 纠纷解决合约
@@ -46,7 +46,7 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
     IERC20 public immutable taskToken;
 
     // 用户NFT合约地址
-    IUserInfoNFT public immutable userInfoNFT;
+    ISoulboundUserNFT public immutable userInfoNFT;
 
     // 纠纷计数器
     uint256 public disputeCounter;
@@ -112,8 +112,8 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
         }
 
         // 检查用户是否为顶级游民
-        IUserInfoNFT.UserGrade userGrade = userInfoNFT.getUserGrade(msg.sender);
-        if (userGrade != IUserInfoNFT.UserGrade.Excellent) {
+        ISoulboundUserNFT.UserGrade userGrade = userInfoNFT.getUserGrade(msg.sender);
+        if (userGrade != ISoulboundUserNFT.UserGrade.Excellent) {
             revert DisputeResolver_NotEliteUser();
         }
         _;
@@ -124,7 +124,7 @@ contract DisputeResolver is ReentrancyGuard, Ownable {
      * @param _taskToken 平台代币地址
      * @param _userInfoNFT 用户NFT合约地址
      */
-    constructor(IERC20 _taskToken, IUserInfoNFT _userInfoNFT) Ownable(msg.sender) {
+    constructor(IERC20 _taskToken, ISoulboundUserNFT _userInfoNFT) Ownable(msg.sender) {
         if (address(_taskToken) == address(0)) {
             revert DisputeResolver_InvalidTaskToken();
         }

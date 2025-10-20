@@ -2,14 +2,15 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "forge-std/Test.sol";
-import "../contracts/DisputeResolver.sol";
+import "../contracts/task/DisputeResolver.sol";
 import "../contracts/TaskToken.sol";
-import "../contracts/UserInfoNFT.sol";
+import "../contracts/SoulboundUserNFT.sol";
+import "../contracts/interfaces/ISoulboundUserNFT.sol";
 
 contract DisputeResolverTest is Test {
     DisputeResolver public disputeResolver;
     TaskToken public taskToken;
-    SoulboundUserNFT public userInfoNFT;
+    SoulboundUserNFT public soulboundUserNFT;
     address public owner;
     address public admin1;
     address public admin2;
@@ -38,30 +39,30 @@ contract DisputeResolverTest is Test {
         taskToken.mint(worker, ADMIN_STAKE_AMOUNT + REWARD_AMOUNT);
         taskToken.mint(taskCreator, ADMIN_STAKE_AMOUNT);
 
-        // 部署UserInfoNFT合约
-        userInfoNFT = new SoulboundUserNFT("Test User NFT", "TUN");
+        // 部署SoulboundUserNFT合约
+        soulboundUserNFT = new SoulboundUserNFT("Test User NFT", "TUN");
 
         // 部署DisputeResolver合约
-        disputeResolver = new DisputeResolver(taskToken, IUserInfoNFT(address(userInfoNFT)));
+        disputeResolver = new DisputeResolver(taskToken, ISoulboundUserNFT(address(soulboundUserNFT)));
 
         // 为管理员铸造NFT
         vm.startPrank(admin1);
-        userInfoNFT.mintUserNFT("Admin1", "admin1@test.com", "Test admin", "avatar1", new string[](0));
+        soulboundUserNFT.mintUserNFT("Admin1", "admin1@test.com", "Test admin", "avatar1", new string[](0));
         vm.stopPrank();
 
         vm.startPrank(admin2);
-        userInfoNFT.mintUserNFT("Admin2", "admin2@test.com", "Test admin", "avatar2", new string[](0));
+        soulboundUserNFT.mintUserNFT("Admin2", "admin2@test.com", "Test admin", "avatar2", new string[](0));
         vm.stopPrank();
 
         vm.startPrank(admin3);
-        userInfoNFT.mintUserNFT("Admin3", "admin3@test.com", "Test admin", "avatar3", new string[](0));
+        soulboundUserNFT.mintUserNFT("Admin3", "admin3@test.com", "Test admin", "avatar3", new string[](0));
         vm.stopPrank();
 
         // 使用合约所有者设置管理员为顶级游民等级
         vm.startPrank(owner);
-        userInfoNFT.updateUserGrade(admin1, SoulboundUserNFT.UserGrade.Excellent);
-        userInfoNFT.updateUserGrade(admin2, SoulboundUserNFT.UserGrade.Excellent);
-        userInfoNFT.updateUserGrade(admin3, SoulboundUserNFT.UserGrade.Excellent);
+        soulboundUserNFT.updateUserGrade(admin1, SoulboundUserNFT.UserGrade.Excellent);
+        soulboundUserNFT.updateUserGrade(admin2, SoulboundUserNFT.UserGrade.Excellent);
+        soulboundUserNFT.updateUserGrade(admin3, SoulboundUserNFT.UserGrade.Excellent);
         vm.stopPrank();
 
         // 设置授权

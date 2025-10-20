@@ -15,11 +15,7 @@ interface IContentShare {
     }
 
     // 事件
-    event ContentCreated(
-        uint256 indexed contentId,
-        address indexed creator,
-        uint256 price
-    );
+    event ContentCreated(uint256 indexed contentId, address indexed creator, uint256 price);
 
     event ContentUpdated(uint256 indexed contentId, uint256 price);
 
@@ -42,29 +38,14 @@ interface IContentShare {
 
     event WhitelistUserAdded(address indexed user);
     event WhitelistUserRemoved(address indexed user);
-    event RevenueShareUpdated(
-        uint256 creatorShare,
-        uint256 platformShare,
-        uint256 treasuryShare
-    );
+    event RevenueShareUpdated(uint256 creatorShare, uint256 platformShare, uint256 treasuryShare);
     event TreasuryUpdated(address oldTreasury, address newTreasury);
-    event RevenueWithdrawn(
-        address indexed recipient,
-        uint256 amount,
-        string type_
-    );
+    event RevenueWithdrawn(address indexed recipient, uint256 amount, string type_);
 
     // 函数
-    function createContent(
-        string calldata _title,
-        uint256 _price
-    ) external returns (uint256);
+    function createContent(string calldata _title, uint256 _price) external returns (uint256);
 
-    function updateContent(
-        uint256 _contentId,
-        string calldata _title,
-        uint256 _price
-    ) external;
+    function updateContent(uint256 _contentId, string calldata _title, uint256 _price) external;
 
     function purchaseContent(uint256 _contentId) external;
 
@@ -78,16 +59,11 @@ interface IContentShare {
 
     // 查询函数
 
-    function getContent(
-        uint256 _contentId
-    ) external view returns (Content memory);
+    function getContent(uint256 _contentId) external view returns (Content memory);
 
     function getCreatorRevenue(address _user) external view returns (uint256);
 
     function getPlatformRevenue() external view returns (uint256);
 
-    function calculateActualPrice(
-        uint256 _contentId,
-        address _user
-    ) external view returns (uint256);
+    function calculateActualPrice(uint256 _contentId, address _user) external view returns (uint256);
 }

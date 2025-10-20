@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "../BaseTask.sol";
+import "./BaseTask.sol";
 
 /**
  * @title 一次性结清的任务合约

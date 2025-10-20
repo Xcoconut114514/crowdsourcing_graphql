@@ -5,9 +5,9 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  11155111: {
+  31337: {
     TaskToken: {
-      address: "0xC60094551BE157Ce85a765739663E70eC868D81B",
+      address: "0x700b6a60ce7eaaea56f065753d8dcb9653dbad35",
       abi: [
         {
           type: "constructor",
@@ -480,225 +480,75 @@ const deployedContracts = {
       },
       deployedOnBlock: 1,
     },
-    DisputeResolver: {
-      address: "0x75460477F10a92fb4444b7cb3C82A2d77220c54F",
+    SoulboundUserNFT: {
+      address: "0xa15bb66138824a1c7167f5e85b957d04dd34e468",
       abi: [
         {
           type: "constructor",
           inputs: [
             {
-              name: "_taskToken",
-              type: "address",
-              internalType: "contract IERC20",
-            },
-          ],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "DenominatorFee",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "adminStakeAmount",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "adminStatus",
-          inputs: [
-            {
-              name: "",
-              type: "address",
-              internalType: "address",
-            },
-          ],
-          outputs: [
-            {
-              name: "stakeAmount",
-              type: "uint256",
-              internalType: "uint256",
+              name: "name",
+              type: "string",
+              internalType: "string",
             },
             {
-              name: "isActive",
-              type: "bool",
-              internalType: "bool",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "approveProposal",
-          inputs: [
-            {
-              name: "_disputeId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "disputeCounter",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "disputeProcessingRewardBps",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "disputes",
-          inputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "rewardAmount",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "workerShare",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "taskContract",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "worker",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "taskCreator",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "workerApproved",
-              type: "bool",
-              internalType: "bool",
-            },
-            {
-              name: "creatorApproved",
-              type: "bool",
-              internalType: "bool",
-            },
-            {
-              name: "status",
-              type: "uint8",
-              internalType: "enum DisputeResolver.DisputeStatus",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "distributeFunds",
-          inputs: [
-            {
-              name: "_disputeId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "fileDispute",
-          inputs: [
-            {
-              name: "_taskContract",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "_worker",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "_taskCreator",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "_rewardAmount",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "_proof",
+              name: "symbol",
               type: "string",
               internalType: "string",
             },
           ],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "SOULBOUND_TYPE",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "SOULBOUND_VERSION",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "approve",
+          inputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
           outputs: [],
           stateMutability: "nonpayable",
         },
         {
           type: "function",
-          name: "getAdminStake",
+          name: "balanceOf",
           inputs: [
             {
-              name: "_admin",
+              name: "owner",
               type: "address",
               internalType: "address",
             },
@@ -714,10 +564,10 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "getDispute",
+          name: "getApproved",
           inputs: [
             {
-              name: "_disputeId",
+              name: "tokenId",
               type: "uint256",
               internalType: "uint256",
             },
@@ -725,79 +575,28 @@ const deployedContracts = {
           outputs: [
             {
               name: "",
-              type: "tuple",
-              internalType: "struct DisputeResolver.Dispute",
-              components: [
-                {
-                  name: "taskId",
-                  type: "uint256",
-                  internalType: "uint256",
-                },
-                {
-                  name: "rewardAmount",
-                  type: "uint256",
-                  internalType: "uint256",
-                },
-                {
-                  name: "workerShare",
-                  type: "uint256",
-                  internalType: "uint256",
-                },
-                {
-                  name: "taskContract",
-                  type: "address",
-                  internalType: "address",
-                },
-                {
-                  name: "worker",
-                  type: "address",
-                  internalType: "address",
-                },
-                {
-                  name: "taskCreator",
-                  type: "address",
-                  internalType: "address",
-                },
-                {
-                  name: "workerApproved",
-                  type: "bool",
-                  internalType: "bool",
-                },
-                {
-                  name: "creatorApproved",
-                  type: "bool",
-                  internalType: "bool",
-                },
-                {
-                  name: "status",
-                  type: "uint8",
-                  internalType: "enum DisputeResolver.DisputeStatus",
-                },
-                {
-                  name: "votes",
-                  type: "tuple[]",
-                  internalType: "struct DisputeResolver.AdminVote[]",
-                  components: [
-                    {
-                      name: "admin",
-                      type: "address",
-                      internalType: "address",
-                    },
-                    {
-                      name: "workerShare",
-                      type: "uint256",
-                      internalType: "uint256",
-                    },
-                  ],
-                },
-              ],
+              type: "address",
+              internalType: "address",
             },
           ],
           stateMutability: "view",
         },
         {
           type: "function",
-          name: "getDisputeProcessingRewardBps",
+          name: "getSoulboundType",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          stateMutability: "pure",
+        },
+        {
+          type: "function",
+          name: "getSoulboundVersion",
           inputs: [],
           outputs: [
             {
@@ -810,17 +609,120 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "hasVotedOnDispute",
+          name: "getTokenIdByUser",
           inputs: [
             {
-              name: "",
+              name: "user",
               type: "address",
               internalType: "address",
             },
+          ],
+          outputs: [
             {
               name: "",
               type: "uint256",
               internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getUserGrade",
+          inputs: [
+            {
+              name: "userAddress",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint8",
+              internalType: "enum SoulboundUserNFT.UserGrade",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getUserGradeString",
+          inputs: [
+            {
+              name: "userAddress",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getUserMetadata",
+          inputs: [
+            {
+              name: "userAddress",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "tuple",
+              internalType: "struct SoulboundUserNFT.UserMetadata",
+              components: [
+                {
+                  name: "tokenId",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "userAddress",
+                  type: "address",
+                  internalType: "address",
+                },
+                {
+                  name: "username",
+                  type: "string",
+                  internalType: "string",
+                },
+                {
+                  name: "email",
+                  type: "string",
+                  internalType: "string",
+                },
+                {
+                  name: "grade",
+                  type: "uint8",
+                  internalType: "enum SoulboundUserNFT.UserGrade",
+                },
+                {
+                  name: "createdAt",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+              ],
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "hasSoulboundNFT",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
             },
           ],
           outputs: [
@@ -828,6 +730,95 @@ const deployedContracts = {
               name: "",
               type: "bool",
               internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "hasUserMintedNFT",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "isApprovedForAll",
+          inputs: [
+            {
+              name: "owner",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "operator",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "mintUserNFT",
+          inputs: [
+            {
+              name: "username",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "email",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "bio",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "avatar",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "skills",
+              type: "string[]",
+              internalType: "string[]",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "name",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "string",
+              internalType: "string",
             },
           ],
           stateMutability: "view",
@@ -847,29 +838,22 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "processVotes",
+          name: "ownerOf",
           inputs: [
             {
-              name: "_disputeId",
+              name: "tokenId",
               type: "uint256",
               internalType: "uint256",
             },
           ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "rejectProposal",
-          inputs: [
+          outputs: [
             {
-              name: "_disputeId",
-              type: "uint256",
-              internalType: "uint256",
+              name: "",
+              type: "address",
+              internalType: "address",
             },
           ],
-          outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "view",
         },
         {
           type: "function",
@@ -880,7 +864,917 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "stakeToBecomeAdmin",
+          name: "safeTransferFrom",
+          inputs: [
+            {
+              name: "from",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "to",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "safeTransferFrom",
+          inputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "",
+              type: "bytes",
+              internalType: "bytes",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "setApprovalForAll",
+          inputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "supportsInterface",
+          inputs: [
+            {
+              name: "interfaceId",
+              type: "bytes4",
+              internalType: "bytes4",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "symbol",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "tokenURI",
+          inputs: [
+            {
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "totalSupply",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "transferFrom",
+          inputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "transferOwnership",
+          inputs: [
+            {
+              name: "newOwner",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "updateUserGrade",
+          inputs: [
+            {
+              name: "userAddress",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "newGrade",
+              type: "uint8",
+              internalType: "enum SoulboundUserNFT.UserGrade",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "updateUserProfile",
+          inputs: [
+            {
+              name: "bio",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "avatar",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "skills",
+              type: "string[]",
+              internalType: "string[]",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "userMetadata",
+          inputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "userAddress",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "username",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "email",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "grade",
+              type: "uint8",
+              internalType: "enum SoulboundUserNFT.UserGrade",
+            },
+            {
+              name: "createdAt",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "event",
+          name: "Approval",
+          inputs: [
+            {
+              name: "owner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "approved",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "tokenId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "ApprovalForAll",
+          inputs: [
+            {
+              name: "owner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "operator",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "approved",
+              type: "bool",
+              indexed: false,
+              internalType: "bool",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "BatchMetadataUpdate",
+          inputs: [
+            {
+              name: "_fromTokenId",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "_toTokenId",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "MetadataUpdate",
+          inputs: [
+            {
+              name: "_tokenId",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "OwnershipTransferred",
+          inputs: [
+            {
+              name: "previousOwner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "newOwner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "SoulboundNFTMinted",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "tokenId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "username",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "email",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "bio",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "avatar",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "skills",
+              type: "string[]",
+              indexed: false,
+              internalType: "string[]",
+            },
+            {
+              name: "grade",
+              type: "uint8",
+              indexed: false,
+              internalType: "enum SoulboundUserNFT.UserGrade",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "Transfer",
+          inputs: [
+            {
+              name: "from",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "to",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "tokenId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "UserGradeUpdated",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "tokenId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "newGrade",
+              type: "uint8",
+              indexed: false,
+              internalType: "enum SoulboundUserNFT.UserGrade",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "UserProfileUpdated",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "tokenId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "bio",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "avatar",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "skills",
+              type: "string[]",
+              indexed: false,
+              internalType: "string[]",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "error",
+          name: "ERC721IncorrectOwner",
+          inputs: [
+            {
+              name: "sender",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "owner",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ERC721InsufficientApproval",
+          inputs: [
+            {
+              name: "operator",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ERC721InvalidApprover",
+          inputs: [
+            {
+              name: "approver",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ERC721InvalidOperator",
+          inputs: [
+            {
+              name: "operator",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ERC721InvalidOwner",
+          inputs: [
+            {
+              name: "owner",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ERC721InvalidReceiver",
+          inputs: [
+            {
+              name: "receiver",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ERC721InvalidSender",
+          inputs: [
+            {
+              name: "sender",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ERC721NonexistentToken",
+          inputs: [
+            {
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "OwnableInvalidOwner",
+          inputs: [
+            {
+              name: "owner",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "OwnableUnauthorizedAccount",
+          inputs: [
+            {
+              name: "account",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ReentrancyGuardReentrantCall",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "SoulboundNFT_TransferNotAllowed",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "SoulboundNFT_UserAlreadyMinted",
+          inputs: [],
+        },
+      ],
+      inheritedFunctions: {
+        approve: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        balanceOf: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        getApproved: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        isApprovedForAll: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        name: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        ownerOf: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        safeTransferFrom: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        setApprovalForAll: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        supportsInterface: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        symbol: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        tokenURI: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        transferFrom: "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        owner: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
+        renounceOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
+        transferOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
+      },
+      deployedOnBlock: 2,
+    },
+    ContentShare: {
+      address: "0xb19b36b1456e65e3a6d514d3f715f204bd59f431",
+      abi: [
+        {
+          type: "constructor",
+          inputs: [
+            {
+              name: "_taskToken",
+              type: "address",
+              internalType: "contract IERC20",
+            },
+            {
+              name: "_userNFT",
+              type: "address",
+              internalType: "contract ISoulboundUserNFT",
+            },
+          ],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "BASIS_POINTS",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "CREATOR_SHARE",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "PLATFORM_SHARE",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "contentCounter",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "contents",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "id",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "creator",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "title",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "price",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "createContent",
+          inputs: [
+            {
+              name: "_title",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "_price",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "creatorRevenue",
+          inputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getContent",
+          inputs: [
+            {
+              name: "_contentId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "tuple",
+              internalType: "struct ContentShare.Content",
+              components: [
+                {
+                  name: "id",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "creator",
+                  type: "address",
+                  internalType: "address",
+                },
+                {
+                  name: "title",
+                  type: "string",
+                  internalType: "string",
+                },
+                {
+                  name: "price",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+              ],
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getRevenue",
+          inputs: [
+            {
+              name: "_user",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "gradeDiscounts",
+          inputs: [
+            {
+              name: "",
+              type: "uint8",
+              internalType: "uint8",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "owner",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "purchaseContent",
+          inputs: [
+            {
+              name: "_contentId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "renounceOwnership",
           inputs: [],
           outputs: [],
           stateMutability: "nonpayable",
@@ -913,15 +1807,20 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "voteOnDispute",
+          name: "updateContent",
           inputs: [
             {
-              name: "_disputeId",
+              name: "_contentId",
               type: "uint256",
               internalType: "uint256",
             },
             {
-              name: "_workerShare",
+              name: "_title",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "_price",
               type: "uint256",
               internalType: "uint256",
             },
@@ -931,23 +1830,60 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "withdrawStake",
+          name: "updateGradeDiscount",
+          inputs: [
+            {
+              name: "_grade",
+              type: "uint8",
+              internalType: "uint8",
+            },
+            {
+              name: "_discount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "userNFT",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract ISoulboundUserNFT",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "withdrawRevenue",
           inputs: [],
           outputs: [],
           stateMutability: "nonpayable",
         },
         {
           type: "event",
-          name: "DisputeResolver_AdminStaked",
+          name: "ContentCreated",
           inputs: [
             {
-              name: "admin",
+              name: "contentId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "creator",
               type: "address",
               indexed: true,
               internalType: "address",
             },
             {
-              name: "amount",
+              name: "price",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -957,22 +1893,40 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "DisputeResolver_AdminVoted",
+          name: "ContentPurchased",
           inputs: [
             {
-              name: "disputeId",
+              name: "contentId",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
             },
             {
-              name: "admin",
+              name: "buyer",
               type: "address",
               indexed: true,
               internalType: "address",
             },
             {
-              name: "workerShare",
+              name: "creator",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "pricePaid",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "userGrade",
+              type: "uint8",
+              indexed: false,
+              internalType: "uint8",
+            },
+            {
+              name: "discountApplied",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -982,16 +1936,16 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "DisputeResolver_AdminWithdrawn",
+          name: "ContentUpdated",
           inputs: [
             {
-              name: "admin",
-              type: "address",
+              name: "contentId",
+              type: "uint256",
               indexed: true,
-              internalType: "address",
+              internalType: "uint256",
             },
             {
-              name: "amount",
+              name: "price",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -1001,131 +1955,18 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "DisputeResolver_DisputeFiled",
+          name: "GradeDiscountUpdated",
           inputs: [
             {
-              name: "disputeId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "taskContract",
-              type: "address",
-              indexed: true,
-              internalType: "address",
-            },
-            {
-              name: "worker",
-              type: "address",
+              name: "grade",
+              type: "uint8",
               indexed: false,
-              internalType: "address",
+              internalType: "uint8",
             },
             {
-              name: "taskCreator",
-              type: "address",
-              indexed: false,
-              internalType: "address",
-            },
-            {
-              name: "rewardAmount",
+              name: "discount",
               type: "uint256",
               indexed: false,
-              internalType: "uint256",
-            },
-            {
-              name: "proof",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "DisputeResolver_DisputeResolved",
-          inputs: [
-            {
-              name: "disputeId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "workerShare",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "DisputeResolver_FundsDistributed",
-          inputs: [
-            {
-              name: "disputeId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "DisputeResolver_ProposalApprovedByCreator",
-          inputs: [
-            {
-              name: "disputeId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "taskCreator",
-              type: "address",
-              indexed: false,
-              internalType: "address",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "DisputeResolver_ProposalApprovedByWorker",
-          inputs: [
-            {
-              name: "disputeId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "worker",
-              type: "address",
-              indexed: false,
-              internalType: "address",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "DisputeResolver_ProposalRejected",
-          inputs: [
-            {
-              name: "disputeId",
-              type: "uint256",
-              indexed: true,
               internalType: "uint256",
             },
           ],
@@ -1151,69 +1992,103 @@ const deployedContracts = {
           anonymous: false,
         },
         {
+          type: "event",
+          name: "RevenueDistributed",
+          inputs: [
+            {
+              name: "contentId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "creator",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "creatorAmount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "platformAmount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "RevenueWithdrawn",
+          inputs: [
+            {
+              name: "recipient",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "type_",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+          ],
+          anonymous: false,
+        },
+        {
           type: "error",
-          name: "DisputeResolver_AlreadyApproved",
+          name: "ContentShare_ContentNotFound",
+          inputs: [
+            {
+              name: "contentId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ContentShare_InsufficientPayment",
+          inputs: [
+            {
+              name: "required",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "provided",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ContentShare_NoRevenueToWithdraw",
           inputs: [],
         },
         {
           type: "error",
-          name: "DisputeResolver_AlreadyStaked",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "DisputeResolver_AlreadyVoted",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "DisputeResolver_DisputeNotResolved",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "DisputeResolver_InvalidTaskContract",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "DisputeResolver_InvalidTaskToken",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "DisputeResolver_InvalidWorkerShare",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "DisputeResolver_NoActiveDispute",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "DisputeResolver_NotAdmin",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "DisputeResolver_NotEnoughVotes",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "DisputeResolver_OnlyDisputeParty",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "DisputeResolver_ProposalNotApproved",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "DisputeResolver_ZeroReward",
-          inputs: [],
+          name: "ContentShare_OnlyCreator",
+          inputs: [
+            {
+              name: "contentId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
         },
         {
           type: "error",
@@ -1259,119 +2134,10 @@ const deployedContracts = {
         renounceOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
         transferOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 2,
+      deployedOnBlock: 3,
     },
-    UserInfo: {
-      address: "0xA1134b21b0FC9B0313D149FbE51249EEd429A482",
-      abi: [
-        {
-          type: "function",
-          name: "updateUserProfile",
-          inputs: [
-            {
-              name: "name",
-              type: "string",
-              internalType: "string",
-            },
-            {
-              name: "email",
-              type: "string",
-              internalType: "string",
-            },
-            {
-              name: "bio",
-              type: "string",
-              internalType: "string",
-            },
-            {
-              name: "website",
-              type: "string",
-              internalType: "string",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "updateUserSkills",
-          inputs: [
-            {
-              name: "skills",
-              type: "string[]",
-              internalType: "string[]",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "event",
-          name: "UserProfileUpdated",
-          inputs: [
-            {
-              name: "user",
-              type: "address",
-              indexed: true,
-              internalType: "address",
-            },
-            {
-              name: "name",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-            {
-              name: "email",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-            {
-              name: "bio",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-            {
-              name: "website",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "UserSkillsUpdated",
-          inputs: [
-            {
-              name: "user",
-              type: "address",
-              indexed: true,
-              internalType: "address",
-            },
-            {
-              name: "skills",
-              type: "string[]",
-              indexed: false,
-              internalType: "string[]",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "error",
-          name: "UserInfo_EmptyName",
-          inputs: [],
-        },
-      ],
-      inheritedFunctions: {},
-      deployedOnBlock: 2,
-    },
-    FixedPaymentTask: {
-      address: "0x4Ab860E65e934EdD1191e6Ee6C3561D304f5F9b2",
+    CollectiveRental: {
+      address: "0x8ce361602b935680e8dec218b820ff5056beb7af",
       abi: [
         {
           type: "constructor",
@@ -1382,16 +2148,16 @@ const deployedContracts = {
               internalType: "contract IERC20",
             },
             {
-              name: "_disputeResolver",
+              name: "_userNFT",
               type: "address",
-              internalType: "contract IDisputeResolver",
+              internalType: "contract ISoulboundUserNFT",
             },
           ],
           stateMutability: "nonpayable",
         },
         {
           type: "function",
-          name: "DenominatorFee",
+          name: "DENOMINATOR",
           inputs: [],
           outputs: [
             {
@@ -1404,20 +2170,34 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "addWorker",
+          name: "checkIsParticipant",
           inputs: [
             {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "_worker",
+              name: "_user",
               type: "address",
               internalType: "address",
             },
             {
-              name: "_reward",
+              name: "_projectId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "completeProject",
+          inputs: [
+            {
+              name: "_projectId",
               type: "uint256",
               internalType: "uint256",
             },
@@ -1427,50 +2207,24 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "approveProofOfWork",
+          name: "createRentalProject",
           inputs: [
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "changedeadline",
-          inputs: [
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "_deadline",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "createTask",
-          inputs: [
-            {
-              name: "_title",
-              type: "string",
-              internalType: "string",
-            },
             {
               name: "_description",
               type: "string",
               internalType: "string",
             },
             {
+              name: "_depositPerPerson",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_participantGoal",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
               name: "_deadline",
               type: "uint256",
               internalType: "uint256",
@@ -1481,23 +2235,159 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "disputeResolver",
-          inputs: [],
+          name: "getAlreadyWithdrawAmount",
+          inputs: [
+            {
+              name: "_projectId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
           outputs: [
             {
               name: "",
-              type: "address",
-              internalType: "contract IDisputeResolver",
+              type: "uint256",
+              internalType: "uint256",
             },
           ],
           stateMutability: "view",
         },
         {
           type: "function",
-          name: "fileDisputeByWorker",
+          name: "getProjectCount",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getProjectInfo",
           inputs: [
             {
-              name: "_taskId",
+              name: "_projectId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "id",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "creator",
+              type: "address",
+              internalType: "address payable",
+            },
+            {
+              name: "description",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "depositPerPerson",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "participantGoal",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "currentParticipants",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "deadline",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "currentDeposits",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "allowence",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "alreadyWithdrawAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "completed",
+              type: "bool",
+              internalType: "bool",
+            },
+            {
+              name: "isSuccessful",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getProjectParticipants",
+          inputs: [
+            {
+              name: "_projectId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "address[]",
+              internalType: "address[]",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getRemainingAllowance",
+          inputs: [
+            {
+              name: "_projectId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "increaseAllowence",
+          inputs: [
+            {
+              name: "_projectId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_amount",
               type: "uint256",
               internalType: "uint256",
             },
@@ -1507,10 +2397,15 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "getTask",
+          name: "isParticipant",
           inputs: [
             {
-              name: "_taskId",
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
               type: "uint256",
               internalType: "uint256",
             },
@@ -1518,55 +2413,18 @@ const deployedContracts = {
           outputs: [
             {
               name: "",
-              type: "tuple",
-              internalType: "struct BaseTask.Task",
-              components: [
-                {
-                  name: "id",
-                  type: "uint256",
-                  internalType: "uint256",
-                },
-                {
-                  name: "totalreward",
-                  type: "uint256",
-                  internalType: "uint256",
-                },
-                {
-                  name: "deadline",
-                  type: "uint256",
-                  internalType: "uint256",
-                },
-                {
-                  name: "status",
-                  type: "uint8",
-                  internalType: "enum BaseTask.TaskStatus",
-                },
-                {
-                  name: "creator",
-                  type: "address",
-                  internalType: "address",
-                },
-                {
-                  name: "worker",
-                  type: "address",
-                  internalType: "address",
-                },
-              ],
+              type: "bool",
+              internalType: "bool",
             },
           ],
           stateMutability: "view",
         },
         {
           type: "function",
-          name: "increaseReward",
+          name: "joinRentalProject",
           inputs: [
             {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "_reward",
+              name: "_projectId",
               type: "uint256",
               internalType: "uint256",
             },
@@ -1589,39 +2447,6 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "pause",
-          inputs: [],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "paused",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "bool",
-              internalType: "bool",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "payTask",
-          inputs: [
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
           name: "platformFee",
           inputs: [],
           outputs: [
@@ -1635,92 +2460,31 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "renounceOwnership",
-          inputs: [],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "submitProofOfWork",
+          name: "projectParticipants",
           inputs: [
             {
-              name: "_taskId",
+              name: "",
               type: "uint256",
               internalType: "uint256",
             },
-            {
-              name: "_proof",
-              type: "string",
-              internalType: "string",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "taskCounter",
-          inputs: [],
-          outputs: [
             {
               name: "",
               type: "uint256",
               internalType: "uint256",
             },
           ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "taskToken",
-          inputs: [],
           outputs: [
             {
               name: "",
               type: "address",
-              internalType: "contract IERC20",
+              internalType: "address",
             },
           ],
           stateMutability: "view",
         },
         {
           type: "function",
-          name: "taskWorkProof",
-          inputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "submitted",
-              type: "bool",
-              internalType: "bool",
-            },
-            {
-              name: "approved",
-              type: "bool",
-              internalType: "bool",
-            },
-            {
-              name: "submittedAt",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "proof",
-              type: "string",
-              internalType: "string",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "tasks",
+          name: "projects",
           inputs: [
             {
               name: "",
@@ -1735,7 +2499,27 @@ const deployedContracts = {
               internalType: "uint256",
             },
             {
-              name: "totalreward",
+              name: "creator",
+              type: "address",
+              internalType: "address payable",
+            },
+            {
+              name: "description",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "depositPerPerson",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "participantGoal",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "currentParticipants",
               type: "uint256",
               internalType: "uint256",
             },
@@ -1745,17 +2529,40 @@ const deployedContracts = {
               internalType: "uint256",
             },
             {
-              name: "status",
-              type: "uint8",
-              internalType: "enum BaseTask.TaskStatus",
+              name: "currentDeposits",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              name: "creator",
-              type: "address",
-              internalType: "address",
+              name: "allowence",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              name: "worker",
+              name: "alreadyWithdrawAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "completed",
+              type: "bool",
+              internalType: "bool",
+            },
+            {
+              name: "isSuccessful",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "proposalAddress",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
               type: "address",
               internalType: "address",
             },
@@ -1764,16 +2571,62 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "terminateTask",
+          name: "refund",
           inputs: [
             {
-              name: "_taskId",
+              name: "_projectId",
               type: "uint256",
               internalType: "uint256",
             },
           ],
           outputs: [],
           stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "renounceOwnership",
+          inputs: [],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "setProjectFailed",
+          inputs: [
+            {
+              name: "_projectId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "setProposalAddress",
+          inputs: [
+            {
+              name: "_proposalAddress",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "taskToken",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract IERC20",
+            },
+          ],
+          stateMutability: "view",
         },
         {
           type: "function",
@@ -1803,17 +2656,41 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "unpause",
-          inputs: [],
+          name: "updatePlatformFee",
+          inputs: [
+            {
+              name: "_newFee",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
           outputs: [],
           stateMutability: "nonpayable",
         },
         {
           type: "function",
-          name: "updatePlatformFee",
+          name: "userNFT",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract ISoulboundUserNFT",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "withdrawFunds",
           inputs: [
             {
-              name: "_newFee",
+              name: "_projectId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_amount",
               type: "uint256",
               internalType: "uint256",
             },
@@ -1830,164 +2707,44 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "DisputeResolverUpdated",
+          name: "AllowenceIncreased",
           inputs: [
             {
-              name: "oldResolver",
+              name: "id",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "allowence",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "FundsWithdrawn",
+          inputs: [
+            {
+              name: "id",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "account",
               type: "address",
-              indexed: false,
-              internalType: "address",
-            },
-            {
-              name: "newResolver",
-              type: "address",
-              indexed: false,
-              internalType: "address",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "FixedPaymentTaskCreated",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "creator",
-              type: "address",
               indexed: true,
               internalType: "address",
-            },
-            {
-              name: "title",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-            {
-              name: "description",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-            {
-              name: "deadline",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "FixedPaymentTask_ProofOfWorkApproved",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "FixedPaymentTask_ProofOfWorkSubmitted",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "proof",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "FixedPaymentTask_TaskCancelled",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "FixedPaymentTask_TaskPaid",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
             },
             {
               name: "amount",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "FixedPaymentTask_TaskWorkerAdded",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "worker",
-              type: "address",
-              indexed: true,
-              internalType: "address",
-            },
-            {
-              name: "reward",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "FixedPaymentTask_TaskWorkerRemoved",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "worker",
-              type: "address",
-              indexed: true,
-              internalType: "address",
             },
           ],
           anonymous: false,
@@ -2013,13 +2770,31 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "Paused",
+          name: "ParticipantJoined",
           inputs: [
             {
-              name: "account",
+              name: "id",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "participant",
               type: "address",
-              indexed: false,
+              indexed: true,
               internalType: "address",
+            },
+            {
+              name: "depositAmount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "currentParticipants",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
             },
           ],
           anonymous: false,
@@ -2045,58 +2820,7 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "RewardIncreased",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-            {
-              name: "amount",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "TaskDeadlineChanged",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-            {
-              name: "newDeadline",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "Unpaused",
-          inputs: [
-            {
-              name: "account",
-              type: "address",
-              indexed: false,
-              internalType: "address",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "WithdrawPlatformRevenue",
+          name: "PlatformRevenueWithdrawn",
           inputs: [
             {
               name: "owner",
@@ -2114,138 +2838,98 @@ const deployedContracts = {
           anonymous: false,
         },
         {
-          type: "error",
-          name: "BaseTask_InvalidDisputeResolver",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BaseTask_InvalidTaskToken",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "EnforcedPause",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "ExpectedPause",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FeeTooHigh",
+          type: "event",
+          name: "ProjectCompleted",
           inputs: [
             {
-              name: "newFee",
+              name: "id",
               type: "uint256",
+              indexed: true,
               internalType: "uint256",
             },
-          ],
-        },
-        {
-          type: "error",
-          name: "FixedPaymentTask_DisputeTimeNotReached",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FixedPaymentTask_InvalidWorkerAddress",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FixedPaymentTask_NoProofOfWorkSubmitted",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FixedPaymentTask_OnlyOneWorkerAllowed",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FixedPaymentTask_ProofAlreadyApproved",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FixedPaymentTask_ProofNotSubmitted",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FixedPaymentTask_ProofOfWorkEmpty",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FixedPaymentTask_TaskCannotBeCancelled",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FixedPaymentTask_TaskDeadlinePassed",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FixedPaymentTask_TaskNotCompleted",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FixedPaymentTask_TaskNotOpen",
-          inputs: [
             {
-              name: "taskId",
-              type: "uint256",
-              internalType: "uint256",
+              name: "isSuccessful",
+              type: "bool",
+              indexed: false,
+              internalType: "bool",
             },
           ],
+          anonymous: false,
         },
         {
-          type: "error",
-          name: "InvalidDeadline",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "NoRevenueToWithdraw",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "OnlyTaskCreator",
+          type: "event",
+          name: "ProjectCreated",
           inputs: [
             {
-              name: "caller",
+              name: "id",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "creator",
               type: "address",
+              indexed: true,
               internalType: "address",
             },
             {
-              name: "taskId",
+              name: "description",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "depositPerPerson",
               type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "participantGoal",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "deadline",
+              type: "uint256",
+              indexed: false,
               internalType: "uint256",
             },
           ],
+          anonymous: false,
         },
         {
-          type: "error",
-          name: "OnlyTaskWorker",
+          type: "event",
+          name: "ProjectFailed",
           inputs: [
             {
-              name: "caller",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "taskId",
+              name: "id",
               type: "uint256",
+              indexed: true,
               internalType: "uint256",
             },
           ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "RentalEnded",
+          inputs: [
+            {
+              name: "id",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "success",
+              type: "bool",
+              indexed: false,
+              internalType: "bool",
+            },
+          ],
+          anonymous: false,
         },
         {
           type: "error",
@@ -2276,11 +2960,6 @@ const deployedContracts = {
         },
         {
           type: "error",
-          name: "RewardMoreThanZero",
-          inputs: [],
-        },
-        {
-          type: "error",
           name: "SafeERC20FailedOperation",
           inputs: [
             {
@@ -2290,347 +2969,34 @@ const deployedContracts = {
             },
           ],
         },
-        {
-          type: "error",
-          name: "TaskNotInProgress",
-          inputs: [],
-        },
       ],
       inheritedFunctions: {
-        DenominatorFee: "contracts/BaseTask.sol",
-        changedeadline: "contracts/BaseTask.sol",
-        createTask: "contracts/BaseTask.sol",
-        disputeResolver: "contracts/BaseTask.sol",
-        getTask: "contracts/BaseTask.sol",
-        owner: "contracts/BaseTask.sol",
-        pause: "contracts/BaseTask.sol",
-        paused: "contracts/BaseTask.sol",
-        platformFee: "contracts/BaseTask.sol",
-        renounceOwnership: "contracts/BaseTask.sol",
-        taskCounter: "contracts/BaseTask.sol",
-        taskToken: "contracts/BaseTask.sol",
-        tasks: "contracts/BaseTask.sol",
-        terminateTask: "contracts/BaseTask.sol",
-        totalPlatformRevenue: "contracts/BaseTask.sol",
-        transferOwnership: "contracts/BaseTask.sol",
-        unpause: "contracts/BaseTask.sol",
-        updatePlatformFee: "contracts/BaseTask.sol",
-        withdrawPlatformRevenue: "contracts/BaseTask.sol",
+        owner: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
+        renounceOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
+        transferOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
       },
       deployedOnBlock: 3,
     },
-    BiddingTask: {
-      address: "0x4524cc34CA526e42907C1cd4732dc4ED3f90a458",
+    ProposalGovernance: {
+      address: "0xe1aa25618fa0c7a1cfdab5d6b456af611873b629",
       abi: [
         {
           type: "constructor",
           inputs: [
             {
-              name: "_taskToken",
-              type: "address",
-              internalType: "contract IERC20",
-            },
-            {
-              name: "_disputeResolver",
-              type: "address",
-              internalType: "contract IDisputeResolver",
-            },
-          ],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "DenominatorFee",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "acceptBid",
-          inputs: [
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "_bidIndex",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "approveProofOfWork",
-          inputs: [
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "changedeadline",
-          inputs: [
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "_deadline",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "createTask",
-          inputs: [
-            {
-              name: "_title",
-              type: "string",
-              internalType: "string",
-            },
-            {
-              name: "_description",
-              type: "string",
-              internalType: "string",
-            },
-            {
-              name: "_deadline",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "disputeResolver",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "address",
-              internalType: "contract IDisputeResolver",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "fileDisputeByWorker",
-          inputs: [
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "getBid",
-          inputs: [
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "_bidIndex",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "",
-              type: "tuple",
-              internalType: "struct BiddingTask.Bid",
-              components: [
-                {
-                  name: "bidder",
-                  type: "address",
-                  internalType: "address",
-                },
-                {
-                  name: "amount",
-                  type: "uint256",
-                  internalType: "uint256",
-                },
-                {
-                  name: "estimatedTime",
-                  type: "uint256",
-                  internalType: "uint256",
-                },
-              ],
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "getTask",
-          inputs: [
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "",
-              type: "tuple",
-              internalType: "struct BaseTask.Task",
-              components: [
-                {
-                  name: "id",
-                  type: "uint256",
-                  internalType: "uint256",
-                },
-                {
-                  name: "totalreward",
-                  type: "uint256",
-                  internalType: "uint256",
-                },
-                {
-                  name: "deadline",
-                  type: "uint256",
-                  internalType: "uint256",
-                },
-                {
-                  name: "status",
-                  type: "uint8",
-                  internalType: "enum BaseTask.TaskStatus",
-                },
-                {
-                  name: "creator",
-                  type: "address",
-                  internalType: "address",
-                },
-                {
-                  name: "worker",
-                  type: "address",
-                  internalType: "address",
-                },
-              ],
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "increaseReward",
-          inputs: [
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "_reward",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "owner",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
+              name: "_crowdfundingAddress",
               type: "address",
               internalType: "address",
             },
           ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "pause",
-          inputs: [],
-          outputs: [],
           stateMutability: "nonpayable",
         },
         {
           type: "function",
-          name: "paused",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "bool",
-              internalType: "bool",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "payTask",
+          name: "createProposal",
           inputs: [
             {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "platformFee",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "renounceOwnership",
-          inputs: [],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "submitBid",
-          inputs: [
-            {
-              name: "_taskId",
+              name: "_projectId",
               type: "uint256",
               internalType: "uint256",
             },
@@ -2640,32 +3006,45 @@ const deployedContracts = {
               internalType: "uint256",
             },
             {
+              name: "_voteDurationDays",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
               name: "_description",
               type: "string",
               internalType: "string",
             },
-            {
-              name: "_estimatedTime",
-              type: "uint256",
-              internalType: "uint256",
-            },
           ],
           outputs: [],
           stateMutability: "nonpayable",
         },
         {
           type: "function",
-          name: "submitProofOfWork",
+          name: "crowdfundingAddress",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "executeProposal",
           inputs: [
             {
-              name: "_taskId",
+              name: "_projectId",
               type: "uint256",
               internalType: "uint256",
             },
             {
-              name: "_proof",
-              type: "string",
-              internalType: "string",
+              name: "_proposalId",
+              type: "uint256",
+              internalType: "uint256",
             },
           ],
           outputs: [],
@@ -2673,7 +3052,20 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "taskBids",
+          name: "owner",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "projectProposals",
           inputs: [
             {
               name: "",
@@ -2688,9 +3080,19 @@ const deployedContracts = {
           ],
           outputs: [
             {
-              name: "bidder",
-              type: "address",
-              internalType: "address",
+              name: "projectId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "proposalId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "description",
+              type: "string",
+              internalType: "string",
             },
             {
               name: "amount",
@@ -2698,76 +3100,36 @@ const deployedContracts = {
               internalType: "uint256",
             },
             {
-              name: "estimatedTime",
+              name: "voteDeadline",
               type: "uint256",
               internalType: "uint256",
             },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "taskCounter",
-          inputs: [],
-          outputs: [
             {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "taskToken",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "address",
-              internalType: "contract IERC20",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "taskWorkProof",
-          inputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "submitted",
+              name: "executed",
               type: "bool",
               internalType: "bool",
             },
             {
-              name: "approved",
+              name: "passed",
               type: "bool",
               internalType: "bool",
             },
             {
-              name: "submittedAt",
+              name: "yesVotesAmount",
               type: "uint256",
               internalType: "uint256",
             },
             {
-              name: "proof",
-              type: "string",
-              internalType: "string",
+              name: "noVotesAmount",
+              type: "uint256",
+              internalType: "uint256",
             },
           ],
           stateMutability: "view",
         },
         {
           type: "function",
-          name: "tasks",
+          name: "proposalFailureCount",
           inputs: [
             {
               name: "",
@@ -2777,63 +3139,19 @@ const deployedContracts = {
           ],
           outputs: [
             {
-              name: "id",
+              name: "",
               type: "uint256",
               internalType: "uint256",
-            },
-            {
-              name: "totalreward",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "deadline",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "status",
-              type: "uint8",
-              internalType: "enum BaseTask.TaskStatus",
-            },
-            {
-              name: "creator",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "worker",
-              type: "address",
-              internalType: "address",
             },
           ],
           stateMutability: "view",
         },
         {
           type: "function",
-          name: "terminateTask",
-          inputs: [
-            {
-              name: "_taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
+          name: "renounceOwnership",
+          inputs: [],
           outputs: [],
           stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "totalPlatformRevenue",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
         },
         {
           type: "function",
@@ -2850,212 +3168,26 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "unpause",
-          inputs: [],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "updatePlatformFee",
+          name: "voteOnProposal",
           inputs: [
             {
-              name: "_newFee",
+              name: "_projectId",
               type: "uint256",
               internalType: "uint256",
+            },
+            {
+              name: "_proposalId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_support",
+              type: "bool",
+              internalType: "bool",
             },
           ],
           outputs: [],
           stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "withdrawPlatformRevenue",
-          inputs: [],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "event",
-          name: "BiddingTaskCreated",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "creator",
-              type: "address",
-              indexed: true,
-              internalType: "address",
-            },
-            {
-              name: "title",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-            {
-              name: "description",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-            {
-              name: "deadline",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "BiddingTask_BidSubmitted",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "bidder",
-              type: "address",
-              indexed: true,
-              internalType: "address",
-            },
-            {
-              name: "amount",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-            {
-              name: "estimatedTime",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-            {
-              name: "description",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "BiddingTask_ProofOfWorkApproved",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "BiddingTask_ProofOfWorkSubmitted",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "proof",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "BiddingTask_TaskCancelled",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "BiddingTask_TaskPaid",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "amount",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "BiddingTask_TaskWorkerAdded",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "worker",
-              type: "address",
-              indexed: true,
-              internalType: "address",
-            },
-            {
-              name: "amount",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "DisputeResolverUpdated",
-          inputs: [
-            {
-              name: "oldResolver",
-              type: "address",
-              indexed: false,
-              internalType: "address",
-            },
-            {
-              name: "newResolver",
-              type: "address",
-              indexed: false,
-              internalType: "address",
-            },
-          ],
-          anonymous: false,
         },
         {
           type: "event",
@@ -3078,45 +3210,93 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "Paused",
+          name: "ProposalCreated",
           inputs: [
             {
-              name: "account",
-              type: "address",
+              name: "projectId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "proposalId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "description",
+              type: "string",
               indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "voteDeadline",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "ProposalExecuted",
+          inputs: [
+            {
+              name: "projectId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "proposalId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "passed",
+              type: "bool",
+              indexed: false,
+              internalType: "bool",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "Voted",
+          inputs: [
+            {
+              name: "projectId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "proposalId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "voter",
+              type: "address",
+              indexed: true,
               internalType: "address",
             },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "PlatformFeeUpdated",
-          inputs: [
             {
-              name: "oldFee",
-              type: "uint256",
+              name: "support",
+              type: "bool",
               indexed: false,
-              internalType: "uint256",
-            },
-            {
-              name: "newFee",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "RewardIncreased",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
+              internalType: "bool",
             },
             {
               name: "amount",
@@ -3126,190 +3306,6 @@ const deployedContracts = {
             },
           ],
           anonymous: false,
-        },
-        {
-          type: "event",
-          name: "TaskDeadlineChanged",
-          inputs: [
-            {
-              name: "taskId",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-            {
-              name: "newDeadline",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "Unpaused",
-          inputs: [
-            {
-              name: "account",
-              type: "address",
-              indexed: false,
-              internalType: "address",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "WithdrawPlatformRevenue",
-          inputs: [
-            {
-              name: "owner",
-              type: "address",
-              indexed: false,
-              internalType: "address",
-            },
-            {
-              name: "amount",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "error",
-          name: "BaseTask_InvalidDisputeResolver",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BaseTask_InvalidTaskToken",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_BidDescriptionEmpty",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_DisputeTimeNotReached",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_InvalidBidAmount",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_InvalidBidIndex",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_NoProofOfWorkSubmitted",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_ProofAlreadyApproved",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_ProofNotSubmitted",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_ProofOfWorkEmpty",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_TaskCannotBeCancelled",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_TaskDeadlinePassed",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_TaskNotCompleted",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "BiddingTask_TaskNotOpen",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "EnforcedPause",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "ExpectedPause",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "FeeTooHigh",
-          inputs: [
-            {
-              name: "newFee",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-        },
-        {
-          type: "error",
-          name: "InvalidDeadline",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "NoRevenueToWithdraw",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "OnlyTaskCreator",
-          inputs: [
-            {
-              name: "caller",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-        },
-        {
-          type: "error",
-          name: "OnlyTaskWorker",
-          inputs: [
-            {
-              name: "caller",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "taskId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
         },
         {
           type: "error",
@@ -3333,58 +3329,16 @@ const deployedContracts = {
             },
           ],
         },
-        {
-          type: "error",
-          name: "ReentrancyGuardReentrantCall",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "RewardMoreThanZero",
-          inputs: [],
-        },
-        {
-          type: "error",
-          name: "SafeERC20FailedOperation",
-          inputs: [
-            {
-              name: "token",
-              type: "address",
-              internalType: "address",
-            },
-          ],
-        },
-        {
-          type: "error",
-          name: "TaskNotInProgress",
-          inputs: [],
-        },
       ],
       inheritedFunctions: {
-        DenominatorFee: "contracts/BaseTask.sol",
-        changedeadline: "contracts/BaseTask.sol",
-        createTask: "contracts/BaseTask.sol",
-        disputeResolver: "contracts/BaseTask.sol",
-        getTask: "contracts/BaseTask.sol",
-        owner: "contracts/BaseTask.sol",
-        pause: "contracts/BaseTask.sol",
-        paused: "contracts/BaseTask.sol",
-        platformFee: "contracts/BaseTask.sol",
-        renounceOwnership: "contracts/BaseTask.sol",
-        taskCounter: "contracts/BaseTask.sol",
-        taskToken: "contracts/BaseTask.sol",
-        tasks: "contracts/BaseTask.sol",
-        terminateTask: "contracts/BaseTask.sol",
-        totalPlatformRevenue: "contracts/BaseTask.sol",
-        transferOwnership: "contracts/BaseTask.sol",
-        unpause: "contracts/BaseTask.sol",
-        updatePlatformFee: "contracts/BaseTask.sol",
-        withdrawPlatformRevenue: "contracts/BaseTask.sol",
+        owner: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
+        renounceOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
+        transferOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 4,
+      deployedOnBlock: 3,
     },
     MilestonePaymentTask: {
-      address: "0xd1F251a60513e7b15De8b236716f8DEB0A427379",
+      address: "0x12975173b87f7595ee45dffb2ab812ece596bf84",
       abi: [
         {
           type: "constructor",
@@ -4601,25 +4555,2729 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        DenominatorFee: "contracts/BaseTask.sol",
-        changedeadline: "contracts/BaseTask.sol",
-        createTask: "contracts/BaseTask.sol",
-        disputeResolver: "contracts/BaseTask.sol",
-        getTask: "contracts/BaseTask.sol",
-        owner: "contracts/BaseTask.sol",
-        pause: "contracts/BaseTask.sol",
-        paused: "contracts/BaseTask.sol",
-        platformFee: "contracts/BaseTask.sol",
-        renounceOwnership: "contracts/BaseTask.sol",
-        taskCounter: "contracts/BaseTask.sol",
-        taskToken: "contracts/BaseTask.sol",
-        tasks: "contracts/BaseTask.sol",
-        terminateTask: "contracts/BaseTask.sol",
-        totalPlatformRevenue: "contracts/BaseTask.sol",
-        transferOwnership: "contracts/BaseTask.sol",
-        unpause: "contracts/BaseTask.sol",
-        updatePlatformFee: "contracts/BaseTask.sol",
-        withdrawPlatformRevenue: "contracts/BaseTask.sol",
+        DenominatorFee: "contracts/task/BaseTask.sol",
+        changedeadline: "contracts/task/BaseTask.sol",
+        createTask: "contracts/task/BaseTask.sol",
+        disputeResolver: "contracts/task/BaseTask.sol",
+        getTask: "contracts/task/BaseTask.sol",
+        owner: "contracts/task/BaseTask.sol",
+        pause: "contracts/task/BaseTask.sol",
+        paused: "contracts/task/BaseTask.sol",
+        platformFee: "contracts/task/BaseTask.sol",
+        renounceOwnership: "contracts/task/BaseTask.sol",
+        taskCounter: "contracts/task/BaseTask.sol",
+        taskToken: "contracts/task/BaseTask.sol",
+        tasks: "contracts/task/BaseTask.sol",
+        terminateTask: "contracts/task/BaseTask.sol",
+        totalPlatformRevenue: "contracts/task/BaseTask.sol",
+        transferOwnership: "contracts/task/BaseTask.sol",
+        unpause: "contracts/task/BaseTask.sol",
+        updatePlatformFee: "contracts/task/BaseTask.sol",
+        withdrawPlatformRevenue: "contracts/task/BaseTask.sol",
+      },
+      deployedOnBlock: 4,
+    },
+    DisputeResolver: {
+      address: "0x0c8e79f3534b00d9a3d4a856b665bf4ebc22f2ba",
+      abi: [
+        {
+          type: "constructor",
+          inputs: [
+            {
+              name: "_taskToken",
+              type: "address",
+              internalType: "contract IERC20",
+            },
+            {
+              name: "_userInfoNFT",
+              type: "address",
+              internalType: "contract ISoulboundUserNFT",
+            },
+          ],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "DenominatorFee",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "approveProposal",
+          inputs: [
+            {
+              name: "_disputeId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "disputeCounter",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "disputeProcessingRewardBps",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "disputes",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "rewardAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "workerShare",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "taskContract",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "worker",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "taskCreator",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "workerApproved",
+              type: "bool",
+              internalType: "bool",
+            },
+            {
+              name: "creatorApproved",
+              type: "bool",
+              internalType: "bool",
+            },
+            {
+              name: "status",
+              type: "uint8",
+              internalType: "enum DisputeResolver.DisputeStatus",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "distributeFunds",
+          inputs: [
+            {
+              name: "_disputeId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "fileDispute",
+          inputs: [
+            {
+              name: "_taskContract",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_worker",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_taskCreator",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_rewardAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_proof",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "getDispute",
+          inputs: [
+            {
+              name: "_disputeId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "tuple",
+              internalType: "struct DisputeResolver.Dispute",
+              components: [
+                {
+                  name: "taskId",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "rewardAmount",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "workerShare",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "taskContract",
+                  type: "address",
+                  internalType: "address",
+                },
+                {
+                  name: "worker",
+                  type: "address",
+                  internalType: "address",
+                },
+                {
+                  name: "taskCreator",
+                  type: "address",
+                  internalType: "address",
+                },
+                {
+                  name: "workerApproved",
+                  type: "bool",
+                  internalType: "bool",
+                },
+                {
+                  name: "creatorApproved",
+                  type: "bool",
+                  internalType: "bool",
+                },
+                {
+                  name: "status",
+                  type: "uint8",
+                  internalType: "enum DisputeResolver.DisputeStatus",
+                },
+                {
+                  name: "votes",
+                  type: "tuple[]",
+                  internalType: "struct DisputeResolver.EliteVote[]",
+                  components: [
+                    {
+                      name: "elite",
+                      type: "address",
+                      internalType: "address",
+                    },
+                    {
+                      name: "workerShare",
+                      type: "uint256",
+                      internalType: "uint256",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getDisputeProcessingRewardBps",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "pure",
+        },
+        {
+          type: "function",
+          name: "hasVotedOnDispute",
+          inputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "owner",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "processVotes",
+          inputs: [
+            {
+              name: "_disputeId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "rejectProposal",
+          inputs: [
+            {
+              name: "_disputeId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "renounceOwnership",
+          inputs: [],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "taskToken",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract IERC20",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "transferOwnership",
+          inputs: [
+            {
+              name: "newOwner",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "userInfoNFT",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract ISoulboundUserNFT",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "voteOnDispute",
+          inputs: [
+            {
+              name: "_disputeId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_workerShare",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "event",
+          name: "DisputeResolver_DisputeFiled",
+          inputs: [
+            {
+              name: "disputeId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "taskContract",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "worker",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+            {
+              name: "taskCreator",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+            {
+              name: "rewardAmount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "proof",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "DisputeResolver_DisputeResolved",
+          inputs: [
+            {
+              name: "disputeId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "workerShare",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "DisputeResolver_EliteVoted",
+          inputs: [
+            {
+              name: "disputeId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "elite",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "workerShare",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "DisputeResolver_FundsDistributed",
+          inputs: [
+            {
+              name: "disputeId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "DisputeResolver_ProposalApprovedByCreator",
+          inputs: [
+            {
+              name: "disputeId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "taskCreator",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "DisputeResolver_ProposalApprovedByWorker",
+          inputs: [
+            {
+              name: "disputeId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "worker",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "DisputeResolver_ProposalRejected",
+          inputs: [
+            {
+              name: "disputeId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "OwnershipTransferred",
+          inputs: [
+            {
+              name: "previousOwner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "newOwner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_AlreadyApproved",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_AlreadyVoted",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_DisputeNotResolved",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_InvalidTaskContract",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_InvalidTaskToken",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_InvalidUserNFTContract",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_InvalidWorkerShare",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_NoActiveDispute",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_NotEliteUser",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_NotEnoughVotes",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_OnlyDisputeParty",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_ProposalNotApproved",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DisputeResolver_ZeroReward",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "OwnableInvalidOwner",
+          inputs: [
+            {
+              name: "owner",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "OwnableUnauthorizedAccount",
+          inputs: [
+            {
+              name: "account",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ReentrancyGuardReentrantCall",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "SafeERC20FailedOperation",
+          inputs: [
+            {
+              name: "token",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+      ],
+      inheritedFunctions: {
+        owner: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
+        renounceOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
+        transferOwnership: "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
+      },
+      deployedOnBlock: 3,
+    },
+    FixedPaymentTask: {
+      address: "0xed1db453c3156ff3155a97ad217b3087d5dc5f6e",
+      abi: [
+        {
+          type: "constructor",
+          inputs: [
+            {
+              name: "_taskToken",
+              type: "address",
+              internalType: "contract IERC20",
+            },
+            {
+              name: "_disputeResolver",
+              type: "address",
+              internalType: "contract IDisputeResolver",
+            },
+          ],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "DenominatorFee",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "addWorker",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_worker",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_reward",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "approveProofOfWork",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "changedeadline",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_deadline",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "createTask",
+          inputs: [
+            {
+              name: "_title",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "_description",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "_deadline",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "disputeResolver",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract IDisputeResolver",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "fileDisputeByWorker",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "getTask",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "tuple",
+              internalType: "struct BaseTask.Task",
+              components: [
+                {
+                  name: "id",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "totalreward",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "deadline",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "status",
+                  type: "uint8",
+                  internalType: "enum BaseTask.TaskStatus",
+                },
+                {
+                  name: "creator",
+                  type: "address",
+                  internalType: "address",
+                },
+                {
+                  name: "worker",
+                  type: "address",
+                  internalType: "address",
+                },
+              ],
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "increaseReward",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_reward",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "owner",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "pause",
+          inputs: [],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "paused",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "payTask",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "platformFee",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "renounceOwnership",
+          inputs: [],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "submitProofOfWork",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_proof",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "taskCounter",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "taskToken",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract IERC20",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "taskWorkProof",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "submitted",
+              type: "bool",
+              internalType: "bool",
+            },
+            {
+              name: "approved",
+              type: "bool",
+              internalType: "bool",
+            },
+            {
+              name: "submittedAt",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "proof",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "tasks",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "id",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "totalreward",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "deadline",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "status",
+              type: "uint8",
+              internalType: "enum BaseTask.TaskStatus",
+            },
+            {
+              name: "creator",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "worker",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "terminateTask",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "totalPlatformRevenue",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "transferOwnership",
+          inputs: [
+            {
+              name: "newOwner",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "unpause",
+          inputs: [],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "updatePlatformFee",
+          inputs: [
+            {
+              name: "_newFee",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "withdrawPlatformRevenue",
+          inputs: [],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "event",
+          name: "DisputeResolverUpdated",
+          inputs: [
+            {
+              name: "oldResolver",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+            {
+              name: "newResolver",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "FixedPaymentTaskCreated",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "creator",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "title",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "description",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "deadline",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "FixedPaymentTask_ProofOfWorkApproved",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "FixedPaymentTask_ProofOfWorkSubmitted",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "proof",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "FixedPaymentTask_TaskCancelled",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "FixedPaymentTask_TaskPaid",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "FixedPaymentTask_TaskWorkerAdded",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "worker",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "reward",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "FixedPaymentTask_TaskWorkerRemoved",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "worker",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "OwnershipTransferred",
+          inputs: [
+            {
+              name: "previousOwner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "newOwner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "Paused",
+          inputs: [
+            {
+              name: "account",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "PlatformFeeUpdated",
+          inputs: [
+            {
+              name: "oldFee",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "newFee",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "RewardIncreased",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "TaskDeadlineChanged",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "newDeadline",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "Unpaused",
+          inputs: [
+            {
+              name: "account",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "WithdrawPlatformRevenue",
+          inputs: [
+            {
+              name: "owner",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "error",
+          name: "BaseTask_InvalidDisputeResolver",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BaseTask_InvalidTaskToken",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "EnforcedPause",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "ExpectedPause",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FeeTooHigh",
+          inputs: [
+            {
+              name: "newFee",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "FixedPaymentTask_DisputeTimeNotReached",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FixedPaymentTask_InvalidWorkerAddress",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FixedPaymentTask_NoProofOfWorkSubmitted",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FixedPaymentTask_OnlyOneWorkerAllowed",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FixedPaymentTask_ProofAlreadyApproved",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FixedPaymentTask_ProofNotSubmitted",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FixedPaymentTask_ProofOfWorkEmpty",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FixedPaymentTask_TaskCannotBeCancelled",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FixedPaymentTask_TaskDeadlinePassed",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FixedPaymentTask_TaskNotCompleted",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FixedPaymentTask_TaskNotOpen",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "InvalidDeadline",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "NoRevenueToWithdraw",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "OnlyTaskCreator",
+          inputs: [
+            {
+              name: "caller",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "OnlyTaskWorker",
+          inputs: [
+            {
+              name: "caller",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "OwnableInvalidOwner",
+          inputs: [
+            {
+              name: "owner",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "OwnableUnauthorizedAccount",
+          inputs: [
+            {
+              name: "account",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ReentrancyGuardReentrantCall",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "RewardMoreThanZero",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "SafeERC20FailedOperation",
+          inputs: [
+            {
+              name: "token",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "TaskNotInProgress",
+          inputs: [],
+        },
+      ],
+      inheritedFunctions: {
+        DenominatorFee: "contracts/task/BaseTask.sol",
+        changedeadline: "contracts/task/BaseTask.sol",
+        createTask: "contracts/task/BaseTask.sol",
+        disputeResolver: "contracts/task/BaseTask.sol",
+        getTask: "contracts/task/BaseTask.sol",
+        owner: "contracts/task/BaseTask.sol",
+        pause: "contracts/task/BaseTask.sol",
+        paused: "contracts/task/BaseTask.sol",
+        platformFee: "contracts/task/BaseTask.sol",
+        renounceOwnership: "contracts/task/BaseTask.sol",
+        taskCounter: "contracts/task/BaseTask.sol",
+        taskToken: "contracts/task/BaseTask.sol",
+        tasks: "contracts/task/BaseTask.sol",
+        terminateTask: "contracts/task/BaseTask.sol",
+        totalPlatformRevenue: "contracts/task/BaseTask.sol",
+        transferOwnership: "contracts/task/BaseTask.sol",
+        unpause: "contracts/task/BaseTask.sol",
+        updatePlatformFee: "contracts/task/BaseTask.sol",
+        withdrawPlatformRevenue: "contracts/task/BaseTask.sol",
+      },
+      deployedOnBlock: 3,
+    },
+    BiddingTask: {
+      address: "0xf7cd8fa9b94db2aa972023b379c7f72c65e4de9d",
+      abi: [
+        {
+          type: "constructor",
+          inputs: [
+            {
+              name: "_taskToken",
+              type: "address",
+              internalType: "contract IERC20",
+            },
+            {
+              name: "_disputeResolver",
+              type: "address",
+              internalType: "contract IDisputeResolver",
+            },
+          ],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "DenominatorFee",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "acceptBid",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_bidIndex",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "approveProofOfWork",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "changedeadline",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_deadline",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "createTask",
+          inputs: [
+            {
+              name: "_title",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "_description",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "_deadline",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "disputeResolver",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract IDisputeResolver",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "fileDisputeByWorker",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "getBid",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_bidIndex",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "tuple",
+              internalType: "struct BiddingTask.Bid",
+              components: [
+                {
+                  name: "bidder",
+                  type: "address",
+                  internalType: "address",
+                },
+                {
+                  name: "amount",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "estimatedTime",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+              ],
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getTask",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "tuple",
+              internalType: "struct BaseTask.Task",
+              components: [
+                {
+                  name: "id",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "totalreward",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "deadline",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "status",
+                  type: "uint8",
+                  internalType: "enum BaseTask.TaskStatus",
+                },
+                {
+                  name: "creator",
+                  type: "address",
+                  internalType: "address",
+                },
+                {
+                  name: "worker",
+                  type: "address",
+                  internalType: "address",
+                },
+              ],
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "increaseReward",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_reward",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "owner",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "pause",
+          inputs: [],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "paused",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "payTask",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "platformFee",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "renounceOwnership",
+          inputs: [],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "submitBid",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_amount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_description",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "_estimatedTime",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "submitProofOfWork",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_proof",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "taskBids",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "bidder",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "estimatedTime",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "taskCounter",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "taskToken",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract IERC20",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "taskWorkProof",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "submitted",
+              type: "bool",
+              internalType: "bool",
+            },
+            {
+              name: "approved",
+              type: "bool",
+              internalType: "bool",
+            },
+            {
+              name: "submittedAt",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "proof",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "tasks",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "id",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "totalreward",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "deadline",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "status",
+              type: "uint8",
+              internalType: "enum BaseTask.TaskStatus",
+            },
+            {
+              name: "creator",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "worker",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "terminateTask",
+          inputs: [
+            {
+              name: "_taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "totalPlatformRevenue",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "transferOwnership",
+          inputs: [
+            {
+              name: "newOwner",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "unpause",
+          inputs: [],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "updatePlatformFee",
+          inputs: [
+            {
+              name: "_newFee",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "withdrawPlatformRevenue",
+          inputs: [],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "event",
+          name: "BiddingTaskCreated",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "creator",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "title",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "description",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "deadline",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "BiddingTask_BidSubmitted",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "bidder",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "estimatedTime",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "description",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "BiddingTask_ProofOfWorkApproved",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "BiddingTask_ProofOfWorkSubmitted",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "proof",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "BiddingTask_TaskCancelled",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "BiddingTask_TaskPaid",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "BiddingTask_TaskWorkerAdded",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "worker",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "DisputeResolverUpdated",
+          inputs: [
+            {
+              name: "oldResolver",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+            {
+              name: "newResolver",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "OwnershipTransferred",
+          inputs: [
+            {
+              name: "previousOwner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "newOwner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "Paused",
+          inputs: [
+            {
+              name: "account",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "PlatformFeeUpdated",
+          inputs: [
+            {
+              name: "oldFee",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "newFee",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "RewardIncreased",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "TaskDeadlineChanged",
+          inputs: [
+            {
+              name: "taskId",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "newDeadline",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "Unpaused",
+          inputs: [
+            {
+              name: "account",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "WithdrawPlatformRevenue",
+          inputs: [
+            {
+              name: "owner",
+              type: "address",
+              indexed: false,
+              internalType: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "error",
+          name: "BaseTask_InvalidDisputeResolver",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BaseTask_InvalidTaskToken",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_BidDescriptionEmpty",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_DisputeTimeNotReached",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_InvalidBidAmount",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_InvalidBidIndex",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_NoProofOfWorkSubmitted",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_ProofAlreadyApproved",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_ProofNotSubmitted",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_ProofOfWorkEmpty",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_TaskCannotBeCancelled",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_TaskDeadlinePassed",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_TaskNotCompleted",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "BiddingTask_TaskNotOpen",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "EnforcedPause",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "ExpectedPause",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FeeTooHigh",
+          inputs: [
+            {
+              name: "newFee",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "InvalidDeadline",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "NoRevenueToWithdraw",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "OnlyTaskCreator",
+          inputs: [
+            {
+              name: "caller",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "OnlyTaskWorker",
+          inputs: [
+            {
+              name: "caller",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "taskId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "OwnableInvalidOwner",
+          inputs: [
+            {
+              name: "owner",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "OwnableUnauthorizedAccount",
+          inputs: [
+            {
+              name: "account",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "ReentrancyGuardReentrantCall",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "RewardMoreThanZero",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "SafeERC20FailedOperation",
+          inputs: [
+            {
+              name: "token",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "TaskNotInProgress",
+          inputs: [],
+        },
+      ],
+      inheritedFunctions: {
+        DenominatorFee: "contracts/task/BaseTask.sol",
+        changedeadline: "contracts/task/BaseTask.sol",
+        createTask: "contracts/task/BaseTask.sol",
+        disputeResolver: "contracts/task/BaseTask.sol",
+        getTask: "contracts/task/BaseTask.sol",
+        owner: "contracts/task/BaseTask.sol",
+        pause: "contracts/task/BaseTask.sol",
+        paused: "contracts/task/BaseTask.sol",
+        platformFee: "contracts/task/BaseTask.sol",
+        renounceOwnership: "contracts/task/BaseTask.sol",
+        taskCounter: "contracts/task/BaseTask.sol",
+        taskToken: "contracts/task/BaseTask.sol",
+        tasks: "contracts/task/BaseTask.sol",
+        terminateTask: "contracts/task/BaseTask.sol",
+        totalPlatformRevenue: "contracts/task/BaseTask.sol",
+        transferOwnership: "contracts/task/BaseTask.sol",
+        unpause: "contracts/task/BaseTask.sol",
+        updatePlatformFee: "contracts/task/BaseTask.sol",
+        withdrawPlatformRevenue: "contracts/task/BaseTask.sol",
       },
       deployedOnBlock: 4,
     },
