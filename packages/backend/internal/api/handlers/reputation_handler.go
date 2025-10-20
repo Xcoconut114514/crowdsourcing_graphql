@@ -173,3 +173,51 @@ func (h *ReputationHandler) GetAnomalyDetection(c *gin.Context) {
 		"address": address,
 	})
 }
+
+func (h *ReputationHandler) GetUserTier(c *gin.Context) {
+	address := c.Param("address")
+
+	tier, err := h.service.GetUserTier(c.Request.Context(), address)
+	if err != nil {
+		logger.Error("Failed to get user tier", "address", address, "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to get user tier",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": tier,
+	})
+}
+
+func (h *ReputationHandler) TriggerWeeklyUpdate(c *gin.Context) {
+	// 这个方法可以用于测试或手动触发更新
+	// 生产环境中应该添加认证保护
+
+	go func() {
+		// 异步执行，避免阻塞请求
+		// TODO: 调用 scheduler 的 updateSensitiveUsers
+		logger.Info("Manual weekly update triggered")
+	}()
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Weekly update triggered",
+	})
+}
+
+// TriggerMonthlyUpdate 手动触发月更新
+func (h *ReputationHandler) TriggerMonthlyUpdate(c *gin.Context) {
+	// 这个方法可以用于测试或手动触发更新
+	// 生产环境中应该添加认证保护
+
+	go func() {
+		// 异步执行，避免阻塞请求
+		// TODO: 调用 scheduler 的 updateAllUsers
+		logger.Info("Manual monthly update triggered")
+	}()
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Monthly update triggered",
+	})
+}

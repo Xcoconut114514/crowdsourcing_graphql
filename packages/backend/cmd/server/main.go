@@ -13,7 +13,7 @@ import (
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/internal/api/routes"
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/internal/config"
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/internal/repository/db"
-	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/pkg/cache"
+	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/internal/service/scheduler"
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/pkg/logger"
 	"github.com/KamisAyaka/crowdsourcing_graphql/packages/backend/pkg/subgraph"
 	"github.com/gin-gonic/gin"
@@ -41,13 +41,6 @@ func main() {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
 
-	// 初始化 Redis 缓存
-	redisCache, err := cache.NewRedisCache(cfg.Redis)
-	if err != nil {
-		log.Fatalf("Failed to connect to Redis: %v", err)
-	}
-	defer redisCache.Close()
-
 	// 初始化 Subgraph 客户端
 	subgraphClient := subgraph.NewClient(cfg.SubgraphURL)
 
@@ -57,7 +50,14 @@ func main() {
 	}
 
 	// 创建路由
-	router := routes.SetupRoutes(database, redisCache, subgraphClient, cfg)
+	router := routes.SetupRoutes(database, subgraphClient, cfg)
+
+	// 启动评分调度器
+	scoreScheduler := scheduler.NewScoreScheduler(database, subgraphClient, cfg)
+	scoreScheduler.Start()
+	defer scoreScheduler.Stop()
+
+	logger.Info("Score scheduler started")
 
 	// 创建 HTTP 服务器
 	srv := &http.Server{
@@ -65,7 +65,7 @@ func main() {
 		Handler: router,
 	}
 
-	// 优雅关闭
+	// 启动服务器
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Failed to start server: %v", err)

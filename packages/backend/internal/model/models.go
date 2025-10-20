@@ -1,8 +1,9 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 // User 用户模型
@@ -38,6 +39,9 @@ type GuildScore struct {
 	Score     float64 `json:"score"`
 	Rank      string  `json:"rank"`
 	RankTitle string  `json:"rank_title"`
+
+	// 添加 User 关联 - 这是关键！
+	User *User `gorm:"foreignKey:UserID" json:"user,omitempty"`
 
 	// 各维度得分
 	TaskCompletionScore float64 `json:"task_completion_score"`
